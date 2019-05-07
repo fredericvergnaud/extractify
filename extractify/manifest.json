@@ -1,0 +1,56 @@
+{
+    "manifest_version": 2,
+    "name": "Extractify",
+    "version": "0.2",
+
+    "description": "Extract structured data online",
+    "homepage_url": "http://www.csi.mines-paristech.fr/equipe/ingenieurs-et-personnel-administratif/frederic-vergnaud/",
+    "icons": {
+        "48": "extension/views/icons/chrome_logo.png"
+    },
+
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "<all_urls>",
+        "webNavigation",
+        "storage"
+    ],
+
+    "browser_action": {
+        "default_icon": "extension/views/icons/chrome_logo.png",
+        "default_title": "Extract web structured content"
+    },
+
+    "web_accessible_resources": [
+        "/extension/main_panel.html"
+    ],
+
+    //Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the //content of web pages. So if your extension needs to do that, you need content scripts.
+
+    "background": {
+        "scripts": [
+            "/background/background.js"
+        ],
+        "persistent": false
+        //"persistent": true
+    },
+
+    //A content script is a part of your extension that runs in the context of a particular web page (as //opposed to background scripts which are part of the extension, or scripts which are part of the web //site itself, such as those loaded using the <script> element).
+    //You can load a content script into a web page in one of two ways:
+    //declaratively: using the content_scripts key in your manifest.json, you can ask the browser to load a //content script whenever the browser loads a page whose URL matches a given pattern
+    //programmatically: using the tabs.executeScript() API, you can load a content script into a specific //tab whenever you want: for example, in response to the user clicking on a browser action.
+
+
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*"],
+        "css": ["content/style.css"],
+        "js": [
+            "/extension/views/libs/jquery.js",
+            "/extension/models/models.js",
+            "content/functions.js",
+            "content/content.js"
+        ],
+        "run_at": "document_end"
+    }]
+}

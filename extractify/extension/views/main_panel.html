@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+    <div id="header_wrapper">
+        <div class="header_logo">
+            <img src="icons/logo.png" class="logo_img">
+        </div>
+        <div class="title" id="main_title">
+            <p>Extractify</p>
+        </div>
+        <div id="header_button_wrapper"></div>
+    </div>
+    <div id="tabs" style="display:none">
+        <ul id="levels_tabs"></ul>
+    </div>
+
+    <div id="select_deeper_links_wrapper" title="Create new level" style="display:none">
+        <p class="validateTips">If you are thinking of finding navigation links on the next level, find a page that contains navigation links !</p>
+        <form width="90%"><select size="1" name="deeper_links" id="select_deeper_links_form" class="text ui-widget-content ui-corner-all"></select></form>
+    </div>
+
+    <div id="level_type_select_wrapper" title="Select a level type" style="display:none;">
+        <form width="90%">
+            <select size="1" name="level_type" id="level_type_select" class="text ui-widget-content ui-corner-all">
+            </select>
+        </form>
+    </div>
+
+    <div id="add_custom_col_wrapper" title="Add a custom col" style="display:none;">
+        <form width="90%" class="add_custom_col_form">
+            <label for="custom_col_title">Title :</label>
+            <input type="text" name="custom_col_title" id="custom_col_title" class="text ui-widget-content ui-corner-all">
+        </form>
+    </div>
+
+    <div id="col_title_select_wrapper" title="Select a column title" style="display:none;">
+        <form width="90%">
+            <select size="1" name="col_title" id="col_title_select" class="text ui-widget-content ui-corner-all">
+            </select>
+        </form>
+    </div>
+
+    <div id="scrapping_results_wrapper" title="Scrapping" style="display:none" class="scrapping_result">
+        <div id="nbr_of_scrapped_forum"></div>
+        <div id="nbr_of_scrapped_topic"></div>
+        <div id="nbr_of_scrapped_message"></div>
+        <div id="scrapping_done"></div>
+    </div>
+
+    <script src="libs/jquery.js"></script>
+    <script src="libs/jquery-ui.js"></script>
+    <script src="../globals.js"></script>
+    <script src="../../shared/shared.js"></script>
+    <script src="../models/models.js"></script>
+    <script src="../controllers/levels.js"></script>
+    <script src="../controllers/level.js"></script>
+    <script src="../controllers/row.js"></script>
+    <script src="../controllers/col.js"></script>
+    <script src="../controllers/depth.js"></script>
+    <script src="../controllers/pagination.js"></script>
+    <script src="../controllers/scrap.js"></script>
+    <script src="dialogs.js"></script>
+    <script src="levels_display.js"></script>
+    <script src="level_display.js"></script>
+    <script src="pagination_display.js"></script>
+    <script src="row_display.js"></script>
+    <script src="col_display.js"></script>
+    <script src="depth_display.js"></script>
+</body>
+
+</html>
