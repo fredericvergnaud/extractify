@@ -1,0 +1,42 @@
+{
+    "manifest_version": 2,
+    "name": "Extractify",
+    "version": "0.4",
+    "description": "Companion to extract structured data online",
+    "homepage_url": "http://www.csi.mines-paristech.fr/equipe/ingenieurs-et-personnel-administratif/frederic-vergnaud/",
+    "icons": {
+        "48": "extension/views/icons/chrome_logo.png"
+    },
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "<all_urls>",
+        "webNavigation",
+        "storage"
+    ],
+    "browser_action": {
+        "default_icon": "extension/views/icons/chrome_logo.png",
+        "default_title": "Extractify"
+    },
+    "web_accessible_resources": [
+        "/extension/main_panel.html"
+    ],
+    "background": {
+        "scripts": [
+            "/background/background.js"
+        ],
+        "persistent": false
+    },
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*"],
+        "css": ["content/style.css"],
+        "js": [
+            "/extension/views/libs/jquery.js",
+            "/extension/views/libs/diff_match_patch.js",
+            "content/lang/en-lang.js",
+            "content/functions.js",
+            "content/content.js"
+        ],
+        "run_at": "document_end"
+    }]
+}
