@@ -1,4 +1,4 @@
-// Version 2 de background
+// Version 3 de background
 
 var extensionWindowId, browserTabUrl, browserTabId, browserWindowId;
 
