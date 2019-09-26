@@ -1,4 +1,4 @@
-// Nouvelle version
+// Ancienne version
 
 var extensionWindowId, browserTabUrl, browserTabId, browserWindowId;
 
