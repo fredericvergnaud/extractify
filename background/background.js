@@ -1,5 +1,3 @@
-// Version 3
-
 var extensionWindowId, browserTabUrl, browserTabId, browserWindowId;
 
 chrome.browserAction.onClicked.addListener(function (tab) {
