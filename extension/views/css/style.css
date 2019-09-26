@@ -1,0 +1,732 @@
+body {
+    font-family: Cuprum;
+    font-size: 14px;
+    background-image: linear-gradient(to right, #25c482, #25b7c3);
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+/* main title, add level, jsonize, dejsonize button */
+
+#header_wrapper {
+    height: 60px;
+    background-color: black;
+    margin-left: -8px;
+    margin-top: -8px;
+    margin-bottom: 20px;
+}
+
+#levels_button_wrapper {
+    height: 60px;
+}
+
+.level_buttons_wrapper {
+    text-align: center;
+}
+
+#create_file_button_wrapper {
+    text-align: center;
+}
+
+.selection_title_wrapper {
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+}
+
+.title p {
+    font-size: 20px;
+    color: white;
+    font-family: Cuprum;
+    padding-top: 20px;
+}
+
+#add_level,
+#jsonize,
+#dejsonize,
+#scrap,
+#new_button {
+    font-family: Cuprum;
+    font-size: small;
+}
+
+.header_logo {
+    width: 40px;
+    max-width: 40px;
+    min-width: 40px;
+    display: inline-block;
+    float: left;
+    margin-left: 5px;
+}
+
+.logo_img {
+    width: 30px;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+#main_title {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    display: inline-block;
+    height: 60px;
+    float: left;
+}
+
+#header_button_wrapper {
+    display: inline-block;
+    height: 60px;
+    float: right;
+    padding-top: 15px;
+}
+
+#jsonize_button_wrapper,
+#scrap_button_wrapper,
+#new_button_wrapper {
+    width: 22%;
+    text-align: center;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.header_button {
+    width: 80px;
+    height: 30px;
+    border: 2px solid #343436;
+    color: white;
+    background-color: black;
+    margin-right: 5px;
+}
+
+.header_button:hover {
+    color: black;
+    background-color: white;
+    cursor: pointer;
+}
+
+.header_button:disabled {
+    color: grey;
+    background-color: black;
+    cursor: no-drop;
+}
+
+.dejsonize_input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+#dejsonize_button_wrapper {
+    height: 30px;
+    display: inline-block;
+}
+
+.dejsonize_label {
+    overflow: hidden;
+    position: relative;
+    color: white;
+    background-color: rgba(255, 0, 0, 0);
+    border: 2px solid #343436;
+    padding-left: 9px;
+    padding-right: 9px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.dejsonize_label:hover,
+.dejsonize_label:active {
+    color: black;
+    background-color: white;
+    cursor: pointer;
+}
+
+.dejsonize_label:disabled {
+    color: grey;
+    background-color: black;
+    cursor: no-drop;
+}
+
+.dejsonize_label [type=file] {
+    cursor: inherit;
+    display: block;
+    font-size: 999px;
+    filter: alpha(opacity=0);
+    min-height: 100%;
+    min-width: 100%;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+}
+
+#dejsonized_file_wrapper {
+    color: white;
+    margin-left: 20px;
+    font-family: Cuprum;
+    font-size: 12px;
+    line-height: 1px;
+}
+
+.level_panel {
+    margin-left: -13px;
+}
+
+
+.level_title_wrapper {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.level_wrapper {
+    color: white;
+    height: 60px;
+    font-family: Cuprum;
+    text-align: center;
+    border-bottom: 1px solid #66d2b7;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 5px 0;
+}
+
+.level_details {
+    color: white;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.level_type_wrapper {
+    color: white;
+    font-family: Cuprum;
+    margin-top: 7px;
+    position: relative;
+}
+
+.level_details_deeper_links {
+    color: black;
+    margin: 0 auto;
+}
+
+.level_url_wrapper {
+    height: auto;
+    margin: 0 auto;
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    /*    padding-left: 60px;*/
+}
+
+.level_buttons_wrapper {
+    text-align: center;
+}
+
+.level_buttons_wrapper div {
+    display: inline-block;
+}
+
+/* ROW */
+
+.row_left_wrapper,
+.col_left_wrapper,
+.pagination_left_wrapper {
+    float: left;
+    height: 50px;
+    width: 400px;
+    margin-left: 20px;
+}
+
+.row_right_wrapper,
+.col_right_wrapper,
+.pagination_right_wrapper {
+    float: right;
+    vertical-align: middle;
+    height: 50px;
+    width: 200px;
+    margin-right: 20px;
+}
+
+#rows_structure_wrapper_thead,
+#cols_structure_wrapper_thead {
+    display: table-row;
+}
+
+#table_wrapper {
+    text-align: center;
+}
+
+.rows_table {
+    display: table;
+    min-width: 570px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.1);
+    width: 100%;
+    border-bottom: 1px solid #66d2b7;
+
+}
+
+.row-color,
+.col-color,
+.depth-color,
+.pagination-color {
+    width: 20px;
+    height: 14px;
+    margin-left: 24px;
+    border: 1px solid #66d2b7;
+    box-shadow: none !important;
+}
+
+.highlight_col {
+    background-color: coral;
+}
+
+.cols_table {
+    display: table;
+    min-width: 570px;
+    margin: 0 auto;
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.cols_table_body {
+    display: table-row-group;
+}
+
+.rows_table_row {
+    border-bottom: 3px solid #333;
+    box-shadow: 0 0 0px #fff !important;
+    /*    cursor: move;*/
+}
+
+.cols_table_row {
+    border-bottom: 1px solid #66d2b7;
+    /*    cursor: move;*/
+}
+
+#row_tag_class,
+#col_title,
+#col_tag_class,
+#level_type,
+#depth_tag_class,
+#pagination_tag_class {
+    width: 170px;
+}
+
+#pagination_prefix,
+#pagination_start_number,
+#pagination_end_number,
+#pagination_step {
+    width: 100px;
+}
+
+.custom_pagination_label {
+    display: inline-block;
+    width: 35px;
+}
+
+.rows_table_row,
+.cols_table_row {
+    display: table-row;
+}
+
+.depth_row {
+    cursor: default !important;
+}
+
+.highlight_depth {
+    background-color: #77dd77;
+}
+
+.rows_table_cell,
+.cols_table_cell {
+    display: table-cell;
+    vertical-align: middle;
+    height: 50px;
+}
+
+.rows_table_cell_small,
+.cols_table_cell_small {
+    width: 70px;
+    /*    max-width: 50px;*/
+    min-width: 50px;
+    text-align: center;
+    color: darkcyan;
+    text-transform: capitalize;
+}
+
+.rows_table_cell_middle,
+.cols_table_cell_middle {
+    width: 78px;
+    max-width: 78px;
+    min-width: 78px;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.rows_table_cell_big,
+.cols_table_cell_big {
+    width: 260px;
+    max-width: 260px;
+    min-width: 260px;
+    text-align: center;
+}
+
+.rows_table_cell_button {
+    width: 200px;
+    text-align: right;
+}
+
+.cols_table_cell_button {
+    width: 200px;
+    text-align: right;
+}
+
+.cols_structure_wrapper {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.highlight_pagination {
+    background-color: #FF6961;
+
+}
+
+/*
+.pagination-color {
+    width: 20px;
+    height: 13px;
+    margin-left: 15px;
+    border: 1px solid black;
+    box-shadow: none !important;
+}
+*/
+
+.pagination_title_table_cell {
+    width: 50px;
+    float: left;
+    height: 50px;
+    padding-top: 20px;
+}
+
+.right_arrow {
+    display: inline-block;
+    margin-left: 50px;
+    vertical-align: top;
+}
+
+.right_arrow img {
+    display: none;
+}
+
+.button_select_wrapper {
+    display: inline-grid;
+    text-align: center;
+}
+
+.button_select {
+    margin: 20px;
+}
+
+.remove_level_button {
+    margin: 0 auto;
+}
+
+.remove_level_button_wrapper {
+    float: right;
+    height: 16px;
+    vertical-align: top;
+    padding-right: 5px;
+    margin-right: 20px;
+    margin-top: -35px;
+}
+
+.button_select,
+.button_add_col,
+.button_remove_row,
+.button_remove_col,
+.button_add_depth,
+.button_remove_depth,
+.button_add_pagination,
+.button_add_custom_pagination,
+.button_remove_pagination {
+    color: chartreuse;
+    background-color: rgba(255, 0, 0, 0);
+    border: 0;
+    text-decoration: underline;
+    font-size: small;
+}
+
+.button_select:hover,
+.button_select:active,
+.button_add_row:hover,
+.button_add_row:active,
+.button_remove_row:hover,
+.button_remove_row:active,
+.button_add_col:hover,
+.button_add_col:active,
+.button_remove_col:hover,
+.button_remove_col:active,
+.button_add_depth:hover,
+.button_add_depth:active,
+.button_remove_depth:hover,
+.button_remove_depth:active,
+.button_add_pagination:hover,
+.button_add_pagination:active,
+.button_add_custom_pagination:hover,
+.button_add_custom_pagination:active,
+.button_remove_pagination:hover,
+.button_remove_pagination:active {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button_select:disabled,
+.button_add_row:disabled,
+.button_remove_row:disabled,
+.button_add_col:disabled,
+.button_remove_col:disabled,
+.button_add_depth:disabled,
+.button_remove_depth:disabled,
+.button_add_pagination:disabled,
+.button_add_custom_pagination:disabled,
+.button_remove_pagination:disabled {
+    text-decoration: none;
+    color: gray;
+    cursor: no-drop;
+}
+
+#rows_txt,
+#cols_txt {
+    display: none;
+    text-align: center;
+}
+
+#add_rows_button_wrapper,
+#add_cols_button_wrapper,
+#add_pag_button_wrapper,
+#next_panel_button_wrapper {
+    width: 100%;
+}
+
+.button_remove_row {
+    margin-left: -3px;
+}
+
+
+
+.structures_wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.next_panel {
+    text-align: center;
+    margin-top: 15px;
+}
+
+
+/*
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+*/
+
+.cell_title {
+    font-style: italic;
+    color: darkcyan;
+    vertical-align: middle;
+    text-transform: capitalize;
+}
+
+/*
+.cell_result {
+    background-color: #4ad8e5;
+}
+*/
+
+/* jquery ui */
+
+/* col form */
+
+.add_row_form,
+.add_col_form,
+.select_level_type_form,
+.add_depth_form,
+.add_pagination_form,
+.add_custom_pagination_form {
+    margin: 10%;
+}
+
+/* tabs */
+
+#levels_tabs {
+    background-image: linear-gradient(to right, #25c482, #25b7c3);
+}
+
+.ui-widget-header {
+    background-color: #fff;
+    border: 0px;
+    border-radius: 0;
+    border-bottom: 1px solid #66d2b7;
+    font-family: Cuprum;
+}
+
+.ui-widget.ui-widget-content,
+.ui-widget-content {
+    border: 0px;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+    border: 1px solid #66d2b7;
+    border-bottom: 0px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.ui-state-active a,
+.ui-state-active a:link {
+    color: black;
+}
+
+.ui-tabs .ui-tabs-panel {
+    padding: 0px;
+}
+
+
+.ui-widget {
+    font-family: Cuprum;
+    font-size: 1em;
+    background-image: linear-gradient(to right, #25c482, #25b7c3);
+}
+
+.ui-widget button {
+    font-family: Cuprum;
+    font-size: small;
+    /*    background: black;*/
+    /*    color: white;*/
+}
+
+/*
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    padding: 5px;
+    background-color: lightgrey;
+}
+*/
+
+.ui-tabs .ui-tabs-nav {
+    padding: 0;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
+    color: white;
+}
+
+/* dialog */
+
+.ui-widget-overlay {
+    opacity: 0.5;
+    filter: Alpha(Opacity=50);
+    background-color: black;
+}
+
+.custom-dialog.ui-dialog {
+    background: black !important;
+}
+
+.custom-dialog.ui-dialog button {
+    background: black !important;
+    color: white;
+}
+
+.custom-dialog.ui-dialog form select {
+    border: 0px;
+    font-family: Cuprum;
+    font-size: small;
+}
+
+.custom-dialog.ui-dialog form input {
+    border: 0px;
+    color: white;
+    font-family: Cuprum;
+    font-size: small;
+}
+
+.custom-dialog.ui-dialog form label {
+    color: white;
+    font-family: Cuprum;
+    font-size: small;
+}
+
+.custom-dialog.ui-dialog button:hover {
+    color: black;
+    background-color: white !important;
+}
+
+.ui-dialog-content {
+    border: 0 !important;
+}
+
+.ui-widget-content {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #66d2b7;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    margin: 0 !important;
+    border: 0px;
+}
+
+.ui-dialog-titlebar {
+    background: black !important;
+    color: white;
+    border: 0px;
+}
+
+.ui-widget select {
+    color: white;
+}
+
+.validateTips {
+    color: white;
+}
+
+.ui-widget select {
+    width: 100%;
+    display: none;
+}
+
+/* remove du close */
+
+.ui-dialog-titlebar-close {
+    display: none
+}
+
+.scrapping_result {
+    color: white;
+    text-align: center;
+}
