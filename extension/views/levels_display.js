@@ -18,7 +18,7 @@ function start() {
     dejsonizeInput.onclick = function () {
         this.value = null;
     };
-    
+
     // Ajout label au wrapper
     dejsonizeButtonWrapper.appendChild(dejsonizeLabel);
     // Ajout input au wrapper
@@ -74,7 +74,7 @@ function start() {
     newButtonWrapper.appendChild(newButton);
     // Ajout wrapper sous le titre principal "EXTRACTIFY"
     document.getElementById("header_button_wrapper").appendChild(newButtonWrapper);
-    
+
     // Boutons jsonize & dejsonize
 
     // JSONIZE
@@ -116,13 +116,13 @@ function start() {
                 $scrappingResultsWrapper.show();
                 scrappingResults(scrapTabId);
 
-                console.log("SCRAP LEVELS : ");    
+                console.log("SCRAP LEVELS : ");
                 return scrapLevels(scrapTabId);
             })
-            .then (function () {
-            console.log("scrappedObjects lenght = " + scrappedObjects.length);
-//                closeScrappingResultsDialog($scrappingResultsWrapper);
-//                endScrap(scrapTabId);            
+            .then(function () {
+                console.log("scrappedObjects lenght = " + scrappedObjects.length);
+                closeScrappingResultsDialog($scrappingResultsWrapper);
+                endScrap(scrapTabId);
             });
         event.preventDefault();
     });
@@ -131,7 +131,7 @@ function start() {
     scrapButtonWrapper.appendChild(scrapButton);
     // Ajout wrapper sous le titre principal "EXTRACTIFY"
     document.getElementById("header_button_wrapper").appendChild(scrapButtonWrapper);
-    
+
     // wrapper dejsonized file name
     var dejsonizedFileWrapper = document.createElement("div");
     dejsonizedFileWrapper.setAttribute("id", "dejsonized_file_wrapper");

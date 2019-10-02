@@ -1,91 +1,69 @@
 // dynamic css
-function colorGen() {
-    var generateColor = Math.floor(Math.random() * 256);
-    return generateColor;
-}
-
 function injectRowsStyles(level) {
     console.log("getColsDepthsStyles = " + getColsDepthsStyles());
+    let rowColors = "";
     if (!getColsDepthsStyles()) {
-        var css = "";
         for (var i = 0; i < 100; i++) {
             // row
-            var rowColor = "hsl(" + 360 * Math.random() + ',' +
+            let rowColor = "hsl(" + 360 * Math.random() + ',' +
                 (25 + 70 * Math.random()) + '%,' +
                 (85 + 10 * Math.random()) + '%)';
-            var rowColors = ".highlight_row-" + i + " { box-shadow: 0 0 3px #000; background: white; background-color: " + rowColor + " !important; }\n";
-            css += rowColors;
+            rowColors += ".highlight_row-" + i + " { box-shadow: 0 0 3px #000; background: white; background-color: " + rowColor + " !important; }\n";
         }
         console.log("level.rows.length = " + level.rows.length);
-        if (level.rows.length > 0) {
-            for (row of level.rows) {
-                var rowColors = ".highlight_row-" + row.id + " { box-shadow: 0 0 3px #000; background: white; background-color: " + row.color + " !important; }\n";
-                css += rowColors;
-            }
-        }
-        console.log("css = " + css);
+        // si des rows existent déjà, par exemple si on fait un djsonize, on ajoute les couleurs des rows existants
+        if (level.rows.length > 0)
+            for (row of level.rows)
+                rowColors += ".highlight_row-" + row.id + " { box-shadow: 0 0 3px #000; background: white; background-color: " + row.color + " !important; }\n";
         var head = document.head || document.getElementsByTagName('head')[0];
         var style = document.createElement('style');
         head.appendChild(style);
         style.type = 'text/css';
-        style.title = 'content-rows-dynamic-css';
-        style.appendChild(document.createTextNode(css));
+        style.id = "rowsStylesCSS";
+        style.appendChild(document.createTextNode(rowColors));
     } else {
-        for (var i = 0; i < document.styleSheets.length; i++) {
-            var sheet = document.styleSheets[i];
-            //            console.log("sheet title : " + sheet.title);
-            if (sheet.title == "content-cols-depths-dynamic-css") {
-                for (var j = 0; j < 100; j++) {
-                    // row
-                    var rowColor = "hsl(" + 360 * Math.random() + ',' +
-                        (25 + 70 * Math.random()) + '%,' +
-                        (85 + 10 * Math.random()) + '%)';
-                    var rowColors = ".highlight_row-" + j + " { box-shadow: 0 0 3px #000; background: white; background-color: " + rowColor + " !important; }\n";
-                    //                    console.log("rowColors = " + rowColors + " inserted at " + sheet.cssRules.length);
-                    sheet.insertRule(rowColors, sheet.cssRules.length);
-                }
-                if (level.rows.length > 0) {
-                    for (row of level.rows) {
-                        var rowColors = ".highlight_row-" + row.id + " { box-shadow: 0 0 3px #000; background: white; background-color: " + row.color + " !important; }\n";
-                        sheet.insertRule(rowColors, sheet.cssRules.length);
-                    }
-                }
-                break;
-            }
+        let style = document.getElementById("colsStylesCSS");
+        for (var j = 0; j < 100; j++) {
+            // row
+            let rowColor = "hsl(" + 360 * Math.random() + ',' +
+                (25 + 70 * Math.random()) + '%,' +
+                (85 + 10 * Math.random()) + '%)';
+            rowColors += ".highlight_row-" + j + " { box-shadow: 0 0 3px #000; background: white; background-color: " + rowColor + " !important; }\n";
+
         }
+        // si des rows existent déjà, par exemple si on fait un djsonize, on ajoute les couleurs des rows existants
+        if (level.rows.length > 0)
+            for (row of level.rows)
+                rowColors += ".highlight_row-" + row.id + " { box-shadow: 0 0 3px #000; background: white; background-color: " + row.color + " !important; }\n";
+                
+        style.appendChild(document.createTextNode(rowColors));
     }
 }
 
 function injectColsDepthsStyles() {
+    let colDepthColors = "";
     if (!getRowsStyles()) {
-        var css = "";
         for (var i = 0; i < 100; i++) {
             // col-depth
             for (var j = 0; j < 100; j++) {
-                var colDepthColors = ".highlight_col-" + i + ".highlight_depth-" + j + " { box-shadow: 0 0 3px #000; background: white; background: linear-gradient(coral,#77dd77) !important; }\n";
-                css += colDepthColors;
+                colDepthColors += ".highlight_col-" + i + ".highlight_depth-" + j + " { box-shadow: 0 0 3px #000; background: white; background: linear-gradient(coral,#77dd77) !important; }\n";
             }
         }
         var head = document.head || document.getElementsByTagName('head')[0];
         var style = document.createElement('style');
         head.appendChild(style);
         style.type = 'text/css';
-        style.title = 'content-cols-depths-dynamic-css';
-        style.appendChild(document.createTextNode(css));
+        style.id = 'colsStylesCSS';
+        style.appendChild(document.createTextNode(colDepthColors));
     } else {
-        for (var i = 0; i < document.styleSheets.length; i++) {
-            var sheet = document.styleSheets[i];
-            if (sheet.title == "content-rows-dynamic-css") {
-                for (var j = 0; j < 100; j++) {
-                    // col-depth
-                    for (var k = 0; k < 100; k++) {
-                        var colDepthColors = ".highlight_col-" + j + ".highlight_depth-" + k + " { box-shadow: 0 0 3px #000; background: white; background: linear-gradient(coral,#77dd77) !important; }\n";
-                        sheet.insertRule(colDepthColors, sheet.cssRules.length);
-                    }
-                }
-                break;
+        let style = document.getElementById("rowsStylesCSS");
+        for (var j = 0; j < 100; j++) {
+            // col-depth
+            for (var k = 0; k < 100; k++) {
+                colDepthColors += ".highlight_col-" + j + ".highlight_depth-" + k + " { box-shadow: 0 0 3px #000; background: white; background: linear-gradient(coral,#77dd77) !important; }\n";
             }
         }
+        style.appendChild(document.createTextNode(colDepthColors));
     }
 }
 
@@ -225,7 +203,8 @@ function highlightRows(rowTagClass, rowId) {
                 // on les surligne
                 $rowTagClass.addClass("selected_row highlight_row-" + rowId);
                 // on récupère la couleur
-                var rowColor = $rowTagClass.first().css("background-color");
+                var rowColor = $(".highlight_row-" + rowId).first().css("background-color");
+                console.log("rowColor = " + rowColor);
                 // on resolve
                 var dataArray = {
                     "rowTagClass": rowTagClass,

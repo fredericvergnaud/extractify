@@ -56,7 +56,8 @@ function highlightRows(tabId, level, rowTagClass, rowId) {
                 // 'Could not establish connection. Receiving end does not exist.'
                 return;
             }
-            console.log("response = " + response);
+            console.log("response = ");
+            console.log(response);
             if (response !== undefined) {
                 resolve(response.responseData);
             }

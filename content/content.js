@@ -1,25 +1,17 @@
 function getRowsStyles() {
-    var hasRowsStyles = false;
-    for (var i = 0; i < document.styleSheets.length; i++) {
-        var sheet = document.styleSheets[i];
-        if (sheet.title == "content-rows-dynamic-css") {
-            hasRowsStyles = true;
-            break;
-        }
-    }
-    return hasRowsStyles;
+    let styleTag = document.getElementById("rowsStylesCSS");
+    if (styleTag !== null)
+        return true;
+    else
+        return false;
 }
 
 function getColsDepthsStyles() {
-    var hasColsDepthsStyles = false;
-    for (var i = 0; i < document.styleSheets.length; i++) {
-        var sheet = document.styleSheets[i];
-        if (sheet.title == "content-cols-depths-dynamic-css") {
-            hasColsDepthsStyles = true;
-            break;
-        }
-    }
-    return hasColsDepthsStyles;
+    let styleTag = document.getElementById("colsStylesCSS");
+    if (styleTag !== null)
+        return true;
+    else
+        return false;
 }
 
 chrome.runtime.onMessage.addListener(

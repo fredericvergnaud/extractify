@@ -152,7 +152,7 @@ function displayLevel(level) {
             .then(function (rowTagClass) {
                 console.log("rowTagClass choosen = " + rowTagClass);
                 if (rowTagClass !== "") {
-                    // add pagination                    
+                    // add row                    
                     highlightRows(level.tabId, level, rowTagClass, globalRowId)
                         .then(function (selectedRows) {
                             var row = addRow(selectedRows.rowTagClass, selectedRows.rowColor, globalRowId, level);
