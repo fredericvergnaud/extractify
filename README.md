@@ -1,3 +1,7 @@
+***Important***
+
+To mention Extractify in a publication, please use the following : Extractify. Frederic Vergnaud, Centre de Sociologie de l'Innovation - i3, CNRS - Mines ParisTech - PSL Research University, France, https://github.com/fredericvergnaud/extractify/.
+
 **Presentation**
 
 Extractify is a free extension for Chrome, developed in JavaScript under Bracket, whose purpose is to scrap structured data on the web. It is particularly designed for collecting online comments or online conversations such as forums.
