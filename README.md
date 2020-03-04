@@ -1,6 +1,6 @@
 ***Important***
 
-To mention Extractify in a publication, please use the following : Extractify. Frederic Vergnaud, Centre de Sociologie de l'Innovation - i3, CNRS - Mines ParisTech - PSL Research University, France, https://github.com/fredericvergnaud/extractify/.
+To mention Extractify in a publication, please use the following : «Extractify. Frederic Vergnaud, Centre de Sociologie de l'Innovation - i3, CNRS - Mines ParisTech - PSL Research University, France, https://github.com/fredericvergnaud/extractify/»
 
 **Presentation**
 
