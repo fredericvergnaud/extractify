@@ -1,5 +1,12 @@
+@font-face {
+ font-family: 'Cuprum';
+ font-style: normal;
+ font-weight: 400;
+ src: url('fonts/Cuprum/Cuprum-Regular.ttf');
+}
+
 body {
-    font-family: Cuprum;
+    font-family: 'Cuprum';
     font-size: 14px;
     background-image: linear-gradient(to right, #25c482, #25b7c3);
     margin: 0;
@@ -94,6 +101,7 @@ p {
 }
 
 .header_button {
+/*    font-family: 'Cuprum';*/
     width: 80px;
     height: 30px;
     border: 2px solid #343436;
