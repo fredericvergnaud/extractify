@@ -15,11 +15,11 @@ What it does not allow: everything else!
 
 **Manual installation for Chrome**
 
-1.	Press the green **Clone or download** button on this page to download the latest version
+1.	Press the green « **Clone or download** » button on this page to download the latest version
 2.  Unzip the downloaded archive
-3.	In Chrome adress bar, go to extensions page by typing **chrome://extensions/** 
-4.  Switch to **Developper mode** in the upper right corner
-5.  Finally load the folder **extractify-master** as an **unpacked extension**
+3.	In Chrome adress bar, go to extensions page by typing « **chrome://extensions/** » 
+4.  Switch to « **Developper mode** » in the upper right corner
+5.  Finally load the folder **extractify-master** as an « **unpacked extension** »
 
 **Usage**
 
