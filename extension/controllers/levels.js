@@ -1,3 +1,14 @@
+function setOptions() {
+    options = [];
+    $('input[name="option"]').each(function () {
+        console.log("option found : ", $(this).attr("id") + " : " + $(this).val());
+        let option = new Option();
+        option.name = $(this).attr('id');
+        option.value = $(this).val();
+        options.push(option);
+    });
+}
+
 function getLevelsColsNbr() {
     var colsNbr = 0;
     for (var i = 0; i < levels.length; i++) {
@@ -61,8 +72,7 @@ function readJsonFile() {
         reader.onload = function (e) {
             try {
                 newLevels = JSON.parse(reader.result);
-                console.log("newLevels : ");
-                console.log(newLevels);
+                //                console.log("newLevels : ", newLevels);
                 if (newLevels.length > 0) {
                     // test pour savoir si level ou pas
                     let firstLevel = newLevels[0];
@@ -114,9 +124,9 @@ function readJsonFile() {
                             alert(extensionLang.LevelRowsColsIdError);
                         else {
                             // dejsonize
-                            dejsonize(newLevels);
+                            dejsonize(levels);
                             // affichage fichier
-                            console.log(selectedFile);
+                            //                            console.log("selectedFile : ", selectedFile);
                             displayJsonFile(selectedFile);
                         }
                     }
@@ -130,24 +140,15 @@ function readJsonFile() {
     }
 }
 
-function handleUpdated(tabId, changeInfo, tabInfo) {
-    if (changeInfo.status === 'complete') {
-        for (let level of levels) {
-            var levelTabId = level.tabId;
-            if (levelTabId === tabId)
-                highlightContent(tabId, level);
-        }
-    }
-}
-
-function dejsonize(newLevels) {
+async function dejsonize(levels) {
     for (const level of levels) {
         // on crée un nouveau tab
-        createNewTab(level.url)
+        await createNewTab(level.url)
             .then(function (tabId) {
+                console.log("level dejsonized in tab id " + tabId)
                 level.tabId = tabId;
                 loadLevel(level);
-                chrome.tabs.onUpdated.addListener(handleUpdated);
+                highlightContent(tabId, level);
             })
             .then(function () {
                 globalLevelsIdsTab = [...globalLevelsIds];
@@ -216,15 +217,16 @@ function fillLevelTypes(levelTypeKey, levelType) {
         levelTypes[levelTypeKey] = levelType;
 }
 
-// SCRAPPING 
+// SCRAPING 
 
-let rowNbr, scrappedObjects, objectsCount;
+let rowNbr, scrapedObjects, objectsCount, stopScraping;
 
-function initScrapping() {
+function initScraping() {
     rowNbr = 0;
-    scrappedObjects = [];
+    scrapedObjects = [];
     objectsCount = new Map();
-    initScrappingResultsDialog();
+    stopScraping = 0;
+    initScrapingResultsDialog();
 }
 
 function getLevelStructureMap(level) {
@@ -257,14 +259,15 @@ function getLevelStructureMap(level) {
             }
         }
     }
+    //    console.log("levelStructureMap : ", levelStructureMap);
     return levelStructureMap;
 }
 
-function jsonizeScrapping() {
+function jsonizeScraping() {
     var link = document.createElement('a');
-    link.setAttribute('download', 'scrapping.json');
-    if (scrappedObjects.length > 0)
-        link.href = makeTextFile(JSON.stringify(scrappedObjects, null, "\t"));
+    link.setAttribute('download', 'scraping.json');
+    if (scrapedObjects.length > 0)
+        link.href = makeTextFile(JSON.stringify(scrapedObjects, null, "\t"));
     document.body.appendChild(link);
     window.requestAnimationFrame(function () {
         var event = new MouseEvent('click');
@@ -273,133 +276,138 @@ function jsonizeScrapping() {
     });
 }
 
-async function scrapLevels(tabId) {
+async function scrapLevels(tabId, requestLatency, scrapingPageInOwnTab) {
     for (const level of levels) {
-        console.log("level = " + level.id);
-        // Scrap du LEVEL 0
-        if (level.id === 0) {
-            console.log("scrapLevels : Scrapping de " + level.url + " with level id " + level.id);
-            console.log("levels 0 : scrappedObjects lenght = " + scrappedObjects.length);
-            await delayedUpdateTabForLevelScrapping(tabId, level.url, level.id, scrappedObjects)
-        } 
-        else {
-            console.log("levels autres : scrappedObjects lenght = " + scrappedObjects.length);
-            for (const object of scrappedObjects) {
-                console.log("scrapLevels : object url : " + object.url + " | object type : " + object.type);
-                console.log("scrapLevels : Scrapping de " + object.url + " with level id " + level.id);
-                await delayedUpdateTabForLevelScrapping(tabId, object.url, level.id, object.deeperLevel)
-                    .then(async function () {
-                        if (getLevel(level.id + 1) !== undefined)
-                            await scrapLevel(tabId, level, object);
-                    });
-
+        console.log("scrapLevels : level = " + level.id + " | stopScraping = " + stopScraping + " | requestLatency = " + requestLatency + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
+        if (stopScraping === 0) {
+            // Scrap du LEVEL 0
+            if (level.id === 0) {
+                console.log("scrapLevels : Scraping of " + level.url + " with level id " + level.id + " in tab id " + tabId);
+                console.log("scrapLevels : levels 0 : scrapedObjects lenght = " + scrapedObjects.length);
+                await delayedUpdateTabForLevelScraping(tabId, level.url, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab)
+            } else {
+                console.log("scrapLevels : other levels : scrapedObjects lenght = " + scrapedObjects.length);
+                for (const object of scrapedObjects) {
+                    if (stopScraping === 0) {
+                        console.log("scrapLevels : object url : " + object.url + " | object type : " + object.type);
+                        if (scrapingPageInOwnTab === "true")
+                            tabId = level.tabId;
+                        console.log("scrapLevels : Scraping of " + object.url + " with level id " + level.id + " and level tab id " + tabId);
+                        await delayedUpdateTabForLevelScraping(tabId, object.url, level.id, object.deeperLevel, requestLatency, scrapingPageInOwnTab)
+                            .then(async function () {
+                                if (getLevel(level.id + 1) !== undefined)
+                                    await scrapLevel(tabId, level, object, requestLatency, scrapingPageInOwnTab);
+                            });
+                    } else {
+                        console.log("scraping aborted");
+                        return;
+                    }
+                }
             }
+        } else {
+            console.log("scraping aborted");
+            return;
         }
     }
 }
 
-async function scrapLevel(tabId, level, object) {
+async function scrapLevel(tabId, level, object, requestLatency, scrapingPageInOwnTab) {
+    console.log("scrapLevel : stopScraping = " + stopScraping + " | requestLatency = " + requestLatency + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
+
     let levelIdSup = level.id + 1;
     for (const deeperLevelObject of object.deeperLevel) {
-        console.log("scrapLevel : deeperLevelObject url : " + deeperLevelObject.url + " | deeperLevelObject type : " + deeperLevelObject.type);
-        console.log("scrapLevel : Scrapping de " + deeperLevelObject.url + " with level id " + levelIdSup);
-        await delayedUpdateTabForLevelScrapping(tabId, deeperLevelObject.url, levelIdSup, deeperLevelObject.deeperLevel)
-            .then(async function () {
-                if (getLevel(levelIdSup + 1) !== undefined)
-                    await scrapLevel(tabId, getLevel(levelIdSup + 1), deeperLevelObject);
-            });
+        if (stopScraping === 0) {
+            console.log("scrapLevel : deeperLevelObject url : " + deeperLevelObject.url + " | deeperLevelObject type : " + deeperLevelObject.type);
+            console.log("scrapLevel : Scraping of " + deeperLevelObject.url + " with level id " + levelIdSup + " in tab id " + tabId);
+            await delayedUpdateTabForLevelScraping(tabId, deeperLevelObject.url, levelIdSup, deeperLevelObject.deeperLevel, requestLatency, scrapingPageInOwnTab)
+                .then(async function () {
+                    if (getLevel(levelIdSup + 1) !== undefined)
+                        await scrapLevel(tabId, getLevel(levelIdSup + 1), deeperLevelObject, requestLatency, scrapingPageInOwnTab);
+                });
+        } else {
+            console.log("scraping aborted");
+            return;
+        }
     }
 }
 
-async function delayedUpdateTabForLevelScrapping(tabId, url, levelId, objectTab) {
+async function delayedUpdateTabForLevelScraping(tabId, url, levelId, objectTab, requestLatency, scrapingPageInOwnTab) {
     // levelScrapping est la réponse envoyée par le resolve de updateNewTab qui est une Promise
-    //    try {
-
-    await updateLevelScraping(tabId, url, [...getLevelStructureMap(levels[levelId])])
-        .then(function (levelScrapping) {
-            //                console.log("delayedUpdateTabForLevelScrapping levelScrapping :");
-            //                console.log(levelScrapping);
-            return processLevelScrapping(levelScrapping, levelId, objectTab)
+    await updatePageScraping(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
+        .then(function (pageScraping) {
+            //            console.log("delayedUpdateTabForLevelScraping pageScraping :", pageScraping);
+            return processPageScraping(pageScraping, levelId, objectTab)
         })
         .then(async function () {
             let level = getLevel(levelId);
-            console.log("pagination = " + level.pagination);
-            if (level.pagination !== null)
-                await delayedUpdateTabForPaginationScrapping(tabId, url, level, objectTab);
+            if (level.pagination !== null) {
+                console.log("pagination not null ");
+                await delayedUpdateTabForPaginationScraping(tabId, url, level, objectTab, requestLatency, scrapingPageInOwnTab);
+            } else
+                console.log("pagination null ");
         });
-    //    } catch (error) {
-    //        //        console.log("error de scrap level : " + error);
-    //        alert("Level scrapping error : " + error);
-    //        return;
-    //    }
 }
 
 // SCRAP PAGINATION
 
-async function delayedUpdateTabForPaginationScrapping(tabId, url, level, objectTab) {
-    //    try {
+async function delayedUpdateTabForPaginationScraping(tabId, url, level, objectTab, requestLatency, scrapingPageInOwnTab) {
     await updatePaginationScraping(tabId, url, level.pagination)
-        .then(async function (paginationScrapping) {
-            console.log("pagination lenght = " + paginationScrapping.length);
-            if (paginationScrapping.length > 0) {
-                console.log("paginationScrapping : ");
-                console.log(paginationScrapping);
-                for (const paginationUrl of paginationScrapping)
-                    await delayedUpdateTabForPaginationLevelScrapping(tabId, paginationUrl, level.id, objectTab);
+        .then(async function (paginationScraping) {
+            console.log("pagination length = " + paginationScraping.length, level.pagination);
+            if (paginationScraping.length > 0) {
+                //                console.log("paginationScraping : ", paginationScraping);
+                for (const paginationUrl of paginationScraping)
+                    await delayedUpdateTabForPaginationLevelScraping(tabId, paginationUrl, level.id, objectTab, requestLatency, scrapingPageInOwnTab);
             }
         });
-
-    //    } catch (error) {
-    //        //        console.log("error de scrap pagination: " + error);
-    //        return;
-    //    }
 }
 
-async function delayedUpdateTabForPaginationLevelScrapping(tabId, url, levelId, objectTab) {
-    // levelScrapping est la réponse envoyée par le resolve de updateNewTab qui est une Promise
-    //    try {
-
-    await updateLevelScraping(tabId, url, [...getLevelStructureMap(levels[levelId])])
-        .then(function (levelScrapping) {
-            processLevelScrapping(levelScrapping, levelId, objectTab)
+async function delayedUpdateTabForPaginationLevelScraping(tabId, url, levelId, objectTab, requestLatency, scrapingPageInOwnTab) {
+    await updatePageScraping(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
+        .then(function (pageScraping) {
+            processPageScraping(pageScraping, levelId, objectTab)
         });
-    //    } catch (error) {
-    //        //        console.log("error de scrap level : " + error);
-    //        alert("Level scrapping error : " + error);
-    //        return;
-    //    }
 }
 
-function processLevelScrapping(result, levelId, objectTab) {
-    let resultMap = new Map(result);
-    console.log("resultMap :");
-    console.log(resultMap);
-    for (let [url, children] of resultMap) {
-        if (url !== null) {
-            let object = new Object();
-            object.type = levels[levelId].type;
-            for (let child in children) {
-                for (let key in colTitles)
-                    if (child === key)
-                        object[key] = children[child].replace(/\s+/g, ' ').replace(/[\n\r]/g, '').trim();
-                if (child === "url")
-                    object.url = children[child];
+function processPageScraping(result, levelId, objectTab) {
+    if (result !== "noData") {
+        let resultMap = new Map(result);
+        //        console.log("resultMap :", resultMap);
+        for (let [url, children] of resultMap) {
+            if (url !== null) {
+                let object = new Object();
+                object.type = levels[levelId].type;
+                for (let child in children) {
+                    for (let key in colTitles)
+                        if (child === key)
+                            object[key] = children[child].replace(/\s+/g, ' ').replace(/[\n\r]/g, '').trim();
+                    if (child === "url")
+                        object.url = children[child];
+                }
+                object.deeperLevel = [];
+                objectTab.push(object);
+                // update results
+                if (objectsCount.has(object.type)) {
+                    let i = objectsCount.get(object.type);
+                    i++;
+                    objectsCount.set(object.type, i);
+                } else
+                    objectsCount.set(object.type, 1);
+                updateScrapingResultsDialog(object.type);
             }
-            object.deeperLevel = [];
-            objectTab.push(object);
-            // update results
-            if (objectsCount.has(object.type)) {
-                let i = objectsCount.get(object.type);
-                i++;
-                objectsCount.set(object.type, i);
-            } else
-                objectsCount.set(object.type, 1);
-            updateScrappingResultsDialog(object.type);
         }
+    } else {
+        console.log("processLevelScraping : noData");
+        return;
     }
 }
 
-function endScrap(tabId) {
-    jsonizeScrapping();
-    chrome.tabs.remove(tabId, function () {});
+function endScrap(tabId, scrapingPageInOwnTab) {
+    console.log("endScrap : tabId = " + tabId + " | stopscraping = " + stopScraping + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
+    jsonizeScraping();
+    if (scrapingPageInOwnTab === "false" && tabId !== null)
+        chrome.tabs.remove(tabId);
+    if (stopScraping === 0)
+        closeScrapingResultsDialog();
+
 }

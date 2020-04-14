@@ -1,8 +1,8 @@
 @font-face {
- font-family: 'Cuprum';
- font-style: normal;
- font-weight: 400;
- src: url('fonts/Cuprum/Cuprum-Regular.ttf');
+    font-family: 'Cuprum';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fonts/Cuprum/Cuprum-Regular.ttf');
 }
 
 body {
@@ -55,7 +55,8 @@ p {
 #jsonize,
 #dejsonize,
 #scrap,
-#new_button {
+#new_button,
+#options {
     font-family: Cuprum;
     font-size: small;
 }
@@ -89,19 +90,21 @@ p {
     height: 60px;
     float: right;
     padding-top: 15px;
+    margin-right: -20px;
 }
 
 #jsonize_button_wrapper,
 #scrap_button_wrapper,
-#new_button_wrapper {
-    width: 22%;
+#new_button_wrapper,
+#options_button_wrapper {
+    width: 17%;
     text-align: center;
     display: inline-block;
     margin-right: 8px;
 }
 
 .header_button {
-/*    font-family: 'Cuprum';*/
+    /*    font-family: 'Cuprum';*/
     width: 80px;
     height: 30px;
     border: 2px solid #343436;
@@ -588,6 +591,90 @@ p {
     margin: 10%;
 }
 
+/* options panel */
+
+#scraping_page_in_own_tab_input,
+#request_latency_input {
+    width: 20px;
+}
+
+.option_label {
+    padding-left: 10px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 14px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #333;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #22AA22;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #22AA22;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(6px);
+  -ms-transform: translateX(6px);
+  transform: translateX(6px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.options_panel_left_col {
+    width: 80%;
+    float: left;
+    padding-top: 10px;
+}
+
+.options_panel_right_col {
+    width: 20%;
+    float: right;
+    padding-top: 10px;
+}
+
 /* tabs */
 
 #levels_tabs {
@@ -734,7 +821,7 @@ p {
     display: none
 }
 
-.scrapping_result {
+.scraping_result {
     color: white;
     text-align: center;
 }

@@ -5,6 +5,9 @@ var globalRowId = 0;
 var globalColId = 0;
 
 var levels = [];
+var options = [];
+
+// JQUERY-UI //
 
 // TABS //
 
@@ -32,6 +35,7 @@ function removeHighlightedElement(tabId, element) {
 }
 
 function highlightContent(tabId, level) {
+    console.log("highlightContent reçu : tabId = " + tabId + " | level = ", level);
     chrome.tabs.sendMessage(tabId, {
         action: "highlightContent",
         data: level
@@ -52,12 +56,11 @@ function highlightRows(tabId, level, rowTagClass, rowId) {
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {
-                console.log(lastError.message);
+                console.log("lastError.message", lastError.message);
                 // 'Could not establish connection. Receiving end does not exist.'
                 return;
             }
-            console.log("response = ");
-            console.log(response);
+            console.log("response = ", response);
             if (response !== undefined) {
                 resolve(response.responseData);
             }
@@ -79,7 +82,7 @@ function highlightCols(tabId, row, colTagClass, colId) {
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {
-                console.log(lastError.message);
+                console.log("lastError.message", lastError.message);
                 // 'Could not establish connection. Receiving end does not exist.'
                 return;
             }
@@ -103,7 +106,7 @@ function highlightDepth(tabId, row, depthTagClass) {
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {
-                console.log(lastError.message);
+                console.log("lastError.message", lastError.message);
                 // 'Could not establish connection. Receiving end does not exist.'
                 return;
             }
@@ -127,7 +130,7 @@ function highlightPagination(tabId, level, paginationTagClass) {
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {
-                console.log(lastError.message);
+                console.log("lastError.message", lastError.message);
                 // 'Could not establish connection. Receiving end does not exist.'
                 return;
             }
@@ -151,7 +154,7 @@ function matchPaginationPrefixAndStep(tabId, prefix, step) {
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {
-                console.log(lastError.message);
+                console.log("lastError.message", lastError.message);
                 // 'Could not establish connection. Receiving end does not exist.'
                 return;
             }
@@ -203,7 +206,7 @@ function sendMessageToTab(level, action, data) {
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {
-                console.log(lastError.message);
+                console.log("lastError.message", lastError.message);
                 // 'Could not establish connection. Receiving end does not exist.'
                 return;
             }
@@ -240,7 +243,12 @@ function createNewTab(url) {
         chrome.tabs.create({
             url: url
         }, function (tab) {
-            resolve(tab.id);
+            chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
+                if (changeInfo.status === 'complete' && tabId === tab.id) {
+                    chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
+                    resolve(tab.id);
+                }
+            });
         });
     });
 }
@@ -249,33 +257,47 @@ function createNewTab(url) {
 // Le callback de l'update de newTab se produit à l'update, mais pas au chargement complet de la page
 // -> Promise + Nécessité de rajouter un listener (auquel on donne un nom pour pouvoir le supprimer lors du resolve) à onUpdated qui va renvoyer un status : on pourra alors faire un test sur ce statut ('complete')
 // sendMessage est une fonction synchrone : pas de Promise
-function updateLevelScraping(newTabId, url, levelStructureMap) {
+function updatePageScraping(newTabId, url, levelStructureMap, requestLatency, scrapingPageInOwnTab) {
+    console.log("updatePageScraping : requestLatency = " + requestLatency);
+    var lastError;
     return new Promise(function (resolve, reject) {
         chrome.tabs.update(newTabId, {
             url: url
         }, function (tab) {
-            chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
-                if (changeInfo.status === 'complete') {
-                    chrome.tabs.sendMessage(tab.id, {
-                        action: "levelScrapping",
-                        data: levelStructureMap,
-                        rowNbr: rowNbr
-                    }, function (response) {
-                        var lastError = chrome.runtime.lastError;
-                        if (lastError) {
-                            console.log(lastError.message);
-                            // 'Could not establish connection. Receiving end does not exist.'
-                            return;
-                        }
-                        if (response.data != "") {
-                            rowNbr += response.responseData.length;
-                            resolve(response.responseData);
-                        } else
-                            reject("failed");
-                        chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
-                    });
-                }
-            });
+            lastError = chrome.runtime.lastError;
+            if (lastError) {
+                alert(extensionLang.ScrapingError + "\n" + lastError.message);
+                if (scrapingPageInOwnTab === "true")
+                    newTabId = null;
+                endScrap(newTabId, scrapingPageInOwnTab);
+                return;
+            } else {
+                chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
+                    if (changeInfo.status === 'complete') {
+                        chrome.tabs.sendMessage(tab.id, {
+                            action: "pageScraping",
+                            data: levelStructureMap,
+                            rowNbr: rowNbr,
+                            requestLatency: requestLatency
+                        }, function (response) {
+                            lastError = chrome.runtime.lastError;
+                            if (lastError) {
+                                alert(extensionLang.ScrapingError + "\n" + lastError.message);
+                                if (scrapingPageInOwnTab === "true")
+                                    newTabId = null;
+                                endScrap(newTabId, scrapingPageInOwnTab);
+                                return;
+                            }
+                            if (response.data != "") {
+                                rowNbr += response.responseData.length;
+                                resolve(response.responseData);
+                            } else
+                                reject("failed");
+                            chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
+                        });
+                    }
+                });
+            }
         });
     });
 }
@@ -288,12 +310,12 @@ function updatePaginationScraping(newTabId, url, pagination) {
             chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
                 if (changeInfo.status === 'complete') {
                     chrome.tabs.sendMessage(tab.id, {
-                        action: "paginationScrapping",
+                        action: "paginationScraping",
                         data: pagination
                     }, function (response) {
                         var lastError = chrome.runtime.lastError;
                         if (lastError) {
-                            console.log(lastError.message);
+                            console.log("lastError.message", lastError.message);
                             // 'Could not establish connection. Receiving end does not exist.'
                             return;
                         }

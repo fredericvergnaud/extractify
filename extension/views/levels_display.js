@@ -104,26 +104,46 @@ function start() {
     scrapButton.setAttribute("class", "header_button");
     scrapButton.setAttribute("id", "scrap");
     scrapButton.addEventListener("click", function (event) {
-        initScrapping();
-        scrappedObjects = [];
-        console.log("levels_display : scrappedObjects length = " + scrappedObjects.length);
-        let scrapTabId, $scrappingResultsWrapper;
-        createNewTab("about:blank")
-            .then(function (newTabId) {
-                scrapTabId = newTabId;
-                // ouverture du dialog
-                $scrappingResultsWrapper = $("#scrapping_results_wrapper");
-                $scrappingResultsWrapper.show();
-                scrappingResults(scrapTabId);
+        initScraping();
+        scrapedObjects = [];
+        console.log("levels_display : scrapedObjects length = " + scrapedObjects.length);
+        let newTabId, currentTabId, $scrapingResultsWrapper;
+        // options
+        let requestLatency = options.find(x => x.name === "request_latency_input").value;
+        let scrapingPageInOwnTab = options.find(x => x.name === "scraping_page_in_own_tab_input").value;
+        console.log("levels_display.js : before scraping : requestLatency = " + requestLatency + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
+        console.log();
+        // ouverture du dialog
+        $scrapingResultsWrapper = $("#scraping_results_wrapper");
+        $scrapingResultsWrapper.show();
 
-                console.log("SCRAP LEVELS : ");
-                return scrapLevels(scrapTabId);
-            })
-            .then(function () {
-                console.log("scrappedObjects lenght = " + scrappedObjects.length);
-                closeScrappingResultsDialog($scrappingResultsWrapper);
-                endScrap(scrapTabId);
-            });
+
+        console.log("SCRAP LEVELS : ");
+
+        // si scrapingPageInOwnTab true
+        if (scrapingPageInOwnTab === "true") {
+            currentTabId = levels[0].tabId;
+            console.log("levels_display.js : currentTabId = " + currentTabId);
+            openScrapingResultsDialog(currentTabId);
+            scrapLevels(currentTabId, requestLatency, scrapingPageInOwnTab).then(function () {
+                console.log("levels_display.js : scrapedObjects lenght = " + scrapedObjects.length);
+                endScrap(null, scrapingPageInOwnTab);
+            });;
+
+        } else {
+            createNewTab("about:blank")
+                .then(function (tabId) {
+                    newTabId = tabId;
+                    openScrapingResultsDialog(newTabId);
+                    console.log("levels_display.js : newTabId = " + newTabId);
+                    return scrapLevels(newTabId, requestLatency, scrapingPageInOwnTab);
+                })
+                .then(function () {
+                    console.log("levels_display.js : scrapedObjects lenght = " + scrapedObjects.length);
+                    endScrap(newTabId, scrapingPageInOwnTab);
+                });
+        }
+
         event.preventDefault();
     });
     scrapButton.innerHTML = extensionLang.ScrapButton;
@@ -131,6 +151,26 @@ function start() {
     scrapButtonWrapper.appendChild(scrapButton);
     // Ajout wrapper sous le titre principal "EXTRACTIFY"
     document.getElementById("header_button_wrapper").appendChild(scrapButtonWrapper);
+
+    // OPTION
+    var optionButtonWrapper = document.createElement("div");
+    optionButtonWrapper.setAttribute("id", "options_button_wrapper");
+    optionButtonWrapper.setAttribute("class", "level_buttons_wrapper");
+    // button
+    var optionButton = document.createElement("button");
+    optionButton.setAttribute("class", "header_button");
+    optionButton.setAttribute("id", "options");
+    optionButton.addEventListener("click", function (event) {
+        // on lance le dialogue
+        selectOptions();
+        event.preventDefault();
+    });
+    //    liveScrapButton.innerHTML = extensionLang.liveScrapButton;
+    optionButton.innerHTML = "Options";
+    // Ajout button au wrapper
+    optionButtonWrapper.appendChild(optionButton);
+    // Ajout wrapper sous le titre principal "EXTRACTIFY"
+    document.getElementById("header_button_wrapper").appendChild(optionButtonWrapper);
 
     // wrapper dejsonized file name
     var dejsonizedFileWrapper = document.createElement("div");
@@ -160,9 +200,13 @@ function start() {
                 })
         });
 
-    // par défaut, on désactive jsonize et scrap
+    // par défaut, on désactive jsonize, scrap et options
     disableJsonizeButton();
     disableScrapButton();
+    disableOptionsButton();
+
+    // on initialise les options
+    setOptions();
 }
 
 function disableJsonizeButton() {
@@ -195,26 +239,39 @@ function disableScrapButton() {
     scrapButton.disabled = true;
 }
 
-function updateScrappingResultsDialog(objectType) {
-    let $nbr_of_scrapped_objects = $("#nbr_of_scrapped_objects");
-    let child = $(nbr_of_scrapped_objects).find("#nbr_of_" + objectType);
+function enableOptionsButton() {
+    var optionsButton = document.getElementById("options");
+    optionsButton.disabled = false;
+}
+
+function disableOptionsButton() {
+    var optionsButton = document.getElementById("options");
+    optionsButton.disabled = true;
+}
+
+function updateScrapingResultsDialog(objectType) {
+    let $nbr_of_scraped_objects = $("#nbr_of_scraped_objects");
+    let child = $(nbr_of_scraped_objects).find("#nbr_of_" + objectType);
     if (child.length === 0)
-        $nbr_of_scrapped_objects.append("<p id='nbr_of_" + objectType + "'>" + objectsCount.get(objectType) + " " + objectType + "(s)</p>");
+        $nbr_of_scraped_objects.append("<p id='nbr_of_" + objectType + "'>" + objectsCount.get(objectType) + " " + objectType + "(s)</p>");
     else
         child.text(objectsCount.get(objectType) + " " + objectType + "(s)");
 }
 
-function initScrappingResultsDialog() {
-    var nbr_of_scrapped_objects = document.getElementById("nbr_of_scrapped_objects");
-    nbr_of_scrapped_objects.innerHTML = "";
-    var scrapping_done = document.getElementById("scrapping_done");
-    scrapping_done.innerHTML = ""
+function initScrapingResultsDialog() {
+    var nbr_of_scraped_objects = document.getElementById("nbr_of_scraped_objects");
+    nbr_of_scraped_objects.innerHTML = "";
+    var scraping_done = document.getElementById("scraping_done");
+    scraping_done.innerHTML = ""
 }
 
-function closeScrappingResultsDialog($scrappingResultsWrapper) {
-    $scrappingResultsWrapper.dialog('close');
-    $("#scrapping_results_wrapper").dialog("destroy");
-    $("#scrapping_results_wrapper").css("display", "none");
+function closeScrapingResultsDialog() {
+    $scrapingResultsWrapper = $("#scraping_results_wrapper");
+    if ($scrapingResultsWrapper) {
+        $scrapingResultsWrapper.dialog('close');
+        $("#scraping_results_wrapper").dialog("destroy");
+        $("#scraping_results_wrapper").css("display", "none");
+    }
 }
 
 // function update levels
@@ -226,9 +283,11 @@ function updateLevelsDisplay() {
     if (getLevelsColsNbr() > 0) {
         enableJsonizeButton();
         enableScrapButton();
+        enableOptionsButton();
     } else {
         disableJsonizeButton();
         disableScrapButton();
+        disableOptionsButton();
     }
     // fermeture du dialog de sélection
     if ($("#select_content_dialog_wrapper").closest('.ui-dialog').is(':visible'))

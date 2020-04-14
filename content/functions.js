@@ -35,7 +35,7 @@ function injectRowsStyles(level) {
         if (level.rows.length > 0)
             for (row of level.rows)
                 rowColors += ".highlight_row-" + row.id + " { box-shadow: 0 0 3px #000; background: white; background-color: " + row.color + " !important; }\n";
-                
+
         style.appendChild(document.createTextNode(rowColors));
     }
 }
@@ -71,15 +71,18 @@ function highlightContent(level) {
     // pagination
     let pagination = level.pagination;
     if (pagination !== null) {
-        let $paginationTagClass = $(pagination.tagClass).first;
-        // On créé un élément jquery selon la classe
-        $paginationTagClass.addClass("selected_pagination highlight_pagination");
+        if (pagination.tagClass !== "custom pagination") {
+            let $paginationTagClass = $(pagination.tagClass).first();
+            if ($paginationTagClass)
+                $paginationTagClass.addClass("selected_pagination highlight_pagination");
+        }
     }
     // rows
     let rows = level.rows;
     for (let i = 0; i < rows.length; i++) {
         let row = rows[i];
         let $rowTagClass = $(row.tagClass);
+        //        console.log("$rowTagClass : ", $rowTagClass);
         $rowTagClass.each(function () {
             $this = $(this);
             $this.addClass("selected_row highlight_row-" + row.id);
@@ -199,7 +202,8 @@ function highlightRows(rowTagClass, rowId) {
         let $rowTagClass;
         try {
             $rowTagClass = $(rowTagClass);
-            if ($rowTagClass !== undefined) {
+            console.log("$rowTagClass length = " + $rowTagClass.length + " : ", $rowTagClass);
+            if ($rowTagClass !== undefined && $rowTagClass.length > 1) {
                 // on les surligne
                 $rowTagClass.addClass("selected_row highlight_row-" + rowId);
                 // on récupère la couleur
@@ -315,7 +319,7 @@ function highlightCols(row, colTagClass, colId) {
         let $colTagClass;
         try {
             $colTagClass = $(colTagClass);
-            if ($colTagClass !== undefined) {
+            if ($colTagClass !== undefined && $colTagClass.length > 1) {
                 $(row.tagClass).each(function () {
                     $selected_col = $(this).find(colTagClass).filter(":first");
                     $selected_col.addClass("selected_col highlight_col-" + colId);
@@ -520,7 +524,7 @@ function selectPagination() {
                     var paginationTagClass = paginationTagName + paginationClassName;
                     let prefixAndStep = getPaginationPrefixAndStep("tagClass", paginationTagClass);
                     if (prefixAndStep.length > 0) {
-                        //                                alert("prefix found : " + prefixAndStep[0] + " | step found : " + prefixAndStep[1]);                                
+                        console.log("selectPagination : prefixAndStep found : ", prefixAndStep);
                         // on highlight
                         targetPagination.addClass("selected_pagination highlight_pagination");
                         // on resolve
@@ -542,6 +546,7 @@ function selectPagination() {
 }
 
 function highlightPagination(level, paginationTagClass) {
+    console.log("highlightPagination : paginationTagClass received = " + paginationTagClass);
     return new Promise(function (resolve, reject) {
         let $paginationTagClass;
         try {
@@ -549,7 +554,7 @@ function highlightPagination(level, paginationTagClass) {
             if ($paginationTagClass !== undefined) {
                 let prefixAndStep = getPaginationPrefixAndStep("tagClass", paginationTagClass);
                 if (prefixAndStep.length > 0) {
-                    //            alert("prefix found : " + prefixAndStep[0] + " | step found : " + prefixAndStep[1]);
+                    console.log("highlightPagination : prefixAndStep found : ", prefixAndStep);
                     // on highlight
                     $paginationTagClass.addClass("selected_pagination highlight_pagination");
                     // on resolve
@@ -570,10 +575,12 @@ function highlightPagination(level, paginationTagClass) {
 }
 
 function matchPaginationPrefixAndStep(givenPrefix, givenStep) {
+    console.log("matchPaginationPrefixAndStep : givenPrefix = " + givenPrefix + " | givenStep = " + givenStep);
     return new Promise(function (resolve, reject) {
         let prefixAndStep = getPaginationPrefixAndStep("custom", givenPrefix);
+        console.log("matchPaginationPrefixAndStep : prefixAndStep returned : prefixAndStep.length = " + prefixAndStep.length, prefixAndStep);
         if (prefixAndStep.length > 0 && prefixAndStep[0] === givenPrefix && prefixAndStep[1] === givenStep) {
-            //            alert("prefix matching : " + prefixAndStep[0] + " | step matching : " + prefixAndStep[1]);
+            console.log("matchPaginationPrefixAndStep : prefixAndStep found : ", prefixAndStep);
             resolve(true);
         } else
             alert(contentLang.UnableToResolvePaginationPages);
@@ -581,6 +588,7 @@ function matchPaginationPrefixAndStep(givenPrefix, givenStep) {
 }
 
 function getPaginationPrefixAndStep(paramType, param) {
+    console.log("getPaginationPrefixAndStep with paramType = " + paramType + " and param = " + param);
     let $urls;
     let hrefs = new Set();
     let currentPage = window.location.href;
@@ -593,7 +601,10 @@ function getPaginationPrefixAndStep(paramType, param) {
         $urls = $("a[href*='" + param + "']");
         regex = new RegExp(param + "\\d+");
     } else {
-        $urls = $(param).first().find("a");
+        if (param.startsWith("a"))
+            $urls = $(param);
+        else
+            $urls = $(param).first().find("a");
         regex = new RegExp("[a-zA-Z]+[^\d][0-9]+(?!.*[0-9])");
     }
 
@@ -602,8 +613,7 @@ function getPaginationPrefixAndStep(paramType, param) {
         if (typeof href !== 'undefined' && !href.endsWith("/") && href !== currentPage && href !== currentPage + "#")
             hrefs.add(href);
     });
-    console.log("hrefs : ");
-    console.log(hrefs);
+    console.log("hrefs : ", hrefs);
 
     // on cherche ce qui varie dans les hrefs : matching selon regex précédente
     let pageVars = new Set();
@@ -611,15 +621,14 @@ function getPaginationPrefixAndStep(paramType, param) {
         let pageVar = href.match(regex);
         if (pageVar !== null) {
             let matcher = pageVar[0];
-            //            console.log("matcher : " + matcher);
+            console.log("matcher : " + matcher);
             pageVars.add(matcher);
         }
     }
-    console.log("pageVars : ");
-    console.log(pageVars);
+    console.log("pageVars : ", pageVars);
 
-    // pageVars doit faire au moins 2 (pour éviter par exemple les norep=1 dans l'url)
-    if (pageVars.size > 1) {
+    // pageVars doit faire au moins 1
+    if (pageVars.size > 0) {
         // prefix
         regex = new RegExp("\\d+");
         let prefixes = new Set();
@@ -633,15 +642,14 @@ function getPaginationPrefixAndStep(paramType, param) {
                 prefixes.add(prefix);
             }
         }
-        console.log("prefixes : ");
-        console.log(prefixes);
+        console.log("prefixes : ", prefixes);
+
         // on trie pageNbrs
         let pageNbrsArray = [...pageNbrs];
         pageNbrsArray.sort(function (a, b) {
             return a - b
         });
-        console.log("pageNbrsArray : ");
-        console.log(pageNbrsArray);
+        console.log("pageNbrsArray : ", pageNbrsArray);
 
         // step
         let steps = [];
@@ -658,14 +666,12 @@ function getPaginationPrefixAndStep(paramType, param) {
         steps.sort(function (a, b) {
             return a - b
         });
-        console.log("steps : ");
-        console.log(steps);
+        console.log("steps : ", steps);
 
         if (prefixes.size === 1 && steps.length > 0)
-            prefixAndStep.push([...prefixes][0], steps[0]);
+            prefixAndStep.push([...prefixes][0], parseInt(steps[0]));
 
-        console.log("prefixAndStep : ");
-        console.log(prefixAndStep);
+        console.log("prefixAndStep : ", prefixAndStep);
     }
     return prefixAndStep;
 }
@@ -885,10 +891,13 @@ function getPaginationPrefixAndStep(paramType, param) {
 // SCRAPPING
 //
 
-function getScrappedLevel(levelStructureMap, rowNbr) {
+function getScrapedPage(levelStructureMap, rowNbr) {
+    console.log("getScrapedPage : levelStructureMap = ", levelStructureMap);
     let map = new Map();
     for (let [rowTagClass, rowChildrenTagClass] of levelStructureMap) {
         $rowTagClass = $(rowTagClass);
+        console.log("$rowTagClass : ");
+        console.log($rowTagClass);
         let childUrl = "";
         $rowTagClass.each(function () {
             let rowChildren = {};
@@ -897,6 +906,7 @@ function getScrappedLevel(levelStructureMap, rowNbr) {
                 let rowChildTitle = rowChildTagClassArray[0];
                 let rowChildTagClass = rowChildTagClassArray[1];
                 let childText = $(this).find(rowChildTagClass).filter(":first").text();
+                console.log("childText : " + childText);
                 if (childText !== null && childText !== undefined) {
                     if (rowChildTitle === "url") {
                         childText = $(this).find(rowChildTagClass).prop("href");
@@ -942,15 +952,21 @@ function getPaginationLinks(pagination) {
     let hrefs = new Set();
     let prefix = pagination.prefix;
     let currentPage = window.location.href;
-    let $paginationTagClass = $(pagination.tagClass).first();
-    let $urls = $paginationTagClass.find("a[href*='" + prefix + "']");
+    let $urls;
+    let paginationTagClass = pagination.tagClass;
+    if (paginationTagClass !== "custom pagination") {
+        let $paginationTagClass = $(paginationTagClass).first();
+        //        if ()
+        $urls = $paginationTagClass.find("a[href*='" + prefix + "']");
+    } else {
+        $urls = $(document).find("a[href*='" + prefix + "']");
+    }
     $urls.each(function () {
         let href = this.href;
         if (typeof href !== 'undefined' && !href.endsWith("/") && href !== currentPage && href !== currentPage + "#")
             hrefs.add(href);
     });
-    console.log("hrefs : ");
-    console.log(hrefs);
+    console.log("hrefs : ", hrefs);
 
     let regex = new RegExp(prefix + "\\d+");
     let xHrefs = new Set();
@@ -968,10 +984,8 @@ function getPaginationLinks(pagination) {
             }
         }
     }
-    console.log("xHrefs : ");
-    console.log(xHrefs);
-    console.log("pageNbrs : ");
-    console.log(pageNbrs);
+    console.log("xHrefs : ", xHrefs);
+    console.log("pageNbrs : ", pageNbrs);
 
     if (xHrefs.size === 1 && pageNbrs.size > 0) {
         let invariantUrl = [...xHrefs][0];
@@ -990,8 +1004,7 @@ function getPaginationLinks(pagination) {
             console.log("link : " + link);
             paginationLinks.add(link);
         }
-        console.log("paginationLinks : ");
-        console.log(paginationLinks);
+        console.log("paginationLinks : ", paginationLinks);
     }
     return [...paginationLinks];
 }

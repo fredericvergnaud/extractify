@@ -17,7 +17,7 @@
         </div>
         <div id="header_button_wrapper"></div>
     </div>
-    
+
     <div id="tabs" style="display:none">
         <ul id="levels_tabs"></ul>
     </div>
@@ -29,7 +29,7 @@
 
     <div id="level_type_select_wrapper" title="Select a level type" style="display:none;">
         <form width="90%" class="select_level_type_form">
-            <label for="level_type">Level type * :</label><br/><br/>
+            <label for="level_type">Level type * :</label><br /><br />
             <input type="text" name="level_type" id="level_type" class="text ui-widget-content ui-corner-all">
         </form>
     </div>
@@ -39,31 +39,31 @@
 
     <div id="add_row_wrapper" title="Add row" style="display:none;">
         <form width="90%" class="add_row_form">
-            <label for="row_tag_class">Tag &amp; Class :</label><br/><br/>
+            <label for="row_tag_class">Tag &amp; Class :</label><br /><br />
             <input type="text" name="row_tag_class" id="row_tag_class" class="text ui-widget-content ui-corner-all">
         </form>
     </div>
 
     <div id="add_col_wrapper" title="Add column" style="display:none;">
         <form width="90%" class="add_col_form">
-            <label for="col_title">Title * :</label><br/>
+            <label for="col_title">Title * :</label><br />
             <input type="text" name="col_title" id="col_title" class="text ui-widget-content ui-corner-all">
-            <br/><br/>
-            <label for="col_tag_class">Tag &amp; Class :</label><br/>
+            <br /><br />
+            <label for="col_tag_class">Tag &amp; Class :</label><br />
             <input type="text" name="col_tag_class" id="col_tag_class" class="text ui-widget-content ui-corner-all">
         </form>
     </div>
 
     <div id="add_depth_wrapper" title="Add deeper level" style="display:none;">
         <form width="90%" class="add_depth_form">
-            <label for="depth_tag_class">Tag &amp; Class :</label><br/><br/>
+            <label for="depth_tag_class">Tag &amp; Class :</label><br /><br />
             <input type="text" name="depth_tag_class" id="depth_tag_class" class="text ui-widget-content ui-corner-all">
         </form>
     </div>
 
     <div id="add_pagination_wrapper" title="Add a pagination" style="display:none;">
         <form width="90%" class="add_pagination_form">
-            <label for="pagination_tag_class">Tag &amp; Class :</label><br/><br/>
+            <label for="pagination_tag_class">Tag &amp; Class :</label><br /><br />
             <input type="text" name="pagination_tag_class" id="pagination_tag_class" class="text ui-widget-content ui-corner-all">
         </form>
     </div>
@@ -71,16 +71,39 @@
     <div id="add_custom_pagination_wrapper" title="Add a custom pagination" style="display:none;">
         <form width="90%" class="add_custom_pagination_form">
             <label for="pagination_prefix" class="custom_pagination_label">Prefix :</label>
-            <input type="text" name="pagination_prefix" id="pagination_prefix" class="text ui-widget-content ui-corner-all"><br/><br/>
+            <input type="text" name="pagination_prefix" id="pagination_prefix" class="text ui-widget-content ui-corner-all"><br /><br />
             <label for="pagination_step" class="custom_pagination_label">Step :</label>
             <input type="text" name="pagination_step" id="pagination_step" class="text ui-widget-content ui-corner-all">
         </form>
     </div>
 
-    <div id="scrapping_results_wrapper" title="Scrapping" style="display:none" class="scrapping_result">
-        <p><br/>Scrapped elements :<br/></p>
-        <div id="nbr_of_scrapped_objects"></div>
-        <div id="scrapping_done"></div>
+    <div id="scraping_results_wrapper" title="Scraping" style="display:none" class="scraping_result">
+        <p><br />Scraped elements :<br /></p>
+        <div id="nbr_of_scraped_objects"></div>
+        <div id="scraping_done"></div>
+    </div>
+
+    <div id="options_select_wrapper" title="Options" style="display:none;">
+        <form width="90%" class="options_select_form" id="options_form">
+            <div class="options_panel_left_col">
+                <label>Scraping options</label>
+            </div>
+            <div class="options_panel_left_col">
+                <label for="request_latency" class="option_label">Request latency (ms) :</label>
+            </div>
+            <div class="options_panel_right_col">
+                <input type="text" name="option" id="request_latency_input" value="0" placeholder="0" class="text ui-widget-content ui-corner-all">
+            </div>
+            <div class="options_panel_left_col">
+                <label for="scraping_page_in_own_tab" class="option_label">Scrap pages in its own tab :</label>
+            </div>
+            <div class="options_panel_right_col">
+                <label class="switch">
+                    <input type="checkbox" id="scraping_page_in_own_tab_input" name="option" value="false">
+                    <span class="slider round" id="scraping_page_in_own_tab_span"></span>
+                </label>
+            </div>
+        </form>
     </div>
 
     <script src="libs/jquery.js"></script>

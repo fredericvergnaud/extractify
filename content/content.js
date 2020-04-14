@@ -40,7 +40,23 @@ chrome.runtime.onMessage.addListener(
                 var level = message.data;
                 if (!hasRowsStyles)
                     injectRowsStyles(level);
-                highlightContent(level);
+                // row
+                var rows = level.rows;
+                var rowsTagClasses = "";
+                for (row of level.rows)
+                    rowsTagClasses += row.tagClass + ",";
+                rowsTagClasses = rowsTagClasses.substring(0, rowsTagClasses.length - 1);
+                console.log("rowsTagClasses : ", rowsTagClasses);
+
+                var jsInitChecktimer = setInterval(checkForJS_Finish, 111);
+
+                function checkForJS_Finish() {
+                    if (rowsTagClasses !== "" && $(rowsTagClasses).length > 0) {
+                        console.log("rowsTagClasses found ! ");
+                        clearInterval(jsInitChecktimer);
+                        highlightContent(level);
+                    }
+                }
                 break;
             case "highlightRows":
                 if (!hasColsDepthsStyles)
@@ -145,16 +161,52 @@ chrome.runtime.onMessage.addListener(
                         });
                     });
                 break;
-            case "levelScrapping":
+            case "pageScraping":
                 var levelStructureMap = new Map(message.data);
+                console.log("levelStructureMap : ", levelStructureMap);
                 var rowNbr = message.rowNbr;
-                var scrappedLevel = getScrappedLevel(levelStructureMap, rowNbr);
-                sendResponse({
-                    response: "scrappedLevel",
-                    responseData: [...scrappedLevel]
-                });
+                var requestLatency = message.requestLatency;
+                console.log("rowNbr = " + rowNbr + " | requestLatency = " + requestLatency);
+                if (requestLatency === 0) {
+                    var scrapedPage = getScrapedPage(levelStructureMap, rowNbr);
+                    sendResponse({
+                        response: "scrapedPage",
+                        responseData: [...scrapedPage]
+                    });
+                } else {
+                    // rows
+                    var rowsTagClasses = "";
+                    for (const [key, value] of levelStructureMap.entries()) {
+                        console.log("key : " + key);
+                        rowsTagClasses += key + ",";
+                    }
+                    rowsTagClasses = rowsTagClasses.substring(0, rowsTagClasses.length - 1);
+                    console.log("rowsTagClasses : ", rowsTagClasses);
+
+                    var requestLatencyMs = requestLatency * 1000;
+                    var jsInitChecktimer = setInterval(scrap_checkForJS_Finish, requestLatencyMs);
+
+                    function scrap_checkForJS_Finish() {
+                        if ($(rowsTagClasses).length > 0) {
+                            console.log("rowsTagClasses found ! ");
+                            clearInterval(jsInitChecktimer);
+                            var scrapedPage = getScrapedPage(levelStructureMap, rowNbr);
+                            sendResponse({
+                                response: "scrapedPage",
+                                responseData: [...scrapedPage]
+                            });
+                        } else {
+                            console.log("rowsTagClasses NOT found");
+                            sendResponse({
+                                response: "scrapedPage",
+                                responseData: "noData"
+                            });
+                        }
+                    }
+
+                }
                 break;
-            case "paginationScrapping":
+            case "paginationScraping":
                 var pagination = message.data;
                 var paginationLinks = getPaginationLinks(pagination);
                 sendResponse({

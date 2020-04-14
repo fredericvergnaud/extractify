@@ -40,3 +40,8 @@ function Depth(dataType, id, tagClass) {
     this.id = id;
     this.tagClass = tagClass;
 }
+
+function Option(name, value) {
+    this.name = name;
+    this.value = value;
+}
