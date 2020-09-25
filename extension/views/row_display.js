@@ -137,7 +137,7 @@ function displayRow(row, level) {
                 if (colArray.length === 3) {
                     // avec tag et class
                     let colTagClass = colArray[2];
-                    highlightCols(level.tabId, row, colTagClass, globalColId)
+                    highlightCols(level.tabId, row, colTagClass, globalColId, level)
                         .then(function(selectedCols) {
                             // add key / title to level type col titles
                             let colTitleKey = colArray[0];

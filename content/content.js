@@ -66,7 +66,7 @@ chrome.runtime.onMessage.addListener(
                 var rowId = message.rowId;
                 if (!hasRowsStyles)
                     injectRowsStyles(level);
-                highlightRows(rowTagClass, rowId)
+                highlightRows(rowTagClass, rowId, level)
                     .then(function (response) {
                         sendResponse({
                             response: "selectedRows",
@@ -97,7 +97,8 @@ chrome.runtime.onMessage.addListener(
                 var row = message.row;
                 var colTagClass = message.colTagClass;
                 var colId = message.colId;
-                highlightCols(row, colTagClass, colId)
+                var level = message.level;
+                highlightCols(row, colTagClass, colId, level)
                     .then(function (response) {
                         sendResponse({
                             response: "selectedCols",

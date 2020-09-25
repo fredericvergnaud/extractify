@@ -68,7 +68,7 @@ function highlightRows(tabId, level, rowTagClass, rowId) {
     });
 }
 
-function highlightCols(tabId, row, colTagClass, colId) {
+function highlightCols(tabId, row, colTagClass, colId, level) {
     // on met le focus sur la fenêtre originale
     chrome.windows.update(browserWindowId, {
         focused: true
@@ -78,7 +78,8 @@ function highlightCols(tabId, row, colTagClass, colId) {
             action: "highlightCols",
             row: row,
             colTagClass: colTagClass,
-            colId: colId
+            colId: colId,
+            level: level
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {

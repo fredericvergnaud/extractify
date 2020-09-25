@@ -3,7 +3,7 @@ function selectLevelType() {
     let defer = $.Deferred();
     $("#level_type_select_wrapper").dialog({
         autoOpen: true,
-        height: 200,
+        height: 210,
         width: 250,
         modal: true,
         buttons: {

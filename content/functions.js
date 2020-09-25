@@ -130,7 +130,7 @@ function getClosestPertinentParentRowTag(element) {
     return closestParent;
 }
 
-function selectRows(rowId) {
+function selectRows(rowId, level) {
     var targetRow;
     return new Promise(function (resolve, reject) {
         // on écoute le mouseover, le mouseout et le click sur les enfants du tag <body>
@@ -174,7 +174,7 @@ function selectRows(rowId) {
                     var rowClassName = "." + rowClasses.join(".");
                     // On créé un élément jquery selon la structure de classe identifiée
                     var $sameTags = $(rowClassName);
-                    if ($sameTags.length > 1) {
+                    if ($sameTags.length > 1 || ($sameTags.length === 1 && level.id > 0))  {
                         // on les surligne
                         $sameTags.addClass("selected_row highlight_row-" + rowId);
                         // on récupère la couleur
@@ -197,13 +197,14 @@ function selectRows(rowId) {
     });
 }
 
-function highlightRows(rowTagClass, rowId) {
+function highlightRows(rowTagClass, rowId, level) {
     return new Promise(function (resolve, reject) {
         let $rowTagClass;
         try {
             $rowTagClass = $(rowTagClass);
             console.log("$rowTagClass length = " + $rowTagClass.length + " : ", $rowTagClass);
-            if ($rowTagClass !== undefined && $rowTagClass.length > 1) {
+            console.log("level id = " + level.id);
+            if ($rowTagClass !== undefined && ($rowTagClass.length > 1 || level.id > 0))  {
                 // on les surligne
                 $rowTagClass.addClass("selected_row highlight_row-" + rowId);
                 // on récupère la couleur
@@ -314,12 +315,12 @@ function selectCols(row, colId) {
     });
 }
 
-function highlightCols(row, colTagClass, colId) {
+function highlightCols(row, colTagClass, colId, level) {
     return new Promise(function (resolve, reject) {
         let $colTagClass;
         try {
             $colTagClass = $(colTagClass);
-            if ($colTagClass !== undefined && $colTagClass.length > 1) {
+            if ($colTagClass !== undefined && ($colTagClass.length > 1 || level.id > 0)) {
                 $(row.tagClass).each(function () {
                     $selected_col = $(this).find(colTagClass).filter(":first");
                     $selected_col.addClass("selected_col highlight_col-" + colId);
