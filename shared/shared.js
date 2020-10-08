@@ -267,11 +267,12 @@ function updatePageScraping(newTabId, url, levelStructureMap, requestLatency, sc
         }, function (tab) {
             lastError = chrome.runtime.lastError;
             if (lastError) {
-                alert(extensionLang.ScrapingError + "\n" + lastError.message);
-                if (scrapingPageInOwnTab === "true")
-                    newTabId = null;
-                endScrap(newTabId, scrapingPageInOwnTab);
-                return;
+//                alert(extensionLang.ScrapingError + " (in tab)\n" + lastError.message);
+//                if (scrapingPageInOwnTab === "true")
+//                    newTabId = null;
+//                endScrap(newTabId, scrapingPageInOwnTab);
+//                return;
+                resolve("noData");
             } else {
                 chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
                     if (changeInfo.status === 'complete') {
@@ -283,18 +284,22 @@ function updatePageScraping(newTabId, url, levelStructureMap, requestLatency, sc
                         }, function (response) {
                             lastError = chrome.runtime.lastError;
                             if (lastError) {
-                                alert(extensionLang.ScrapingError + "\n" + lastError.message);
-                                if (scrapingPageInOwnTab === "true")
-                                    newTabId = null;
-                                endScrap(newTabId, scrapingPageInOwnTab);
-                                return;
-                            }
-                            if (response.data != "") {
-                                rowNbr += response.responseData.length;
-                                resolve(response.responseData);
-                            } else
-                                reject("failed");
-                            chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
+//                                alert(extensionLang.ScrapingError + " (in response)\n" + lastError.message);
+//                                if (scrapingPageInOwnTab === "true")
+//                                    newTabId = null;
+//                                endScrap(newTabId, scrapingPageInOwnTab);
+//                                return;
+                                resolve("noData");
+                            } else {
+                                if (response.data != "") {
+                                    rowNbr += response.responseData.length;
+                                    resolve(response.responseData);
+                                } else {
+//                                    reject("failed");
+                                    resolve("noData");
+                                }
+                                chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
+                            }                            
                         });
                     }
                 });
@@ -316,14 +321,18 @@ function updatePaginationScraping(newTabId, url, pagination) {
                     }, function (response) {
                         var lastError = chrome.runtime.lastError;
                         if (lastError) {
-                            console.log("lastError.message", lastError.message);
+//                            console.log("lastError.message", lastError.message);
                             // 'Could not establish connection. Receiving end does not exist.'
-                            return;
+//                            return;
+                            resolve("noData");
+                        } else {
+                            if (response.data != "")
+                                resolve(response.responseData);
+                            else {
+                                resolve("noData");
+    //                            reject("failed");
+                            }
                         }
-                        if (response.data != "")
-                            resolve(response.responseData);
-                        else
-                            reject("failed");
                         chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
                     });
                 }

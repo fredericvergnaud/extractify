@@ -141,6 +141,9 @@ function start() {
                 .then(function () {
                     console.log("levels_display.js : scrapedObjects lenght = " + scrapedObjects.length);
                     endScrap(newTabId, scrapingPageInOwnTab);
+                console.log("errors : " + errorsNbr);
+                if (errorsNbr > 0)
+                    alert(errorsNbr + extensionLang.ScrapingError);
                 });
         }
 

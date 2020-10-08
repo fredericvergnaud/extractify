@@ -15,5 +15,5 @@ let extensionLang = {
     AddDepthButton: "Add deeper links",
     AddColButton: "Add<br/>col",
     RemoveButton: "Remove",
-    ScrapingError: "Scraping error.",
+    ScrapingError: " scraping error(s). Your scraping may not be complete.",
 };

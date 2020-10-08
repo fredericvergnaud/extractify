@@ -227,6 +227,7 @@ function initScraping() {
     objectsCount = new Map();
     stopScraping = 0;
     initScrapingResultsDialog();
+    errorsNbr = 0;
 }
 
 function getLevelStructureMap(level) {
@@ -335,8 +336,10 @@ async function delayedUpdateTabForLevelScraping(tabId, url, levelId, objectTab, 
     // levelScrapping est la réponse envoyée par le resolve de updateNewTab qui est une Promise
     await updatePageScraping(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
         .then(function (pageScraping) {
-            //            console.log("delayedUpdateTabForLevelScraping pageScraping :", pageScraping);
-            return processPageScraping(pageScraping, levelId, objectTab)
+            console.log("delayedUpdateTabForLevelScraping pageScraping :", pageScraping);
+            if (pageScraping === "noData")
+                errorsNbr++;
+            return processPageScraping(pageScraping, levelId, objectTab);
         })
         .then(async function () {
             let level = getLevel(levelId);
@@ -353,11 +356,15 @@ async function delayedUpdateTabForLevelScraping(tabId, url, levelId, objectTab, 
 async function delayedUpdateTabForPaginationScraping(tabId, url, level, objectTab, requestLatency, scrapingPageInOwnTab) {
     await updatePaginationScraping(tabId, url, level.pagination)
         .then(async function (paginationScraping) {
-            console.log("pagination length = " + paginationScraping.length, level.pagination);
-            if (paginationScraping.length > 0) {
-                //                console.log("paginationScraping : ", paginationScraping);
-                for (const paginationUrl of paginationScraping)
-                    await delayedUpdateTabForPaginationLevelScraping(tabId, paginationUrl, level.id, objectTab, requestLatency, scrapingPageInOwnTab);
+            if (paginationScraping === "noData")
+                errorsNbr++;
+            else {
+                console.log("pagination length = " + paginationScraping.length, level.pagination);
+                if (paginationScraping.length > 0) {
+                    //                console.log("paginationScraping : ", paginationScraping);
+                    for (const paginationUrl of paginationScraping)
+                        await delayedUpdateTabForPaginationLevelScraping(tabId, paginationUrl, level.id, objectTab, requestLatency, scrapingPageInOwnTab);
+                }
             }
         });
 }
