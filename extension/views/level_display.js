@@ -147,7 +147,6 @@ function displayLevel(level) {
     // on montre le formulaire
     let addRowWrapper = document.getElementById("add_row_wrapper");
     addRowWrapper.style.display = "block";
-
     selectRow()
       .then(function(rowSelector) {
         console.log("rowSelector choosen = " + rowSelector);
@@ -204,18 +203,18 @@ function displayLevel(level) {
         console.log("paginationSelector choosen = " + paginationSelector);
         if (paginationSelector !== "") {
           // add pagination
-          highlightPagination(level.tabId, level, paginationSelector)
-            .then(function(selectedPagination) {
-              let pagination = addPagination(selectedPagination.paginationSelector, selectedPagination.paginationPrefix, selectedPagination.paginationStep, level);
-              displayPagination(level);
-              updateLevelDisplay(level);
-              updateLevelsDisplay();
-            });
+          // highlightPagination(level.tabId, level, paginationSelector)
+          //   .then(function(selectedPagination) {
+          //     let pagination = addPagination(selectedPagination.paginationSelector, selectedPagination.paginationPrefix, selectedPagination.paginationStep, level);
+          //     displayPagination(level);
+          //     updateLevelDisplay(level);
+          //     updateLevelsDisplay();
+          //   });
         } else {
           var dataArray = [];
           sendMessageToTab(level, "selectPagination", dataArray)
             .then(function(selectedPagination) {
-              let pagination = addPagination(selectedPagination.paginationSelector, selectedPagination.paginationPrefix, selectedPagination.paginationStep, level);
+              let pagination = addPagination(selectedPagination.paginationSelector, selectedPagination.paginationPrefix, selectedPagination.paginationStep, selectedPagination.paginationLinks, level);
               displayPagination(level);
               updateLevelDisplay(level);
               updateLevelsDisplay();

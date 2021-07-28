@@ -138,7 +138,7 @@ function selectRows(rowId, level) {
       mouseover: function(event) {
         // on récupère la cible survolée
         $targetRow = $(event.target);
-        var targetRowTagName = targetRow.prop("tagName");
+        var targetRowTagName = $targetRow.prop("tagName");
         // si la cible est différente de pertinentRowTags, on récupère un parent plus pertinent
         if (pertinentRowTags.indexOf(targetRowTagName) === -1)
           $targetRow = getClosestPertinentParentRowTag($targetRow);
@@ -581,80 +581,85 @@ function selectPagination() {
         return false;
       },
       click: function(event) {
-        event.preventDefault();
-        // on efface le highlight sur la cible
-        $targetPagination.removeClass("highlight_pagination");
+        try {
+          event.preventDefault();
+          // on efface le highlight sur la cible
+          $targetPagination.removeClass("highlight_pagination");
 
-        // if (!$targetPagination.attr('class')) {
-        //   alert(contentLang.PaginationEmptyClass);
-        //   return false;
-        // } else
-        if ($targetPagination.hasClass("selected_pagination")) {
-          alert(contentLang.PaginationAlreadySelected);
-          return false;
-        } else {
-          var paginationLinksArray = [];
-          var paginationTagName = $targetPagination.prop("tagName");
-          console.log("paginationTagName : ", paginationTagName);
-          // on essaye de voir si existance d'une classe
-          var paginationSelector = null;
-          if ($targetPagination.attr('class') !== '') {
-            var paginationClasses = targetPagination.attr("class").split(" ");
-            var paginationClassName = "." + paginationClasses.join(".");
-            paginationSelector = paginationTagName + paginationClassName;
-          }
-          if (paginationTagName === "A") {
-            paginationLinksArray.push($targetPagination.attr('href'));
-          } else {
-            $paginationLinks = $targetPagination.find("a");
-            $paginationLinks.each(function() {
-              paginationLinksArray.push($(this).attr('href'));
-            });
-          }
-          console.log("paginationLinksArray : ", paginationLinksArray);
-          if (paginationLinksArray.length === 0) {
-            alert(contentLang.UnableToFindLinksForPaginationPages);
-            return false;
-          } else if (paginationLinksArray.length === 1) {
-            if (confirm(contentLang.PaginationFewElements)) {
-              // on highlight
-              $targetPagination.addClass("selected_pagination highlight_pagination");
-              // on resolve
-              var dataArray = {
-                "paginationSelector": paginationSelector,
-                "paginationPrefix": null,
-                "paginationStep": 0,
-                "paginationLinksArray": paginationLinksArray
-              };
-              resolve(dataArray);
-            } else {
-              alert(contentLang.PaginationTooFewElements);
-              return false;
-            }
-          }
-
-
-          // var paginationClasses = targetPagination.attr("class").split(" ");
-          // var paginationClassName = "." + paginationClasses.join(".");
-          // var paginationSelector = paginationTagName + paginationClassName;
-          // let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
-          // if (prefixAndStep.length > 0) {
-          //   console.log("selectPagination : prefixAndStep found : ", prefixAndStep);
-          //   // on highlight
-          //   targetPagination.addClass("selected_pagination highlight_pagination");
-          //   // on resolve
-          //   var dataArray = {
-          //     "paginationSelector": paginationSelector,
-          //     "paginationPrefix": prefixAndStep[0],
-          //     "paginationStep": prefixAndStep[1]
-          //   };
-          //   resolve(dataArray);
-          //   // on enlève les actions
-          //   $('body').children().unbind();
-          // } else {
-          //   alert(contentLang.UnableToResolvePaginationPages);
+          // if (!$targetPagination.attr('class')) {
+          //   alert(contentLang.PaginationEmptyClass);
           //   return false;
-          // }
+          // } else
+          if ($targetPagination.hasClass("selected_pagination")) {
+            alert(contentLang.PaginationAlreadySelected);
+            return false;
+          } else {
+            var paginationLinks = [];
+            var paginationTagName = $targetPagination.prop("tagName");
+            console.log("paginationTagName : ", paginationTagName);
+            // on essaye de voir si existance d'une classe
+            var paginationSelector = "";
+            if ($targetPagination.attr('class') !== '') {
+              var paginationClasses = $targetPagination.attr("class").split(" ");
+              var paginationClassName = "." + paginationClasses.join(".");
+              paginationSelector = paginationTagName + paginationClassName;
+            }
+            if (paginationTagName === "A") {
+              paginationLinks.push($targetPagination.prop("href"));
+            } else {
+              $paginationLinks = $targetPagination.find("a");
+              $paginationLinks.each(function() {
+                paginationLinks.push($(this).prop("href"));
+              });
+            }
+            console.log("paginationLinks : ", paginationLinks);
+            if (paginationLinks.length === 0) {
+              alert(contentLang.UnableToFindLinksForPaginationPages);
+              return false;
+            } else if (paginationLinks.length === 1) {
+              if (confirm(contentLang.PaginationFewElements)) {
+                // on highlight
+                $targetPagination.addClass("selected_pagination highlight_pagination");
+                // on resolve
+                var dataArray = {
+                  "paginationSelector": paginationSelector,
+                  "paginationPrefix": null,
+                  "paginationStep": 0,
+                  "paginationLinks": paginationLinks
+                };
+                resolve(dataArray);
+              } else {
+                alert(contentLang.PaginationTooFewElements);
+                return false;
+              }
+            }
+
+
+            // var paginationClasses = targetPagination.attr("class").split(" ");
+            // var paginationClassName = "." + paginationClasses.join(".");
+            // var paginationSelector = paginationTagName + paginationClassName;
+            // let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
+            // if (prefixAndStep.length > 0) {
+            //   console.log("selectPagination : prefixAndStep found : ", prefixAndStep);
+            //   // on highlight
+            //   targetPagination.addClass("selected_pagination highlight_pagination");
+            //   // on resolve
+            //   var dataArray = {
+            //     "paginationSelector": paginationSelector,
+            //     "paginationPrefix": prefixAndStep[0],
+            //     "paginationStep": prefixAndStep[1]
+            //   };
+            //   resolve(dataArray);
+            //   // on enlève les actions
+            //   $('body').children().unbind();
+            // } else {
+            //   alert(contentLang.UnableToResolvePaginationPages);
+            //   return false;
+            // }
+          }
+          $('body').children().unbind();
+        } catch (error) {
+          alert(error);
         }
         return false;
       }

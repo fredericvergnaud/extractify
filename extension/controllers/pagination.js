@@ -1,8 +1,9 @@
-function addPagination(paginationSelector, paginationPrefix, paginationStep, level) {
+function addPagination(paginationSelector, paginationPrefix, paginationStep, paginationLinks, level) {
     var pagination = new Pagination();
     pagination.selector = paginationSelector;
     pagination.prefix = paginationPrefix;
     pagination.step = Number(paginationStep);
+    pagination.links = paginationLinks;
     level.pagination = pagination;
 //    console.log("Nouvelle pagination : " + pagination.dataType + ", " + pagination.selector);
     saveLevelsArray();
@@ -14,4 +15,3 @@ function removePagination(level) {
     level.pagination = null;
     saveLevelsArray();
 }
-

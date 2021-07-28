@@ -22,7 +22,9 @@ function displayPagination(level) {
     var classNameWrapper = document.createElement('div');
     classNameWrapper.setAttribute('class', "rows_table_cell rows_table_cell_big");
     classNameWrapper.setAttribute('id', "pagination_class_name_wrapper_level-" + level.id);
-    classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + level.pagination.selector;
+    var paginationSelector = "";
+    if (level.pagination.selector !== "")
+      classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + level.pagination.selector;
 
     // Ajout
     paginationLeftWrapper.appendChild(dataTypeWrapper);
@@ -37,7 +39,8 @@ function displayPagination(level) {
     var prefixAndStepWrapper = document.createElement('div');
     prefixAndStepWrapper.setAttribute('class', "cols_table_cell cols_table_cell_middle");
     prefixAndStepWrapper.setAttribute('id', "pagination_prefix_and_step_wrapper_level-" + level.id);
-    prefixAndStepWrapper.innerHTML = '<span class="cell_title">prefix &#126; step</span><br/><span class="cell_result">&apos;' + level.pagination.prefix + '&apos; &#126; ' + level.pagination.step + '</span>';
+    if (level.pagination.prefix !== null)
+      prefixAndStepWrapper.innerHTML = '<span class="cell_title">prefix &#126; step</span><br/><span class="cell_result">&apos;' + level.pagination.prefix + '&apos; &#126; ' + level.pagination.step + '</span>';
 
     // remove pagination button wrapper
     var removePaginationButtonWrapper = document.createElement('div');
