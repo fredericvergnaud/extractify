@@ -77,17 +77,17 @@ function selectRow() {
                 text: "Add row",
                 id: "addRowId",
                 click: function () {
-                    let rowTagClass = $("#row_tag_class").val();
-                    if (rowTagClass !== "") {
+                    let rowSelector = $("#row_tag_class").val();
+                    if (rowSelector !== "") {
                         // nettoyage
                         // replace des espaces
-                        rowTagClass = rowTagClass.replace(/\s+/g, ' ');
+                        rowSelector = rowSelector.replace(/\s+/g, ' ');
                         // replace des return
-                        rowTagClass = rowTagClass.replace(/[\n\r]/g, '');
+                        rowSelector = rowSelector.replace(/[\n\r]/g, '');
                         // trim
-                        rowTagClass = rowTagClass.trim();
+                        rowSelector = rowSelector.trim();
                     }
-                    defer.resolve(rowTagClass);
+                    defer.resolve(rowSelector);
                     $(this).dialog("close");
                     $(this).dialog("destroy");
                     $(this).css("display", "none");
@@ -131,7 +131,7 @@ function selectCol() {
                 id: "addColId",
                 click: function () {
                     let colTitle = $("#col_title").val();
-                    let colTagClass = $("#col_tag_class").val();
+                    let colSelector = $("#col_tag_class").val();
                     let colArray = [],
                         colTitleKey;
                     if (colTitle !== "") {
@@ -147,22 +147,22 @@ function selectCol() {
                         // key
                         colTitleKey = colTitle.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s/g, "_");
                     }
-                    if (colTagClass !== "") {
+                    if (colSelector !== "") {
                         // nettoyage
                         // replace des espaces
-                        colTagClass = colTagClass.replace(/\s+/g, ' ');
+                        colSelector = colSelector.replace(/\s+/g, ' ');
                         // replace des return
-                        colTagClass = colTagClass.replace(/[\n\r]/g, '');
+                        colSelector = colSelector.replace(/[\n\r]/g, '');
                         // trim
-                        colTagClass = colTagClass.trim();
+                        colSelector = colSelector.trim();
                     }
-                    if (colTitle !== "" && colTagClass !== "") {
-                        colArray.push(colTitleKey, colTitle, colTagClass);
+                    if (colTitle !== "" && colSelector !== "") {
+                        colArray.push(colTitleKey, colTitle, colSelector);
                         defer.resolve(colArray);
                         $(this).dialog("close");
                         $(this).dialog("destroy");
                         $(this).css("display", "none");
-                    } else if (colTitle !== "" && colTagClass === "") {
+                    } else if (colTitle !== "" && colSelector === "") {
                         colArray.push(colTitleKey, colTitle);
                         defer.resolve(colArray);
                         $(this).dialog("close");
@@ -211,17 +211,17 @@ function selectDepth() {
                 text: "Add deeper level",
                 id: "addDepthId",
                 click: function () {
-                    let depthTagClass = $("#depth_tag_class").val();
-                    if (depthTagClass !== "") {
+                    let depthSelector = $("#depth_tag_class").val();
+                    if (depthSelector !== "") {
                         // nettoyage
                         // replace des espaces
-                        depthTagClass = depthTagClass.replace(/\s+/g, ' ');
+                        depthSelector = depthSelector.replace(/\s+/g, ' ');
                         // replace des return
-                        depthTagClass = depthTagClass.replace(/[\n\r]/g, '');
+                        depthSelector = depthSelector.replace(/[\n\r]/g, '');
                         // trim
-                        depthTagClass = depthTagClass.trim();
+                        depthSelector = depthSelector.trim();
                     }
-                    defer.resolve(depthTagClass);
+                    defer.resolve(depthSelector);
                     $(this).dialog("close");
                     $(this).dialog("destroy");
                     $(this).css("display", "none");
@@ -264,17 +264,17 @@ function selectPagination() {
                 text: "Add pagination",
                 id: "addPaginationId",
                 click: function () {
-                    let paginationTagClass = $("#pagination_tag_class").val();
-                    if (paginationTagClass !== "") {
+                    let paginationSelector = $("#pagination_tag_class").val();
+                    if (paginationSelector !== "") {
                         // nettoyage
                         // replace des espaces
-                        paginationTagClass = paginationTagClass.replace(/\s+/g, ' ');
+                        paginationSelector = paginationSelector.replace(/\s+/g, ' ');
                         // replace des return
-                        paginationTagClass = paginationTagClass.replace(/[\n\r]/g, '');
+                        paginationSelector = paginationSelector.replace(/[\n\r]/g, '');
                         // trim
-                        paginationTagClass = paginationTagClass.trim();
+                        paginationSelector = paginationSelector.trim();
                     }
-                    defer.resolve(paginationTagClass);
+                    defer.resolve(paginationSelector);
                     $(this).dialog("close");
                     $(this).dialog("destroy");
                     $(this).css("display", "none");

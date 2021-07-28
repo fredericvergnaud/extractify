@@ -21,7 +21,7 @@ function displayRow(row, level) {
     var classNameWrapper = document.createElement('div');
     classNameWrapper.setAttribute('class', "rows_table_cell rows_table_cell_big");
     classNameWrapper.setAttribute('id', "class_name_wrapper_row-" + row.id);
-    classNameWrapper.innerHTML = '<span class="cell_title">tag & class</span><br/>' + row.tagClass;
+    classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + row.selector;
 
     // Ajout
     rowLeftWrapper.appendChild(dataTypeWrapper);
@@ -67,27 +67,27 @@ function displayRow(row, level) {
     addDepthButton.addEventListener("click", function (event) {
 
         // on efface l'input de tag & class
-        let depthTagClassInput = document.getElementById("depth_tag_class");
-        depthTagClassInput.value = "";
+        let depthSelectorInput = document.getElementById("depth_tag_class");
+        depthSelectorInput.value = "";
 
         // on montre le formulaire
         let addDepthWrapper = document.getElementById("add_depth_wrapper");
         addDepthWrapper.style.display = "block";
 
         selectDepth()
-            .then(function (depthTagClass) {
-                console.log("depthTagClass choosen = " + depthTagClass);
-                if (depthTagClass !== "") {
-                    highlightDepth(level.tabId, row, depthTagClass)
+            .then(function (depthSelector) {
+                console.log("depthSelector choosen = " + depthSelector);
+                if (depthSelector !== "") {
+                    highlightDepth(level.tabId, row, depthSelector)
                         .then(function(selectedDepth) {
-                            let depth = addDepth(selectedDepth.depthTagClass, row);
+                            let depth = addDepth(selectedDepth.depthSelector, row);
                             level.someDeeperLinks.push(...selectedDepth.deeperLinks);
                             displayDepth(depth, row, level);
                             updateRowDisplay(row, level);
                             updateLevelDisplay(level);
                             updateLevelsDisplay();
                         });
-                    
+
                 } else {
                     let dataArray = {
                         "row": row
@@ -95,7 +95,7 @@ function displayRow(row, level) {
                     sendMessageToTab(level, "selectDepth", dataArray)
                         .then(function (selectedDepth) {
                             level.someDeeperLinks.push(...selectedDepth.deeperLinks);
-                            var depth = addDepth(selectedDepth.depthTagClass, row);
+                            var depth = addDepth(selectedDepth.depthSelector, row);
                             displayDepth(depth, row, level);
                             updateRowDisplay(row, level);
                             updateLevelDisplay(level);
@@ -123,36 +123,36 @@ function displayRow(row, level) {
         let colTitleInput = document.getElementById("col_title");
         colTitleInput.value = "";
         // on efface l'input de tag & class
-        let colTagClassInput = document.getElementById("col_tag_class");
-        colTagClassInput.value = "";
+        let colSelectorInput = document.getElementById("col_tag_class");
+        colSelectorInput.value = "";
 
         // on montre le formulaire
         let addColWrapper = document.getElementById("add_col_wrapper");
         addColWrapper.style.display = "block";
 
         // on lance le dialogue
-        let selectedColTitleArray, selectedColTagClassArray;
+        let selectedColTitleArray, selectedColSelectorArray;
         selectCol()
             .then(function (colArray) {
                 if (colArray.length === 3) {
                     // avec tag et class
-                    let colTagClass = colArray[2];
-                    highlightCols(level.tabId, row, colTagClass, globalColId, level)
+                    let colSelector = colArray[2];
+                    highlightCols(level.tabId, row, colSelector, globalColId, level)
                         .then(function(selectedCols) {
                             // add key / title to level type col titles
                             let colTitleKey = colArray[0];
                             let colTitle = colArray[1];
                             fillColTitles(colTitleKey, colTitle);
-                            
-                            // add col                    
+
+                            // add col
                             let selectedColTitleArray = [colTitleKey, colTitle];
-                            let col = addCol(colTagClass, globalColId, selectedColTitleArray, row, level);
+                            let col = addCol(colSelector, globalColId, selectedColTitleArray, row, level);
                             displayCol(col, row, level);
                             updateRowDisplay(row, level);
                             updateLevelDisplay(level);
                             updateLevelsDisplay();
                         });
-                    
+
                 } else if (colArray.length === 2) {
                     // sans tag
                     let dataArray = {
@@ -161,14 +161,14 @@ function displayRow(row, level) {
                     };
                     sendMessageToTab(level, "selectCols", dataArray)
                         .then(function (selectedCols) {
-                            //                        console.log("selectedCols : " + selectedCols.colTagClass);
+                            //                        console.log("selectedCols : " + selectedCols.colSelector);
                             // add key / title to level type col titles
                             let colTitleKey = colArray[0];
                             let colTitle = colArray[1];
                             fillColTitles(colTitleKey, colTitle);
-                            
+
                             // add col
-                            let col = addCol(selectedCols.colTagClass, globalColId, colArray, row, level);
+                            let col = addCol(selectedCols.colSelector, globalColId, colArray, row, level);
                             displayCol(col, row, level);
                             updateRowDisplay(row, level);
                             updateLevelDisplay(level);
@@ -181,7 +181,7 @@ function displayRow(row, level) {
     // Ajout bouton au wrapper
     addColsButtonWrapper.appendChild(addColButton);
 
-    // Ajout    
+    // Ajout
     rowRightWrapper.appendChild(addDepthButtonWrapper);
     rowRightWrapper.appendChild(addColsButtonWrapper);
     //    rowRightWrapper.appendChild(addCustomColsButtonWrapper);
@@ -211,7 +211,7 @@ function removeRowDisplay(row) {
 }
 
 // function d'update de row :
-// => bouton add depth 
+// => bouton add depth
 // => bouton add col
 function updateRowDisplay(row, level) {
     //    console.log("updateRowDisplay : row.depth = " + row.depth);

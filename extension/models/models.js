@@ -9,36 +9,36 @@ function Level(id, typeKey, type, url, rows, pagination, tabId, someDeeperLinks)
     this.someDeeperLinks = [];
 }
 
-function Pagination(dataType, tagClass) {
+function Pagination(dataType, selector) {
     this.dataType = "pagination";
-    this.tagClass = tagClass;
+    this.selector = selector;
     this.prefix = null;
     this.step = 0;
-    
+    this.links = [];
 }
 
-function Row(dataType, id, tagClass, depth, color) {
+function Row(dataType, id, selector, depth, color) {
     this.dataType = "row";
     this.id = id;
-    this.tagClass = tagClass;
+    this.selector = selector;
     this.cols = [];
     this.depth = null;
     this.color = color;
 }
 
-function Col(dataType, id, titleKey, title, tagClass, url) {
+function Col(dataType, id, titleKey, title, selector, url) {
     this.dataType = "col";
     this.id = id;
     this.titleKey = titleKey;
     this.title = title;
-    this.tagClass = tagClass;
+    this.selector = selector;
     this.url = url;
 }
 
-function Depth(dataType, id, tagClass) {
+function Depth(dataType, id, selector) {
     this.dataType = "depth";
     this.id = id;
-    this.tagClass = tagClass;
+    this.selector = selector;
 }
 
 function Option(name, value) {

@@ -1,7 +1,7 @@
-function addCol(colTagClass, colId, colTitleArray, row) {
+function addCol(colSelector, colId, colTitleArray, row) {
     var col = new Col();
     col.id = colId;
-    col.tagClass = colTagClass;
+    col.selector = colSelector;
     col.titleKey = colTitleArray[0];
     col.title = colTitleArray[1];
     row.cols.push(col);

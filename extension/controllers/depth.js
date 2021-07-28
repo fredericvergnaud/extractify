@@ -1,7 +1,7 @@
-function addDepth(depthTagClass, row) {
+function addDepth(depthSelector, row) {
     var depth = new Depth();
     depth.id = row.id;
-    depth.tagClass = depthTagClass;
+    depth.selector = depthSelector;
     row.depth = depth;
     saveLevelsArray();
     return depth;

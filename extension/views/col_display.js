@@ -1,9 +1,9 @@
 function displayCol(col, row, level) {
-    
+
     // left wrapper
     var colLeftWrapper = document.createElement('div');
-    colLeftWrapper.setAttribute('class', "col_left_wrapper"); 
-    
+    colLeftWrapper.setAttribute('class', "col_left_wrapper");
+
     // Type
     var dataTypeWrapper = document.createElement('div');
     dataTypeWrapper.setAttribute('class', "cols_table_cell cols_table_cell_small");
@@ -21,20 +21,20 @@ function displayCol(col, row, level) {
     classNameWrapper.setAttribute('class', "cols_table_cell cols_table_cell_big");
     classNameWrapper.setAttribute('id', "col_class_name_wrapper_col-" + col.id);
     if (col.className != '')
-        classNameWrapper.innerHTML = '<span class="cell_title">tag & class</span><br/>' + col.tagClass;
+        classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + col.selector;
     else
         classNameWrapper.innerHTML = '<span class="cell_title">id</span><br/>' + col.idName;
-    
+
     // Ajout
     colLeftWrapper.appendChild(dataTypeWrapper);
     colLeftWrapper.appendChild(colorWrapper);
     colLeftWrapper.appendChild(classNameWrapper);
-    
+
     // right wrapper
     var colRightWrapper = document.createElement('div');
     colRightWrapper.setAttribute('class', "col_right_wrapper");
 
-    // Given title 
+    // Given title
     var givenTitleWrapper = document.createElement('div');
     givenTitleWrapper.setAttribute('class', "cols_table_cell cols_table_cell_middle");
     givenTitleWrapper.setAttribute('id', "col_given_title_wrapper_col-" + col.id);
@@ -61,8 +61,8 @@ function displayCol(col, row, level) {
     });
     // Ajout bouton au wrapper
     removeColButtonWrapper.appendChild(removeColButton);
-    
-    // Ajout    
+
+    // Ajout
     colRightWrapper.appendChild(givenTitleWrapper);
     colRightWrapper.appendChild(removeColButtonWrapper);
 
@@ -72,7 +72,7 @@ function displayCol(col, row, level) {
     colWrapper.setAttribute('id', "col_" + col.id);
     colWrapper.appendChild(colLeftWrapper);
     colWrapper.appendChild(colRightWrapper);
-    
+
     if (document.getElementById("cols_table_row-" + row.id + "_body") === null) {
         // on crée le tableau
         var cTable = document.createElement('div');
@@ -93,7 +93,7 @@ function displayCol(col, row, level) {
         // on ajoute la col à la suite du body existant
         var cBody = document.getElementById("cols_table_row-" + row.id + "_body");
         cBody.appendChild(colWrapper);
-    } 
+    }
 }
 
 function removeColDisplay(col) {

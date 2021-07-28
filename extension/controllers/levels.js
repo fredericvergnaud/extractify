@@ -186,7 +186,7 @@ function loadLevel(level) {
         updateLevelDisplay(level);
         updateLevelsDisplay();
     }
-    // Rows, cols, depth   
+    // Rows, cols, depth
     for (let row of level.rows) {
         displayRow(row, level);
         updateLevelDisplay(level);
@@ -217,7 +217,7 @@ function fillLevelTypes(levelTypeKey, levelType) {
         levelTypes[levelTypeKey] = levelType;
 }
 
-// SCRAPING 
+// SCRAPING
 
 let rowNbr, scrapedObjects, objectsCount, stopScraping;
 
@@ -234,28 +234,28 @@ function getLevelStructureMap(level) {
     let levelStructureMap = new Map();
     let rows = level.rows;
     for (let row of rows) {
-        let rowTagClass = row.tagClass;
+        let rowSelector = row.selector;
         let cols = row.cols;
         for (let col of cols) {
-            let colTagClass = col.tagClass;
+            let colSelector = col.selector;
             let colTitleKey = col.titleKey;
-            var elemStructure = colTitleKey + "***" + colTagClass;
-            if (!levelStructureMap.has(rowTagClass)) {
+            var elemStructure = colTitleKey + "***" + colSelector;
+            if (!levelStructureMap.has(rowSelector)) {
                 var elemStructureArray = [elemStructure];
-                levelStructureMap.set(rowTagClass, elemStructureArray);
+                levelStructureMap.set(rowSelector, elemStructureArray);
             } else {
-                var elemStructureArray = levelStructureMap.get(rowTagClass);
+                var elemStructureArray = levelStructureMap.get(rowSelector);
                 elemStructureArray.push(elemStructure);
             }
         }
         if (row.depth !== null) {
-            var depthTagClass = row.depth.tagClass;
-            var elemStructure = "url***" + depthTagClass;
-            if (!levelStructureMap.has(rowTagClass)) {
+            var depthSelector = row.depth.selector;
+            var elemStructure = "url***" + depthSelector;
+            if (!levelStructureMap.has(rowSelector)) {
                 var elemStructureArray = [elemStructure];
-                levelStructureMap.set(rowTagClass, elemStructureArray);
+                levelStructureMap.set(rowSelector, elemStructureArray);
             } else {
-                var elemStructureArray = levelStructureMap.get(rowTagClass);
+                var elemStructureArray = levelStructureMap.get(rowSelector);
                 elemStructureArray.push(elemStructure);
             }
         }

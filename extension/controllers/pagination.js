@@ -1,10 +1,10 @@
-function addPagination(paginationTagClass, paginationPrefix, paginationStep, level) {
+function addPagination(paginationSelector, paginationPrefix, paginationStep, level) {
     var pagination = new Pagination();
-    pagination.tagClass = paginationTagClass;
+    pagination.selector = paginationSelector;
     pagination.prefix = paginationPrefix;
     pagination.step = Number(paginationStep);
     level.pagination = pagination;
-//    console.log("Nouvelle pagination : " + pagination.dataType + ", " + pagination.tagClass);
+//    console.log("Nouvelle pagination : " + pagination.dataType + ", " + pagination.selector);
     saveLevelsArray();
     return pagination;
 }

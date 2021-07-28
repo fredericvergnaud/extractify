@@ -1,9 +1,9 @@
-function addRow(rowTagClass, rowColor, rowId, level) {
+function addRow(rowSelector, rowColor, rowId, level) {
     var row = new Row();
     row.id = rowId;
-    row.tagClass = rowTagClass;
+    row.selector = rowSelector;
     row.color = rowColor;
-//    console.log("Nouveau row d'id " + row.id + " : " + row.dataType + " | " + row.tagClass + " | " + row.color);
+//    console.log("Nouveau row d'id " + row.id + " : " + row.dataType + " | " + row.selector + " | " + row.color);
     level.rows.push(row);
     globalRowId++;
     saveLevelsArray();

@@ -42,7 +42,7 @@ function highlightContent(tabId, level) {
     });
 }
 
-function highlightRows(tabId, level, rowTagClass, rowId) {
+function highlightRows(tabId, level, rowSelector, rowId) {
     // on met le focus sur la fenêtre originale
     chrome.windows.update(browserWindowId, {
         focused: true
@@ -51,7 +51,7 @@ function highlightRows(tabId, level, rowTagClass, rowId) {
         chrome.tabs.sendMessage(tabId, {
             action: "highlightRows",
             level: level,
-            rowTagClass: rowTagClass,
+            rowSelector: rowSelector,
             rowId: rowId
         }, function (response) {
             var lastError = chrome.runtime.lastError;
@@ -68,7 +68,7 @@ function highlightRows(tabId, level, rowTagClass, rowId) {
     });
 }
 
-function highlightCols(tabId, row, colTagClass, colId, level) {
+function highlightCols(tabId, row, colSelector, colId, level) {
     // on met le focus sur la fenêtre originale
     chrome.windows.update(browserWindowId, {
         focused: true
@@ -77,7 +77,7 @@ function highlightCols(tabId, row, colTagClass, colId, level) {
         chrome.tabs.sendMessage(tabId, {
             action: "highlightCols",
             row: row,
-            colTagClass: colTagClass,
+            colSelector: colSelector,
             colId: colId,
             level: level
         }, function (response) {
@@ -94,7 +94,7 @@ function highlightCols(tabId, row, colTagClass, colId, level) {
     });
 }
 
-function highlightDepth(tabId, row, depthTagClass) {
+function highlightDepth(tabId, row, depthSelector) {
     // on met le focus sur la fenêtre originale
     chrome.windows.update(browserWindowId, {
         focused: true
@@ -103,7 +103,7 @@ function highlightDepth(tabId, row, depthTagClass) {
         chrome.tabs.sendMessage(tabId, {
             action: "highlightDepth",
             row: row,
-            depthTagClass: depthTagClass
+            depthSelector: depthSelector
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {
@@ -118,7 +118,7 @@ function highlightDepth(tabId, row, depthTagClass) {
     });
 }
 
-function highlightPagination(tabId, level, paginationTagClass) {
+function highlightPagination(tabId, level, paginationSelector) {
     // on met le focus sur la fenêtre originale
     chrome.windows.update(browserWindowId, {
         focused: true
@@ -127,7 +127,7 @@ function highlightPagination(tabId, level, paginationTagClass) {
         chrome.tabs.sendMessage(tabId, {
             action: "highlightPagination",
             level: level,
-            paginationTagClass: paginationTagClass
+            paginationSelector: paginationSelector
         }, function (response) {
             var lastError = chrome.runtime.lastError;
             if (lastError) {

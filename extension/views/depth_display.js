@@ -1,32 +1,32 @@
 function displayDepth(depth, row, level) {
-    
+
     // left wrapper
     var depthLeftWrapper = document.createElement('div');
-    depthLeftWrapper.setAttribute('class', "col_left_wrapper"); 
-    
+    depthLeftWrapper.setAttribute('class', "col_left_wrapper");
+
     // Data type
     var dataTypeWrapper = document.createElement('div');
     dataTypeWrapper.setAttribute('class', "cols_table_cell cols_table_cell_small");
     dataTypeWrapper.setAttribute('id', "depth_data_type_wrapper_row-" + row.id);
     dataTypeWrapper.innerHTML = depth.dataType;
-    
+
     // Couleur
     var colorWrapper = document.createElement('div');
     colorWrapper.setAttribute('class', "cols_table_cell cols_table_cell_small");
     colorWrapper.setAttribute('id', "depth_color_wrapper_row-" + row.id);
     colorWrapper.innerHTML = '<span class="cell_title">color</span><br/><div class="depth-color highlight_depth">&nbsp;</div>';
-    
+
     // class name
     var classNameWrapper = document.createElement('div');
     classNameWrapper.setAttribute('class', "cols_table_cell cols_table_cell_big");
     classNameWrapper.setAttribute('id', "depth_class_name_wrapper_row-" + row.id);
-    classNameWrapper.innerHTML = '<span class="cell_title">tag & class</span><br/>' + depth.tagClass;
-    
+    classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + depth.selector;
+
     // Ajout
     depthLeftWrapper.appendChild(dataTypeWrapper);
     depthLeftWrapper.appendChild(colorWrapper);
     depthLeftWrapper.appendChild(classNameWrapper);
-    
+
     // right wrapper
     var depthRightWrapper = document.createElement('div');
     depthRightWrapper.setAttribute('class', "col_right_wrapper");
@@ -50,8 +50,8 @@ function displayDepth(depth, row, level) {
     });
     // Ajout button au wrapper
     removeDepthButtonWrapper.appendChild(removeDepthButton);
-    
-    // Ajout    
+
+    // Ajout
     depthRightWrapper.appendChild(removeDepthButtonWrapper);
 
     // Wrapper total
@@ -60,7 +60,7 @@ function displayDepth(depth, row, level) {
     depthWrapper.setAttribute('id', "row-" + row.id + "_depth");
     depthWrapper.appendChild(depthLeftWrapper);
     depthWrapper.appendChild(depthRightWrapper);
-    
+
     if (document.getElementById("cols_table_row-" + row.id + "_body") === null) {
         // on crée le tableau
         var cTable = document.createElement('div');
