@@ -362,7 +362,7 @@ function selectCols(row, colId) {
 
 function selectColTags(row, colSelector, colId, hasDepth) {
   $(row.selector).each(function() {
-    $selected_col = $(this).find(colSelector).filter(":first");
+    $selected_col = $(this).find(colSelector);
     $selected_col.addClass("selected_col highlight_col-" + colId);
     if (hasDepth)
       $selected_col.addClass("selected_depth highlight_depth-" + row.id);
@@ -1084,7 +1084,18 @@ function getScrapedPage(levelStructureMap, rowNbr) {
         let rowChildSelectorArray = rowChildSelectors.split("***");
         let rowChildTitle = rowChildSelectorArray[0];
         let rowChildSelector = rowChildSelectorArray[1];
-        let childText = $(this).find(rowChildSelector).filter(":first").text();
+        let $child = $(this).find(rowChildSelector);
+        let childText = "";
+        if ($child.length === 1)
+          childText = $child.text();
+        else {
+          let tempChildText = "";
+          $child.each(function() {
+            childText += $(this).text() + " * ";
+          });
+          childText = childText.slice(0, - 3);
+        }
+        // let childText = $(this).find(rowChildSelector).filter(":first").text() + ", ";
         console.log("childText : " + childText);
         if (childText !== null && childText !== undefined) {
           if (rowChildTitle === "url") {

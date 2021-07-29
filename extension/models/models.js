@@ -13,7 +13,9 @@ function Pagination(dataType, selector) {
     this.dataType = "pagination";
     this.selector = selector;
     this.prefix = null;
+    this.start = start;
     this.step = 0;
+    this.upto = 0;
     this.links = [];
 }
 

@@ -270,7 +270,7 @@ p {
 .pagination_right_wrapper {
     float: right;
     vertical-align: middle;
-    height: 50px;
+    height: auto;
     width: 200px;
     margin-right: 20px;
 }
@@ -345,11 +345,17 @@ p {
 #pagination_prefix,
 #pagination_start_number,
 #pagination_end_number,
-#pagination_step {
+#pagination_step,
+#pagination_upto {
     width: 100px;
 }
 
 .custom_pagination_label {
+    display: inline-block;
+    width: 35px;
+}
+
+.add_paginationlinks_manually_label {
     display: inline-block;
     width: 35px;
 }
@@ -587,7 +593,8 @@ p {
 .select_level_type_form,
 .add_depth_form,
 .add_pagination_form,
-.add_custom_pagination_form {
+.add_custom_pagination_form,
+.add_paginationlinks_manually_form {
     margin: 10%;
 }
 
@@ -610,7 +617,7 @@ p {
   height: 14px;
 }
 
-.switch input { 
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;

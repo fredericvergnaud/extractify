@@ -215,9 +215,39 @@ function displayLevel(level) {
           sendMessageToTab(level, "selectPagination", dataArray)
             .then(function(selectedPagination) {
               let pagination = addPagination(selectedPagination.paginationSelector, selectedPagination.paginationPrefix, selectedPagination.paginationStep, selectedPagination.paginationLinks, level);
-              displayPagination(level);
-              updateLevelDisplay(level);
-              updateLevelsDisplay();
+              if (selectedPagination.paginationLinks.length === 1) {
+                if (confirm(extensionLang.AddPaginationLinksManually)) {
+                  addPaginationLinksManually()
+                    .then(function(dataArray) {
+                      console.log("dataArray : " + dataArray);
+                      paginationPrefix = dataArray[0];
+                      paginationStart = dataArray[1];
+                      paginationStep = dataArray[2];
+                      paginationUpto = dataArray[3];
+                      let paginationLinks = [];
+                      for (let i = paginationStart; i < paginationUpto + 1;) {
+                        let paginationLink = paginationPrefix + i;
+                        console.log("paginationLink = ", paginationLink);
+                        paginationLinks.push(paginationLink);
+                        i += paginationStep;
+                      }
+                      pagination.prefix = paginationPrefix;
+                      pagination.start = paginationStart;
+                      pagination.step = paginationStep;
+                      pagination.upto = paginationUpto;
+                      pagination.links = paginationLinks;
+                      displayPagination(level);
+                      updateLevelDisplay(level);
+                      updateLevelsDisplay();
+                    });
+                } else {
+                  displayPagination(level);
+                  updateLevelDisplay(level);
+                  updateLevelsDisplay();                  
+                }
+              } else {
+
+              }
             });
         }
       });

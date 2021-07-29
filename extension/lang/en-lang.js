@@ -16,4 +16,5 @@ let extensionLang = {
     AddColButton: "Add<br/>col",
     RemoveButton: "Remove",
     ScrapingError: " scraping error(s). Your scraping may not be complete.",
+    AddPaginationLinksManually: "You have selected only one pagination link.\nDo you want to add more pagination links manually?",
 };

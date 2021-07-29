@@ -299,7 +299,7 @@ function updatePageScraping(newTabId, url, levelStructureMap, requestLatency, sc
                                     resolve("noData");
                                 }
                                 chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
-                            }                            
+                            }
                         });
                     }
                 });
@@ -308,35 +308,35 @@ function updatePageScraping(newTabId, url, levelStructureMap, requestLatency, sc
     });
 }
 
-function updatePaginationScraping(newTabId, url, pagination) {
-    return new Promise(function (resolve, reject) {
-        chrome.tabs.update(newTabId, {
-            url: url
-        }, function (tab) {
-            chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
-                if (changeInfo.status === 'complete') {
-                    chrome.tabs.sendMessage(tab.id, {
-                        action: "paginationScraping",
-                        data: pagination
-                    }, function (response) {
-                        var lastError = chrome.runtime.lastError;
-                        if (lastError) {
-//                            console.log("lastError.message", lastError.message);
-                            // 'Could not establish connection. Receiving end does not exist.'
-//                            return;
-                            resolve("noData");
-                        } else {
-                            if (response.data != "")
-                                resolve(response.responseData);
-                            else {
-                                resolve("noData");
-    //                            reject("failed");
-                            }
-                        }
-                        chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
-                    });
-                }
-            });
-        });
-    });
-}
+// function updatePaginationScraping(newTabId, url, pagination) {
+//     return new Promise(function (resolve, reject) {
+//         chrome.tabs.update(newTabId, {
+//             url: url
+//         }, function (tab) {
+//             chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
+//                 if (changeInfo.status === 'complete') {
+//                     chrome.tabs.sendMessage(tab.id, {
+//                         action: "paginationScraping",
+//                         data: pagination
+//                     }, function (response) {
+//                         var lastError = chrome.runtime.lastError;
+//                         if (lastError) {
+// //                            console.log("lastError.message", lastError.message);
+//                             // 'Could not establish connection. Receiving end does not exist.'
+// //                            return;
+//                             resolve("noData");
+//                         } else {
+//                             if (response.data != "")
+//                                 resolve(response.responseData);
+//                             else {
+//                                 resolve("noData");
+//     //                            reject("failed");
+//                             }
+//                         }
+//                         chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
+//                     });
+//                 }
+//             });
+//         });
+//     });
+// }
