@@ -379,7 +379,7 @@ function addPaginationLinksManually(pagination) {
           let paginationUpto = $("#add_paginationlinks_manually_upto").val();
           if (paginationPrefix !== "" && paginationStep !== "" && paginationStart !== "" && paginationUpto !== "") {
             if (!$.isNumeric(paginationPrefix) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationUpto)) {
-              let dataArray = [paginationPrefix, Number(paginationStart), Number(paginationStep), Number(paginationUpto)]
+              let dataArray = [paginationPrefix, Number(paginationStart), Number(paginationStep), Number(paginationUpto)];
               defer.resolve(dataArray);
               $(this).dialog("close");
               $(this).dialog("destroy");

@@ -214,40 +214,85 @@ function displayLevel(level) {
           var dataArray = [];
           sendMessageToTab(level, "selectPagination", dataArray)
             .then(function(selectedPagination) {
-              let pagination = addPagination(selectedPagination.paginationSelector, selectedPagination.paginationPrefix, selectedPagination.paginationStep, selectedPagination.paginationLinks, level);
-              if (selectedPagination.paginationLinks.length === 1) {
-                if (confirm(extensionLang.AddPaginationLinksManually)) {
+              // on récupère les résultats de la sélection
+              let selectedPaginationPrefix = selectedPagination.paginationPrefix,
+                selectedPaginationStart = selectedPagination.paginationStart,
+                selectedPaginationStep = selectedPagination.paginationStep,
+                selectedPaginationUpTo = selectedPagination.paginationUpTo,
+                selectedPaginationLinks = selectedPagination.paginationLinks;
+              let pagination = addPagination(selectedPagination.paginationSelector, selectedPaginationPrefix, selectedPaginationStart, selectedPaginationStep, selectedPaginationUpTo, selectedPaginationLinks, level);
+              let paginationPrefix = "",
+                paginationStart = 0,
+                paginationStep = 0,
+                paginationUpTo = 0,
+                paginationLinks = [];
+              if (selectedPaginationLinks.length === 1) {
+                if (confirm(extensionLang.PaginationFewElements)) {
                   addPaginationLinksManually()
                     .then(function(dataArray) {
                       console.log("dataArray : " + dataArray);
                       paginationPrefix = dataArray[0];
                       paginationStart = dataArray[1];
                       paginationStep = dataArray[2];
-                      paginationUpto = dataArray[3];
-                      let paginationLinks = [];
-                      for (let i = paginationStart; i < paginationUpto + 1;) {
+                      paginationUpTo = dataArray[3];
+                      for (let i = paginationStart; i < paginationUpTo + 1;) {
                         let paginationLink = paginationPrefix + i;
-                        console.log("paginationLink = ", paginationLink);
+                        // console.log("paginationLink = ", paginationLink);
                         paginationLinks.push(paginationLink);
                         i += paginationStep;
                       }
-                      pagination.prefix = paginationPrefix;
-                      pagination.start = paginationStart;
-                      pagination.step = paginationStep;
-                      pagination.upto = paginationUpto;
-                      pagination.links = paginationLinks;
-                      displayPagination(level);
-                      updateLevelDisplay(level);
-                      updateLevelsDisplay();
                     });
                 } else {
-                  displayPagination(level);
-                  updateLevelDisplay(level);
-                  updateLevelsDisplay();                  
+                  paginationPrefix = selectedPaginationPrefix;
+                  paginationStart = selectedPaginationStart;
+                  paginationStep = selectedPaginationStep;
+                  paginationUpTo = selectedPaginationUpTo;
+                  paginationLinks = selectedPaginationLinks;
                 }
               } else {
+                // on essaye de trouver un intervalle de 1
+                let steps = getPaginationStep(selectedPaginationLinks);
+                if (steps.size === 1 && steps.has(1)) {
+                  paginationPrefix = selectedPaginationPrefix;
+                  paginationStart = selectedPaginationStart;
+                  paginationStep = selectedPaginationStep;
+                  paginationUpTo = selectedPaginationUpTo;
+                  paginationLinks = selectedPaginationLinks;
 
+                } else {
+                  if (confirm(extensionLang.PaginationNoStepOneFound)) {
+                    addPaginationLinksManually()
+                      .then(function(dataArray) {
+                        console.log("dataArray : ", dataArray);
+                        paginationPrefix = dataArray[0];
+                        paginationStart = dataArray[1];
+                        paginationStep = dataArray[2];
+                        paginationUpTo = dataArray[3];
+                        for (let i = paginationStart; i < paginationUpTo + 1;) {
+                          let paginationLink = paginationPrefix + i;
+                          // console.log("paginationLink = ", paginationLink);
+                          paginationLinks.push(paginationLink);
+                          i += paginationStep;
+                        }
+
+                      });
+                  } else {
+                    paginationPrefix = selectedPaginationPrefix;
+                    paginationStart = selectedPaginationStart;
+                    paginationStep = selectedPaginationStep;
+                    paginationUpTo = selectedPaginationUpTo;
+                    paginationLinks = selectedPaginationLinks;
+                  }
+                }
               }
+              pagination.prefix = paginationPrefix;
+              pagination.start = paginationStart;
+              pagination.step = paginationStep;
+              pagination.upTo = paginationUpTo;
+              pagination.links = paginationLinks;
+              displayPagination(level);
+              updateLevelDisplay(level);
+              updateLevelsDisplay();
             });
         }
       });

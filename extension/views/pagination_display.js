@@ -41,7 +41,7 @@ function displayPagination(level) {
     prefixAndStepWrapper.setAttribute('class', "cols_table_cell cols_table_cell_middle");
     prefixAndStepWrapper.setAttribute('id', "pagination_prefix_and_step_wrapper_level-" + level.id);
     if (level.pagination.prefix !== null)
-      prefixAndStepWrapper.innerHTML = '<span class="cell_title">prefix &#126; start &#126; step &#126; upto</span><br/><span class="cell_result">&apos;' + level.pagination.prefix + '&apos; &#126; ' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.upto + '</span>';
+      prefixAndStepWrapper.innerHTML = '<span class="cell_title">prefix &#126; start &#126; step &#126; upto</span><br/><span class="cell_result">&apos;' + level.pagination.prefix + '&apos; &#126; ' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.upTo + '</span>';
 
     // remove pagination button wrapper
     var removePaginationButtonWrapper = document.createElement('div');

@@ -361,12 +361,16 @@ function selectCols(row, colId) {
 }
 
 function selectColTags(row, colSelector, colId, hasDepth) {
-  $(row.selector).each(function() {
-    $selected_col = $(this).find(colSelector);
-    $selected_col.addClass("selected_col highlight_col-" + colId);
-    if (hasDepth)
-      $selected_col.addClass("selected_depth highlight_depth-" + row.id);
-  });
+  $selected_col = $(row.selector).find(colSelector);
+  $selected_col.addClass("selected_col highlight_col-" + colId);
+  if (hasDepth)
+    $selected_col.addClass("selected_depth highlight_depth-" + row.id);
+  // $(row.selector).each(function() {
+  //   $selected_col = $(this).find(colSelector);
+  //   $selected_col.addClass("selected_col highlight_col-" + colId);
+  //   if (hasDepth)
+  //     $selected_col.addClass("selected_depth highlight_depth-" + row.id);
+  // });
   var dataArray = {
     "colSelector": colSelector
   };
@@ -377,7 +381,8 @@ function highlightCols(row, colSelector, colId, level) {
   return new Promise(function(resolve, reject) {
     let $colSelector;
     try {
-      $colSelector = $(colSelector);
+      $colSelector = $(row.selector).find($(colSelector));
+      console.log("$colSelector = ", $colSelector);
       if ($colSelector.length === 0)
         alert(contentLang.ColUnableToSelect + " (" + colSelector + ")");
       else if ($colSelector.hasClass("selected_col"))
@@ -498,19 +503,33 @@ function selectDepth(row) {
 
 function selectDepthTags(row, depthSelector, colId, hasCol) {
   var deeperLinks = [];
-  $(row.selector).each(function() {
-    $selected_depth = $(this).find(depthSelector).filter(":first");
-    $selected_depth.addClass("selected_depth highlight_depth-" + row.id);
-    if (hasCol)
-      $selected_depth.addClass("selected_col highlight_col-" + colId);
-    var $thisText = $selected_depth.text();
+  $selected_depth = $(row.selector).find(depthSelector);
+  $selected_depth.addClass("selected_depth highlight_depth-" + row.id);
+  if (hasCol)
+    $selected_depth.addClass("selected_col highlight_col-" + colId);
+  $selected_depth.each(function() {
+    var $thisText = $(this).text();
     // test sur le texte : doit être différent d'un nombre
     if (!$.isNumeric($thisText)) {
-      var href = $selected_depth.prop("href");
+      var href = $(this).prop("href");
+      console.log("href = ", href);
       if (href !== null)
         deeperLinks.push(href);
     }
   });
+  // $(row.selector).each(function() {
+  //   $selected_depth = $(this).find(depthSelector).filter(":first");
+  //   $selected_depth.addClass("selected_depth highlight_depth-" + row.id);
+  //   if (hasCol)
+  //     $selected_depth.addClass("selected_col highlight_col-" + colId);
+  //   var $thisText = $selected_depth.text();
+  //   // test sur le texte : doit être différent d'un nombre
+  //   if (!$.isNumeric($thisText)) {
+  //     var href = $selected_depth.prop("href");
+  //     if (href !== null)
+  //       deeperLinks.push(href);
+  //   }
+  // });
   var dataArray = {
     "depthSelector": depthSelector,
     "deeperLinks": deeperLinks
@@ -522,7 +541,7 @@ function highlightDepth(row, depthSelector) {
   return new Promise(function(resolve, reject) {
     let $depthSelector;
     try {
-      $depthSelector = $(depthSelector);
+      $depthSelector = $(row.selector).find($(depthSelector));
       if ($depthSelector.prop("tagName") !== "A")
         alert(contentLang.InvalidSelectionLink);
       else if ($depthSelector.hasClass("selected_depth"))
@@ -594,7 +613,7 @@ function selectPagination() {
             alert(contentLang.PaginationAlreadySelected);
             return false;
           } else {
-            var paginationLinks = [];
+            var paginationLinks = new Set();
             var paginationTagName = $targetPagination.prop("tagName");
             console.log("paginationTagName : ", paginationTagName);
             // on essaye de voir si existance d'une classe
@@ -605,34 +624,42 @@ function selectPagination() {
               paginationSelector = paginationTagName + paginationClassName;
             }
             if (paginationTagName === "A") {
-              paginationLinks.push($targetPagination.prop("href"));
+              paginationLinks.add($targetPagination.prop("href"));
             } else {
               $paginationLinks = $targetPagination.find("a");
               $paginationLinks.each(function() {
-                paginationLinks.push($(this).prop("href"));
+                paginationLinks.add($(this).prop("href"));
               });
             }
+            console.log("paginationLinks size : ", paginationLinks.size);
             console.log("paginationLinks : ", paginationLinks);
-            if (paginationLinks.length === 0) {
+            if (paginationLinks.size === 0) {
               alert(contentLang.UnableToFindLinksForPaginationPages);
               return false;
-            } else if (paginationLinks.length === 1) {
-              if (confirm(contentLang.PaginationFewElements)) {
+            } else
+            // if (paginationLinks.length === 1)
+            {
+              // if (confirm(contentLang.PaginationFewElements)) {
                 // on highlight
                 $targetPagination.addClass("selected_pagination highlight_pagination");
                 // on resolve
                 var dataArray = {
                   "paginationSelector": paginationSelector,
                   "paginationPrefix": null,
+                  "paginationStart": 0,
                   "paginationStep": 0,
-                  "paginationLinks": paginationLinks
+                  "paginationUpTo": 0,
+                  "paginationLinks": [...paginationLinks]
                 };
                 resolve(dataArray);
-              } else {
-                alert(contentLang.PaginationTooFewElements);
-                return false;
-              }
+              // } else {
+              //   alert(contentLang.PaginationTooFewElements);
+              //   return false;
+              // }
             }
+            // else {
+            //
+            // }
 
 
             // var paginationClasses = targetPagination.attr("class").split(" ");
@@ -1075,10 +1102,10 @@ function getScrapedPage(levelStructureMap, rowNbr) {
   let map = new Map();
   for (let [rowSelector, rowChildrenSelector] of levelStructureMap) {
     $rowSelector = $(rowSelector);
-    console.log("$rowSelector : ");
-    console.log($rowSelector);
+    console.log("$rowSelector : ", $rowSelector);
     let childUrl = "";
     $rowSelector.each(function() {
+      let mapId = [];
       let rowChildren = {};
       for (rowChildSelectors of rowChildrenSelector) {
         let rowChildSelectorArray = rowChildSelectors.split("***");
@@ -1089,7 +1116,6 @@ function getScrapedPage(levelStructureMap, rowNbr) {
         if ($child.length === 1)
           childText = $child.text();
         else {
-          let tempChildText = "";
           $child.each(function() {
             childText += $(this).text() + " * ";
           });
@@ -1101,15 +1127,16 @@ function getScrapedPage(levelStructureMap, rowNbr) {
           if (rowChildTitle === "url") {
             childText = $(this).find(rowChildSelector).prop("href");
             childUrl = childText;
-          } else {
-            childUrl = rowNbr;
           }
           rowChildren[rowChildTitle] = childText;
         }
       }
+      if (Object.keys(rowChildren).length > 0) {
+        mapId[0] = rowNbr;
+        mapId[1] = childUrl;
+        map.set(mapId, rowChildren);
+      }
       rowNbr++;
-      if (Object.keys(rowChildren).length > 0)
-        map.set(childUrl, rowChildren);
     });
   }
   return map;

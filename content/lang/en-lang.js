@@ -22,6 +22,5 @@ let contentLang = {
     PaginationAlreadySelected: "Pagination already selected",
     UnableToResolvePaginationPages: "Unable to resolve the address of the pagination pages",
     UnableToFindLinksForPaginationPages: "Unable to find link(s) for the pagination pages",
-    PaginationFewElements: "Your selection has only one link. Do you want to continue ?",
     PaginationTooFewElements: "Can't select this pagination (too few elements)",
 };
