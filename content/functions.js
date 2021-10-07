@@ -605,24 +605,25 @@ function selectPagination() {
           // on efface le highlight sur la cible
           $targetPagination.removeClass("highlight_pagination");
 
-          // if (!$targetPagination.attr('class')) {
-          //   alert(contentLang.PaginationEmptyClass);
-          //   return false;
-          // } else
-          if ($targetPagination.hasClass("selected_pagination")) {
+          if (!$targetPagination.attr('class')) {
+            alert(contentLang.PaginationEmptyClass);
+            return false;
+          } else if ($targetPagination.hasClass("selected_pagination")) {
             alert(contentLang.PaginationAlreadySelected);
             return false;
           } else {
-            var paginationLinks = new Set();
-            var paginationTagName = $targetPagination.prop("tagName");
-            console.log("paginationTagName : ", paginationTagName);
-            // on essaye de voir si existance d'une classe
             var paginationSelector = "";
-            if ($targetPagination.attr('class') !== '') {
-              var paginationClasses = $targetPagination.attr("class").split(" ");
-              var paginationClassName = "." + paginationClasses.join(".");
-              paginationSelector = paginationTagName + paginationClassName;
-            }
+            // classe
+            var paginationClasses = $targetPagination.attr("class").split(" ");
+            var paginationClassName = "." + paginationClasses.join(".");
+            // tag
+            var paginationTagName = $targetPagination.prop("tagName");
+
+            paginationSelector = paginationTagName + paginationClassName;
+
+            // paginationLinks : uniquement pour trouver le nombre de liens sélectionnés
+            var paginationLinks = new Set();
+
             if (paginationTagName === "A") {
               paginationLinks.add($targetPagination.prop("href"));
             } else {
@@ -645,10 +646,6 @@ function selectPagination() {
                 // on resolve
                 var dataArray = {
                   "paginationSelector": paginationSelector,
-                  "paginationPrefix": null,
-                  "paginationStart": 0,
-                  "paginationStep": 0,
-                  "paginationUpTo": 0,
                   "paginationLinks": [...paginationLinks]
                 };
                 resolve(dataArray);
@@ -694,59 +691,59 @@ function selectPagination() {
   });
 }
 
-function selectPagination_old() {
-  return new Promise(function(resolve, reject) {
-    var targetPagination;
-    $('body').children().bind({
-      mouseover: function(event) {
-        targetPagination = $(event.target);
-        targetPagination.addClass("highlight_pagination");
-        return false;
-      },
-      mouseout: function(event) {
-        if (typeof targetPagination !== 'undefined' && !targetPagination.hasClass("selected_pagination"))
-          targetPagination.removeClass("highlight_pagination");
-        return false;
-      },
-      click: function(event) {
-        event.preventDefault();
-        // on efface le highlight sur la cible
-        targetPagination.removeClass("highlight_pagination");
-        if (!targetPagination.attr('class')) {
-          alert(contentLang.PaginationEmptyClass);
-          return false;
-        } else if (targetPagination.hasClass("selected_pagination")) {
-          alert(contentLang.PaginationAlreadySelected);
-          return false;
-        } else {
-          var paginationTagName = targetPagination.prop("tagName");
-          var paginationClasses = targetPagination.attr("class").split(" ");
-          var paginationClassName = "." + paginationClasses.join(".");
-          var paginationSelector = paginationTagName + paginationClassName;
-          let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
-          if (prefixAndStep.length > 0) {
-            console.log("selectPagination : prefixAndStep found : ", prefixAndStep);
-            // on highlight
-            targetPagination.addClass("selected_pagination highlight_pagination");
-            // on resolve
-            var dataArray = {
-              "paginationSelector": paginationSelector,
-              "paginationPrefix": prefixAndStep[0],
-              "paginationStep": prefixAndStep[1]
-            };
-            resolve(dataArray);
-            // on enlève les actions
-            $('body').children().unbind();
-          } else {
-            alert(contentLang.UnableToResolvePaginationPages);
-            return false;
-          }
-        }
-        return false;
-      }
-    });
-  });
-}
+// function selectPagination_old() {
+//   return new Promise(function(resolve, reject) {
+//     var targetPagination;
+//     $('body').children().bind({
+//       mouseover: function(event) {
+//         targetPagination = $(event.target);
+//         targetPagination.addClass("highlight_pagination");
+//         return false;
+//       },
+//       mouseout: function(event) {
+//         if (typeof targetPagination !== 'undefined' && !targetPagination.hasClass("selected_pagination"))
+//           targetPagination.removeClass("highlight_pagination");
+//         return false;
+//       },
+//       click: function(event) {
+//         event.preventDefault();
+//         // on efface le highlight sur la cible
+//         targetPagination.removeClass("highlight_pagination");
+//         if (!targetPagination.attr('class')) {
+//           alert(contentLang.PaginationEmptyClass);
+//           return false;
+//         } else if (targetPagination.hasClass("selected_pagination")) {
+//           alert(contentLang.PaginationAlreadySelected);
+//           return false;
+//         } else {
+//           var paginationTagName = targetPagination.prop("tagName");
+//           var paginationClasses = targetPagination.attr("class").split(" ");
+//           var paginationClassName = "." + paginationClasses.join(".");
+//           var paginationSelector = paginationTagName + paginationClassName;
+//           let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
+//           if (prefixAndStep.length > 0) {
+//             console.log("selectPagination : prefixAndStep found : ", prefixAndStep);
+//             // on highlight
+//             targetPagination.addClass("selected_pagination highlight_pagination");
+//             // on resolve
+//             var dataArray = {
+//               "paginationSelector": paginationSelector,
+//               "paginationPrefix": prefixAndStep[0],
+//               "paginationStep": prefixAndStep[1]
+//             };
+//             resolve(dataArray);
+//             // on enlève les actions
+//             $('body').children().unbind();
+//           } else {
+//             alert(contentLang.UnableToResolvePaginationPages);
+//             return false;
+//           }
+//         }
+//         return false;
+//       }
+//     });
+//   });
+// }
 
 function highlightPagination(level, paginationSelector) {
   console.log("highlightPagination : paginationSelector received = " + paginationSelector);
@@ -777,110 +774,110 @@ function highlightPagination(level, paginationSelector) {
   });
 }
 
-function matchPaginationPrefixAndStep(givenPrefix, givenStep) {
-  console.log("matchPaginationPrefixAndStep : givenPrefix = " + givenPrefix + " | givenStep = " + givenStep);
-  return new Promise(function(resolve, reject) {
-    let prefixAndStep = getPaginationPrefixAndStep("custom", givenPrefix);
-    console.log("matchPaginationPrefixAndStep : prefixAndStep returned : prefixAndStep.length = " + prefixAndStep.length, prefixAndStep);
-    if (prefixAndStep.length > 0 && prefixAndStep[0] === givenPrefix && prefixAndStep[1] === givenStep) {
-      console.log("matchPaginationPrefixAndStep : prefixAndStep found : ", prefixAndStep);
-      resolve(true);
-    } else
-      alert(contentLang.UnableToResolvePaginationPages);
-  });
-}
-
-function getPaginationPrefixAndStep(paramType, param) {
-  console.log("getPaginationPrefixAndStep with paramType = " + paramType + " and param = " + param);
-  let $urls;
-  let hrefs = new Set();
-  let currentPage = window.location.href;
-  let prefixAndStep = [];
-  console.log("currentPage : " + currentPage);
-  let regex;
-  // custom : on cherche les liens contenant le prefix fourni en paramètre
-  // selector : on cherche les liens selon expression régulière : chaine de caractères suivi d'un symbole suivi d'une suite de nombres
-  if (paramType === "custom") {
-    $urls = $("a[href*='" + param + "']");
-    regex = new RegExp(param + "\\d+");
-  } else {
-    if (param.startsWith("a"))
-      $urls = $(param);
-    else
-      $urls = $(param).first().find("a");
-    console.log("urls : ", $urls);
-    regex = new RegExp("([\W][\d]+)(?!.*\d)");
-  }
-
-  $urls.each(function() {
-    let href = this.href;
-    if (href.endsWith("/"))
-      href = href.slice(0, -1);
-    if (typeof href !== 'undefined' && href !== currentPage && href !== currentPage + "#")
-      hrefs.add(href);
-  });
-  console.log("hrefs : ", hrefs);
-
-  // on cherche ce qui varie dans les hrefs : matching selon regex précédente
-  let pageVars = new Set();
-  for (let href of hrefs) {
-    let pageVar = href.match(regex);
-    if (pageVar !== null) {
-      let matcher = pageVar[0];
-      console.log("matcher : " + matcher);
-      pageVars.add(matcher);
-    }
-  }
-  console.log("pageVars : ", pageVars);
-
-  // pageVars doit faire au moins 1
-  if (pageVars.size > 0) {
-    // prefix
-    regex = new RegExp("([\d]+)(?!.*\d)");
-    let prefixes = new Set();
-    let pageNbrs = new Set();
-    for (let pageVar of pageVars) {
-      let pageNbr = pageVar.match(regex);
-      if (pageNbr !== null) {
-        let matcher = pageNbr[0];
-        pageNbrs.add(matcher);
-        let prefix = pageVar.replace(matcher, "");
-        prefixes.add(prefix);
-      }
-    }
-    console.log("prefixes : ", prefixes);
-
-    // on trie pageNbrs
-    let pageNbrsArray = [...pageNbrs];
-    pageNbrsArray.sort(function(a, b) {
-      return a - b
-    });
-    console.log("pageNbrsArray : ", pageNbrsArray);
-
-    // step
-    let steps = [];
-    if (pageNbrsArray.length > 2)
-      for (let i = 0; i < pageNbrsArray.length - 1; i++) {
-        let pageNbr = pageNbrsArray[i];
-        let pageNbrNext = pageNbrsArray[i + 1];
-        console.log("diff = " + (pageNbrNext - pageNbr));
-        steps.push(pageNbrNext - pageNbr);
-      }
-    else
-      steps.push(pageNbrsArray[0]);
-    // on trie steps
-    steps.sort(function(a, b) {
-      return a - b
-    });
-    console.log("steps : ", steps);
-
-    if (prefixes.size === 1 && steps.length > 0)
-      prefixAndStep.push([...prefixes][0], parseInt(steps[0]));
-
-    console.log("prefixAndStep : ", prefixAndStep);
-  }
-  return prefixAndStep;
-}
+// function matchPaginationPrefixAndStep(givenPrefix, givenStep) {
+//   console.log("matchPaginationPrefixAndStep : givenPrefix = " + givenPrefix + " | givenStep = " + givenStep);
+//   return new Promise(function(resolve, reject) {
+//     let prefixAndStep = getPaginationPrefixAndStep("custom", givenPrefix);
+//     console.log("matchPaginationPrefixAndStep : prefixAndStep returned : prefixAndStep.length = " + prefixAndStep.length, prefixAndStep);
+//     if (prefixAndStep.length > 0 && prefixAndStep[0] === givenPrefix && prefixAndStep[1] === givenStep) {
+//       console.log("matchPaginationPrefixAndStep : prefixAndStep found : ", prefixAndStep);
+//       resolve(true);
+//     } else
+//       alert(contentLang.UnableToResolvePaginationPages);
+//   });
+// }
+//
+// function getPaginationPrefixAndStep(paramType, param) {
+//   console.log("getPaginationPrefixAndStep with paramType = " + paramType + " and param = " + param);
+//   let $urls;
+//   let hrefs = new Set();
+//   let currentPage = window.location.href;
+//   let prefixAndStep = [];
+//   console.log("currentPage : " + currentPage);
+//   let regex;
+//   // custom : on cherche les liens contenant le prefix fourni en paramètre
+//   // selector : on cherche les liens selon expression régulière : chaine de caractères suivi d'un symbole suivi d'une suite de nombres
+//   if (paramType === "custom") {
+//     $urls = $("a[href*='" + param + "']");
+//     regex = new RegExp(param + "\\d+");
+//   } else {
+//     if (param.startsWith("a"))
+//       $urls = $(param);
+//     else
+//       $urls = $(param).first().find("a");
+//     console.log("urls : ", $urls);
+//     regex = new RegExp("([\W][\d]+)(?!.*\d)");
+//   }
+//
+//   $urls.each(function() {
+//     let href = this.href;
+//     if (href.endsWith("/"))
+//       href = href.slice(0, -1);
+//     if (typeof href !== 'undefined' && href !== currentPage && href !== currentPage + "#")
+//       hrefs.add(href);
+//   });
+//   console.log("hrefs : ", hrefs);
+//
+//   // on cherche ce qui varie dans les hrefs : matching selon regex précédente
+//   let pageVars = new Set();
+//   for (let href of hrefs) {
+//     let pageVar = href.match(regex);
+//     if (pageVar !== null) {
+//       let matcher = pageVar[0];
+//       console.log("matcher : " + matcher);
+//       pageVars.add(matcher);
+//     }
+//   }
+//   console.log("pageVars : ", pageVars);
+//
+//   // pageVars doit faire au moins 1
+//   if (pageVars.size > 0) {
+//     // prefix
+//     regex = new RegExp("([\d]+)(?!.*\d)");
+//     let prefixes = new Set();
+//     let pageNbrs = new Set();
+//     for (let pageVar of pageVars) {
+//       let pageNbr = pageVar.match(regex);
+//       if (pageNbr !== null) {
+//         let matcher = pageNbr[0];
+//         pageNbrs.add(matcher);
+//         let prefix = pageVar.replace(matcher, "");
+//         prefixes.add(prefix);
+//       }
+//     }
+//     console.log("prefixes : ", prefixes);
+//
+//     // on trie pageNbrs
+//     let pageNbrsArray = [...pageNbrs];
+//     pageNbrsArray.sort(function(a, b) {
+//       return a - b
+//     });
+//     console.log("pageNbrsArray : ", pageNbrsArray);
+//
+//     // step
+//     let steps = [];
+//     if (pageNbrsArray.length > 2)
+//       for (let i = 0; i < pageNbrsArray.length - 1; i++) {
+//         let pageNbr = pageNbrsArray[i];
+//         let pageNbrNext = pageNbrsArray[i + 1];
+//         console.log("diff = " + (pageNbrNext - pageNbr));
+//         steps.push(pageNbrNext - pageNbr);
+//       }
+//     else
+//       steps.push(pageNbrsArray[0]);
+//     // on trie steps
+//     steps.sort(function(a, b) {
+//       return a - b
+//     });
+//     console.log("steps : ", steps);
+//
+//     if (prefixes.size === 1 && steps.length > 0)
+//       prefixAndStep.push([...prefixes][0], parseInt(steps[0]));
+//
+//     console.log("prefixAndStep : ", prefixAndStep);
+//   }
+//   return prefixAndStep;
+// }
 
 //function getCustomPaginationLinks(prefix, startNumber, endNumber, step) {
 //    let invariant = getPaginationPrefix(prefix, startNumber, endNumber);
@@ -1166,62 +1163,101 @@ function getDepthUrls(levelStructureMap) {
 
 function getPaginationLinks(pagination) {
   let paginationLinks = new Set();
-  let hrefs = new Set();
-  let prefix = pagination.prefix;
-  let currentPage = window.location.href;
-  let $urls;
-  let paginationSelector = pagination.selector;
-  if (paginationSelector !== "custom pagination") {
-    let $paginationSelector = $(paginationSelector).first();
-    //        if ()
-    $urls = $paginationSelector.find("a[href*='" + prefix + "']");
-  } else {
-    $urls = $(document).find("a[href*='" + prefix + "']");
-  }
-  $urls.each(function() {
-    let href = this.href;
-    if (typeof href !== 'undefined' && !href.endsWith("/") && href !== currentPage && href !== currentPage + "#")
-      hrefs.add(href);
-  });
-  console.log("hrefs : ", hrefs);
-
-  let regex = new RegExp(prefix + "\\d+");
-  let xHrefs = new Set();
-  let pageNbrs = new Set();
-  for (let href of hrefs) {
-    let xHref = href.replace(regex, "x***x");
-    xHrefs.add(xHref);
-    let prefixAndPageNbr = href.match(regex);
-    if (prefixAndPageNbr !== null) {
-      let matcher = prefixAndPageNbr[0];
-      let pageNbr = matcher.match("\\d+");
-      if (pageNbr !== null) {
-        matcher = pageNbr[0];
-        pageNbrs.add(matcher);
-      }
+  let selector = pagination.selector,
+    prefix = pagination.prefix,
+    start = pagination.start,
+    step = pagination.step,
+    upTo = pagination.upTo;
+  if (selector !== "") {
+    $urls = $(selector).find("a");
+    if ($urls.length > 0) {
+      $urls.each(function() {
+        console.log("href : ", $(this).prop("href"));
+        paginationLinks.add($(this).prop("href"));
+      });
     }
   }
-  console.log("xHrefs : ", xHrefs);
-  console.log("pageNbrs : ", pageNbrs);
 
-  if (xHrefs.size === 1 && pageNbrs.size > 0) {
-    let invariantUrl = [...xHrefs][0];
-    let pageNbrsArray = [...pageNbrs];
-    pageNbrsArray.sort(function(a, b) {
-      return a - b
-    });
-    let lastPage = pageNbrsArray[pageNbrsArray.length - 1];
-    lastPage = Number(lastPage);
-    let step = pagination.step;
-    for (let i = step; i < lastPage + step; i += step) {
-      console.log("i= " + i);
-      let newPrefix = prefix + i;
-      console.log("newPrefix : " + newPrefix);
-      let link = invariantUrl.replace("x***x", newPrefix);
-      console.log("link : " + link);
-      paginationLinks.add(link);
-    }
-    console.log("paginationLinks : ", paginationLinks);
-  }
+  // if ($urls.length > 0) {
+  //   let currentUrl = new URL(window.location.href);
+  //   console.log("pagination : ", pagination);
+  //   let currentHref = currentUrl.href;
+  //   console.log("currentHref : ", currentHref);
+  //   let paginationPrefix = "";
+  //   if (currentHref.indexOf(prefix) != -1)
+  //     paginationPrefix += currentHref.substring(0, currentHref.indexOf(prefix));
+  //   else
+  //     paginationPrefix += currentHref;
+  //   console.log("paginationPrefix : ", paginationPrefix);
+  //   for (let i = start; i < upTo + 1;) {
+  //     let paginationLink = paginationPrefix + prefix + i;
+  //     console.log("paginationLink = ", paginationLink);
+  //     paginationLinks.add(paginationLink);
+  //     i += step;
+  //   }
+  // }
   return [...paginationLinks];
 }
+
+
+// function getPaginationLinks(pagination) {
+//   let paginationLinks = new Set();
+//   let hrefs = new Set();
+//   let prefix = pagination.prefix;
+//   let currentPage = window.location.href;
+//   let $urls;
+//   let paginationSelector = pagination.selector;
+//   if (paginationSelector !== "custom pagination") {
+//     let $paginationSelector = $(paginationSelector).first();
+//     //        if ()
+//     $urls = $paginationSelector.find("a[href*='" + prefix + "']");
+//   } else {
+//     $urls = $(document).find("a[href*='" + prefix + "']");
+//   }
+//   $urls.each(function() {
+//     let href = this.href;
+//     if (typeof href !== 'undefined' && !href.endsWith("/") && href !== currentPage && href !== currentPage + "#")
+//       hrefs.add(href);
+//   });
+//   console.log("hrefs : ", hrefs);
+//
+//   let regex = new RegExp(prefix + "\\d+");
+//   let xHrefs = new Set();
+//   let pageNbrs = new Set();
+//   for (let href of hrefs) {
+//     let xHref = href.replace(regex, "x***x");
+//     xHrefs.add(xHref);
+//     let prefixAndPageNbr = href.match(regex);
+//     if (prefixAndPageNbr !== null) {
+//       let matcher = prefixAndPageNbr[0];
+//       let pageNbr = matcher.match("\\d+");
+//       if (pageNbr !== null) {
+//         matcher = pageNbr[0];
+//         pageNbrs.add(matcher);
+//       }
+//     }
+//   }
+//   console.log("xHrefs : ", xHrefs);
+//   console.log("pageNbrs : ", pageNbrs);
+//
+//   if (xHrefs.size === 1 && pageNbrs.size > 0) {
+//     let invariantUrl = [...xHrefs][0];
+//     let pageNbrsArray = [...pageNbrs];
+//     pageNbrsArray.sort(function(a, b) {
+//       return a - b
+//     });
+//     let lastPage = pageNbrsArray[pageNbrsArray.length - 1];
+//     lastPage = Number(lastPage);
+//     let step = pagination.step;
+//     for (let i = step; i < lastPage + step; i += step) {
+//       console.log("i= " + i);
+//       let newPrefix = prefix + i;
+//       console.log("newPrefix : " + newPrefix);
+//       let link = invariantUrl.replace("x***x", newPrefix);
+//       console.log("link : " + link);
+//       paginationLinks.add(link);
+//     }
+//     console.log("paginationLinks : ", paginationLinks);
+//   }
+//   return [...paginationLinks];
+// }

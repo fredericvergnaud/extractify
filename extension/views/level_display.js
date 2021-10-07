@@ -215,18 +215,9 @@ function displayLevel(level) {
           sendMessageToTab(level, "selectPagination", dataArray)
             .then(function(selectedPagination) {
               // on récupère les résultats de la sélection
-              let selectedPaginationPrefix = selectedPagination.paginationPrefix,
-                selectedPaginationStart = selectedPagination.paginationStart,
-                selectedPaginationStep = selectedPagination.paginationStep,
-                selectedPaginationUpTo = selectedPagination.paginationUpTo,
-                selectedPaginationLinks = selectedPagination.paginationLinks;
-              let pagination = addPagination(selectedPagination.paginationSelector, selectedPaginationPrefix, selectedPaginationStart, selectedPaginationStep, selectedPaginationUpTo, selectedPaginationLinks, level);
-              let paginationPrefix = "",
-                paginationStart = 0,
-                paginationStep = 0,
-                paginationUpTo = 0,
-                paginationLinks = [];
-              if (selectedPaginationLinks.length === 1) {
+              let paginationSelector = selectedPagination.paginationSelector,
+                paginationLinks = selectedPagination.paginationLinks;
+              if (paginationLinks.length === 1) {
                 if (confirm(extensionLang.PaginationFewElements)) {
                   addPaginationLinksManually()
                     .then(function(dataArray) {
@@ -235,30 +226,32 @@ function displayLevel(level) {
                       paginationStart = dataArray[1];
                       paginationStep = dataArray[2];
                       paginationUpTo = dataArray[3];
-                      for (let i = paginationStart; i < paginationUpTo + 1;) {
-                        let paginationLink = paginationPrefix + i;
-                        // console.log("paginationLink = ", paginationLink);
-                        paginationLinks.push(paginationLink);
-                        i += paginationStep;
-                      }
+                      paginationLinks = [];
+                      // for (let i = paginationStart; i < paginationUpTo + 1;) {
+                      //   let paginationLink = paginationPrefix + i;
+                      //   // console.log("paginationLink = ", paginationLink);
+                      //   paginationLinks.push(paginationLink);
+                      //   i += paginationStep;
+                      // }
+                      addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
+                      displayPagination(level);
+                      updateLevelDisplay(level);
+                      updateLevelsDisplay();
                     });
                 } else {
-                  paginationPrefix = selectedPaginationPrefix;
-                  paginationStart = selectedPaginationStart;
-                  paginationStep = selectedPaginationStep;
-                  paginationUpTo = selectedPaginationUpTo;
-                  paginationLinks = selectedPaginationLinks;
+                  addPagination(paginationSelector, "", 0, 0, 0, [], level);
+                  displayPagination(level);
+                  updateLevelDisplay(level);
+                  updateLevelsDisplay();
                 }
               } else {
                 // on essaye de trouver un intervalle de 1
-                let steps = getPaginationStep(selectedPaginationLinks);
+                let steps = getPaginationStep(paginationLinks);
                 if (steps.size === 1 && steps.has(1)) {
-                  paginationPrefix = selectedPaginationPrefix;
-                  paginationStart = selectedPaginationStart;
-                  paginationStep = selectedPaginationStep;
-                  paginationUpTo = selectedPaginationUpTo;
-                  paginationLinks = selectedPaginationLinks;
-
+                  addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
+                  displayPagination(level);
+                  updateLevelDisplay(level);
+                  updateLevelsDisplay();
                 } else {
                   if (confirm(extensionLang.PaginationNoStepOneFound)) {
                     addPaginationLinksManually()
@@ -268,31 +261,26 @@ function displayLevel(level) {
                         paginationStart = dataArray[1];
                         paginationStep = dataArray[2];
                         paginationUpTo = dataArray[3];
-                        for (let i = paginationStart; i < paginationUpTo + 1;) {
-                          let paginationLink = paginationPrefix + i;
-                          // console.log("paginationLink = ", paginationLink);
-                          paginationLinks.push(paginationLink);
-                          i += paginationStep;
-                        }
-
+                        paginationLinks = [];
+                        // for (let i = paginationStart; i < paginationUpTo + 1;) {
+                        //   let paginationLink = paginationPrefix + i;
+                        //   // console.log("paginationLink = ", paginationLink);
+                        //   paginationLinks.push(paginationLink);
+                        //   i += paginationStep;
+                        // }
+                        addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
+                        displayPagination(level);
+                        updateLevelDisplay(level);
+                        updateLevelsDisplay();
                       });
                   } else {
-                    paginationPrefix = selectedPaginationPrefix;
-                    paginationStart = selectedPaginationStart;
-                    paginationStep = selectedPaginationStep;
-                    paginationUpTo = selectedPaginationUpTo;
-                    paginationLinks = selectedPaginationLinks;
+                    addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
+                    displayPagination(level);
+                    updateLevelDisplay(level);
+                    updateLevelsDisplay();
                   }
                 }
               }
-              pagination.prefix = paginationPrefix;
-              pagination.start = paginationStart;
-              pagination.step = paginationStep;
-              pagination.upTo = paginationUpTo;
-              pagination.links = paginationLinks;
-              displayPagination(level);
-              updateLevelDisplay(level);
-              updateLevelsDisplay();
             });
         }
       });

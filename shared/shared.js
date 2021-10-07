@@ -308,46 +308,34 @@ function createNewTab(url) {
 // Le callback de l'update de newTab se produit à l'update, mais pas au chargement complet de la page
 // -> Promise + Nécessité de rajouter un listener (auquel on donne un nom pour pouvoir le supprimer lors du resolve) à onUpdated qui va renvoyer un status : on pourra alors faire un test sur ce statut ('complete')
 // sendMessage est une fonction synchrone : pas de Promise
-function updatePageScraping(newTabId, url, levelStructureMap, requestLatency, scrapingPageInOwnTab) {
-  console.log("updatePageScraping : requestLatency = " + requestLatency);
+function scrapPage(newTabId, url, levelStructureMap, requestLatency, scrapingPageInOwnTab) {
+  // console.log("scrapPage : requestLatency = " + requestLatency);
   var lastError;
   return new Promise(function(resolve, reject) {
     chrome.tabs.update(newTabId, {
       url: url
     }, function(tab) {
       lastError = chrome.runtime.lastError;
-      if (lastError) {
-        //                alert(extensionLang.ScrapingError + " (in tab)\n" + lastError.message);
-        //                if (scrapingPageInOwnTab === "true")
-        //                    newTabId = null;
-        //                endScrap(newTabId, scrapingPageInOwnTab);
-        //                return;
+      if (lastError)
         resolve("noData");
-      } else {
+      else {
         chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
           if (changeInfo.status === 'complete') {
             chrome.tabs.sendMessage(tab.id, {
-              action: "pageScraping",
+              action: "scrapPage",
               data: levelStructureMap,
               rowNbr: rowNbr,
               requestLatency: requestLatency
             }, function(response) {
               lastError = chrome.runtime.lastError;
-              if (lastError) {
-                //                                alert(extensionLang.ScrapingError + " (in response)\n" + lastError.message);
-                //                                if (scrapingPageInOwnTab === "true")
-                //                                    newTabId = null;
-                //                                endScrap(newTabId, scrapingPageInOwnTab);
-                //                                return;
+              if (lastError)
                 resolve("noData");
-              } else {
+              else {
                 if (response.data != "") {
                   rowNbr += response.responseData.length;
                   resolve(response.responseData);
-                } else {
-                  //                                    reject("failed");
+                } else
                   resolve("noData");
-                }
                 chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
               }
             });
@@ -358,35 +346,30 @@ function updatePageScraping(newTabId, url, levelStructureMap, requestLatency, sc
   });
 }
 
-// function updatePaginationScraping(newTabId, url, pagination) {
-//     return new Promise(function (resolve, reject) {
-//         chrome.tabs.update(newTabId, {
-//             url: url
-//         }, function (tab) {
-//             chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
-//                 if (changeInfo.status === 'complete') {
-//                     chrome.tabs.sendMessage(tab.id, {
-//                         action: "paginationScraping",
-//                         data: pagination
-//                     }, function (response) {
-//                         var lastError = chrome.runtime.lastError;
-//                         if (lastError) {
-// //                            console.log("lastError.message", lastError.message);
-//                             // 'Could not establish connection. Receiving end does not exist.'
-// //                            return;
-//                             resolve("noData");
-//                         } else {
-//                             if (response.data != "")
-//                                 resolve(response.responseData);
-//                             else {
-//                                 resolve("noData");
-//     //                            reject("failed");
-//                             }
-//                         }
-//                         chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
-//                     });
-//                 }
-//             });
-//         });
-//     });
-// }
+function scrapPaginationLinks(newTabId, url, pagination) {
+  return new Promise(function(resolve, reject) {
+    chrome.tabs.update(newTabId, {
+      url: url
+    }, function(tab) {
+      chrome.tabs.onUpdated.addListener(function tabUpdatedListener(tabId, changeInfo, tab) {
+        if (changeInfo.status === 'complete') {
+          chrome.tabs.sendMessage(tab.id, {
+            action: "scrapPaginationLinks",
+            data: pagination
+          }, function(response) {
+            var lastError = chrome.runtime.lastError;
+            if (lastError)
+              resolve("noData");
+            else {
+              if (response.data != "")
+                resolve(response.responseData);
+              else
+                resolve("noData");
+            }
+            chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
+          });
+        }
+      });
+    });
+  });
+}

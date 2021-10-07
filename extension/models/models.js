@@ -12,10 +12,10 @@ function Level(id, typeKey, type, url, rows, pagination, tabId, someDeeperLinks)
 function Pagination(dataType, selector) {
     this.dataType = "pagination";
     this.selector = selector;
-    this.prefix = null;
-    this.start = start;
+    this.prefix = "";
+    this.start = 0;
     this.step = 0;
-    this.upto = 0;
+    this.upTo = 0;
     this.links = [];
 }
 

@@ -141,9 +141,9 @@ function start() {
                 .then(function () {
                     console.log("levels_display.js : scrapedObjects lenght = " + scrapedObjects.length);
                     endScrap(newTabId, scrapingPageInOwnTab);
-                console.log("errors : " + errorsNbr);
-                if (errorsNbr > 0)
-                    alert(errorsNbr + extensionLang.ScrapingError);
+                console.log("errors : " + scrapingErrorsNbr);
+                if (scrapingErrorsNbr > 0)
+                    alert(scrapingErrorsNbr + extensionLang.ScrapingError);
                 });
         }
 
@@ -256,9 +256,9 @@ function updateScrapingResultsDialog(objectType) {
     let $nbr_of_scraped_objects = $("#nbr_of_scraped_objects");
     let child = $(nbr_of_scraped_objects).find("#nbr_of_" + objectType);
     if (child.length === 0)
-        $nbr_of_scraped_objects.append("<p id='nbr_of_" + objectType + "'>" + objectsCount.get(objectType) + " " + objectType + "(s)</p>");
+        $nbr_of_scraped_objects.append("<p id='nbr_of_" + objectType + "'>" + scrapedObjectsCount.get(objectType) + " " + objectType + "(s)</p>");
     else
-        child.text(objectsCount.get(objectType) + " " + objectType + "(s)");
+        child.text(scrapedObjectsCount.get(objectType) + " " + objectType + "(s)");
 }
 
 function initScrapingResultsDialog() {

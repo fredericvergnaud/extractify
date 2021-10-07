@@ -167,7 +167,7 @@ chrome.runtime.onMessage.addListener(
             });
           });
         break;
-      case "pageScraping":
+      case "scrapPage":
         var levelStructureMap = new Map(message.data);
         console.log("levelStructureMap : ", levelStructureMap);
         var rowNbr = message.rowNbr;
@@ -212,7 +212,7 @@ chrome.runtime.onMessage.addListener(
 
         }
         break;
-      case "paginationScraping":
+      case "scrapPaginationLinks":
         var pagination = message.data;
         var paginationLinks = getPaginationLinks(pagination);
         sendResponse({
