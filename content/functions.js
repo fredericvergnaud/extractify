@@ -1180,9 +1180,11 @@ function getPaginationLinks(pagination) {
 }
 
 function getPaginationLinksWithSelector(selector, prefix, start, step, upTo) {
+  // By Selector
   let tempPaginationLinks = new Set(),
     paginationLinks = new Set(),
-    $urls;
+    $urls,
+    fileExtension = "";
   console.log("Selector not empty :");
   $urls = $(selector).find("a");
   if ($urls.length > 0)
@@ -1202,6 +1204,7 @@ function getPaginationLinksWithSelector(selector, prefix, start, step, upTo) {
     let foundStart = urlsVariables.start;
     let foundSteps = urlsVariables.steps;
     let foundUpTo = urlsVariables.upTo;
+    let fileExtension = urlsVariables.fileExtension;
     if (foundPrefix !== "") {
       prefix = foundPrefix;
       if (start === 0)
@@ -1212,168 +1215,12 @@ function getPaginationLinksWithSelector(selector, prefix, start, step, upTo) {
         else
           step = 1;
       upTo = foundUpTo;
-      paginationLinks = createPaginationLinks(prefix, start, step, upTo);
+      paginationLinks = createPaginationLinks(prefix, start, step, upTo, fileExtension);
     }
   } else {
     // 1 seul lien reçu
   }
   return paginationLinks;
-}
-
-function getPertinentLinks(links) {
-  let pertinentLinks = new Set();
-  for (let i = 0; i < links.length - 1; i++) {
-    let link = links[i];
-    let linkNext = links[i + 1];
-    let differenceBetweenLinks = parseInt(getDifferenceBetweenLinks(link, linkNext)) || 0;
-    console.log("difference between " + link + " and " + linkNext + " : ", differenceBetweenLinks);
-    if (differenceBetweenLinks !== 0)
-      pertinentLinks.add(link).add(linkNext);
-  }
-  return [...pertinentLinks];
-}
-
-function getPagesNumbers(pertinentLinks, prefix) {
-  let pagesNumbers = new Set();
-  for (let i = 0; i < pertinentLinks.length - 1; i++) {
-    let pertinentLink = pertinentLinks[i];
-    let pertinentLinkNext = pertinentLinks[i + 1];
-    let differenceBetweenPertinentLinks = parseInt(getDifferenceBetweenLinks(pertinentLink, pertinentLinkNext)) || 0;
-    console.log("difference between " + pertinentLink + " and " + pertinentLinkNext + " : ", differenceBetweenPertinentLinks);
-    if (differenceBetweenPertinentLinks !== 0)
-      pagesNumbers.add(differenceBetweenPertinentLinks);
-  }
-  // 2ème passage avec prefix
-  console.log("2ème passage de getPagesNumbers avec prefix : ", prefix)
-  if (prefix !== "") {
-    for (let i = 0; i < pertinentLinks.length - 1; i++) {
-      let pertinentLink = pertinentLinks[i];
-      if (pertinentLink.indexOf(prefix) !== -1) {
-        let prefixPosition = pertinentLink.indexOf(prefix);
-        let prefixLength = prefix.length;
-        let pageNumber = pertinentLink.substring(prefixPosition + prefixLength - 1);
-        console.log("prefixPosition : ", prefixPosition, "\nprefixLength : ", prefixLength, "\npageNumber : ", pageNumber);
-        pageNumber = parseInt(pageNumber);
-        if (!isNaN(pageNumber))
-          pagesNumbers.add(pageNumber);
-      }
-    }
-  }
-  return [...pagesNumbers];
-}
-
-function getStart(pagesNumbers) {
-  let start = 0;
-  if (pagesNumbers.length > 0)
-    if (pagesNumbers.length > 1)
-      start = pagesNumbers[0];
-    else
-      start = 2;
-  else
-    start = 2
-  return start;
-}
-
-function getUpTo(pagesNumbers) {
-  let upTo = 0;
-  if (pagesNumbers.length > 0)
-    if (pagesNumbers.length > 1)
-      upTo = pagesNumbers[pagesNumbers.length - 1];
-    else
-      upTo = pageNbrsArray[0];
-  else
-    upTo = 0;
-  return upTo;
-}
-
-function getSteps(pagesNumbers) {
-  let steps = new Set();
-  if (pagesNumbers.length > 1)
-    for (let i = 0; i < pagesNumbers.length - 1; i++) {
-      let pageNbr = pagesNumbers[i];
-      let pageNbrNext = pagesNumbers[i + 1];
-      steps.add(pageNbrNext - pageNbr);
-    }
-  else
-    steps.add(pageNbrsArray[0]);
-  return [...steps];
-}
-
-function getPrefix(pertinentLinks) {
-  let prefix = "";
-  var A = pertinentLinks.concat().sort(),
-    a1 = A[0],
-    a2 = A[A.length - 1],
-    L = a1.length,
-    i = 0;
-  while (i < L && a1.charAt(i) === a2.charAt(i)) i++;
-  prefix = a1.substring(0, i);
-  return prefix;
-}
-
-function getDifferenceBetweenLinks(a, b) {
-  var i = 0;
-  var j = 0;
-  var result = "";
-  while (j < b.length) {
-    if (a[i] != b[j] || i == a.length)
-      result += b[j];
-    else
-      i++;
-    j++;
-  }
-  return result;
-}
-
-function createPaginationLinks(prefix, start, step, upTo) {
-  let paginationLinks = new Set();
-  console.log("Create link with prefix = " + prefix + " | start = " + start + " | step = " + step + " | upTo = " + upTo);
-  for (let i = start; i < upTo + 1;) {
-    let paginationLink = prefix + i;
-    console.log("paginationLink = ", paginationLink);
-    paginationLinks.add(paginationLink);
-    i += step;
-  }
-  return [...paginationLinks];
-}
-
-function getPaginationUrlsVariables(links) {
-  let paginationUrlsVariables = {},
-    prefix = "",
-    start = 0,
-    upTo = 0,
-    steps = [],
-    pagesNumbers = [],
-    pertinentLinks = [];
-  // pertinentLinks
-  pertinentLinks = getPertinentLinks(links);
-  console.log("Pertinent links found : ", pertinentLinks);
-
-  // prefix
-  prefix = getPrefix(pertinentLinks);
-  console.log("prefix found : ", prefix);
-  paginationUrlsVariables.prefix = prefix;
-
-  // Pages numbers
-  pagesNumbers = getPagesNumbers(pertinentLinks, prefix);
-  pagesNumbers.sort(function(a, b) {
-    return a - b
-  });
-  console.log("pages number found : ", pagesNumbers);
-
-  // start & upTo
-  start = getStart(pagesNumbers);
-  upTo = getUpTo(pagesNumbers);
-  console.log("start found : ", start, "\nupTo found : ", upTo);
-  paginationUrlsVariables.start = start;
-  paginationUrlsVariables.upTo = upTo;
-
-  // steps
-  steps = getSteps(pagesNumbers);
-  console.log("steps found : ", steps);
-  paginationUrlsVariables.steps = steps;
-
-  return paginationUrlsVariables;
 }
 
 function getPaginationLinksWithPrefixAsVariable(prefix, start, step, upTo) {
@@ -1448,8 +1295,11 @@ function getPaginationLinksWithPrefixAsVariable(prefix, start, step, upTo) {
       pertinentLinks = getPertinentLinks([...tempPaginationLinks]);
       console.log("Pertinent links found : ", pertinentLinks);
 
+      // page extension
+      let fileExtension = getFileExtension(pertinentLinks);
+
       // Pages numbers
-      pagesNumbers = getPagesNumbers(pertinentLinks, searchInUrls);
+      pagesNumbers = getPagesNumbers(pertinentLinks, searchInUrls, fileExtension);
       pagesNumbers.sort(function(a, b) {
         return a - b
       });
@@ -1465,7 +1315,7 @@ function getPaginationLinksWithPrefixAsVariable(prefix, start, step, upTo) {
           start = 2;
         if (pathnameUsed === 1)
           searchInUrls = origin + "/" + searchInUrls;
-        paginationLinks = createPaginationLinks(searchInUrls, start, step, upTo);
+        paginationLinks = createPaginationLinks(searchInUrls, start, step, upTo, fileExtension);
       } else
         console.log("Failed to build pagination links (upTo = 0)");
     } else {
@@ -1474,6 +1324,188 @@ function getPaginationLinksWithPrefixAsVariable(prefix, start, step, upTo) {
   } else
     console.log("Failed to find some urls with " + searchInUrls);
   return paginationLinks;
+}
+
+function getPertinentLinks(links) {
+  let pertinentLinks = new Set();
+  for (let i = 0; i < links.length - 1; i++) {
+    let link = links[i];
+    let linkNext = links[i + 1];
+    let differenceBetweenLinks = parseInt(getDifferenceBetweenLinks(link, linkNext)) || 0;
+    console.log("difference between " + link + " and " + linkNext + " : ", differenceBetweenLinks);
+    if (differenceBetweenLinks !== 0)
+      pertinentLinks.add(link).add(linkNext);
+  }
+  return [...pertinentLinks];
+}
+
+function getFileExtension(pertinentLinks){
+  let fileExtension = "",
+    filesExtensions = new Set();
+  for (pertinentLink of pertinentLinks){
+    if (pertinentLink.endsWith("html"))
+      filesExtensions.add(".html");
+    else if (pertinentLink.endsWith("htm"))
+      filesExtensions.add(".htm");
+  }
+  if ([...filesExtensions].length === 1)
+    fileExtension = [...filesExtensions][0];
+  console.log("fileExtension found : ", fileExtension);
+  return fileExtension;
+}
+
+function getPagesNumbers(pertinentLinks, prefix, fileExtension) {
+  let pagesNumbers = new Set();
+  // 1er passage avec différence entre liens
+  console.log("1er passage avec différences entre liens");
+  for (let i = 0; i < pertinentLinks.length - 1; i++) {
+    let pertinentLink = pertinentLinks[i];
+    let pertinentLinkNext = pertinentLinks[i + 1];
+    let differenceBetweenPertinentLinks = parseInt(getDifferenceBetweenLinks(pertinentLink, pertinentLinkNext)) || 0;
+    console.log("difference between " + pertinentLink + " and " + pertinentLinkNext + " : ", differenceBetweenPertinentLinks);
+    if (differenceBetweenPertinentLinks !== 0)
+      pagesNumbers.add(differenceBetweenPertinentLinks);
+  }
+  // 2ème passage avec prefix
+  console.log("2ème passage de getPagesNumbers avec prefix : ", prefix)
+  if (prefix !== "") {
+    for (pertinentLink of pertinentLinks) {
+      if (fileExtension !== "")
+        pertinentLink = pertinentLink.replace(fileExtension, "");
+      if (pertinentLink.indexOf(prefix) !== -1) {
+        let prefixPosition = pertinentLink.indexOf(prefix);
+        let prefixLength = prefix.length;
+        let pageNumber = pertinentLink.substring(prefixPosition + prefixLength);
+        console.log("prefixPosition : ", prefixPosition, "\nprefixLength : ", prefixLength, "\npageNumber : ", pageNumber);
+        pageNumber = parseInt(pageNumber.replace(/^\D+/g, ""));
+        if (!isNaN(pageNumber) && pageNumber > 0)
+          pagesNumbers.add(pageNumber);
+      }
+    }
+  }
+  return [...pagesNumbers];
+}
+
+function getStart(pagesNumbers) {
+  let start = 0;
+  if (pagesNumbers.length > 0)
+    if (pagesNumbers.length > 1)
+      start = pagesNumbers[0];
+    else
+      start = 2;
+  else
+    start = 2
+  return start;
+}
+
+function getUpTo(pagesNumbers) {
+  let upTo = 0;
+  if (pagesNumbers.length > 0)
+    if (pagesNumbers.length > 1)
+      upTo = pagesNumbers[pagesNumbers.length - 1];
+    else
+      upTo = pageNbrsArray[0];
+  else
+    upTo = 0;
+  return upTo;
+}
+
+function getSteps(pagesNumbers) {
+  let steps = new Set();
+  if (pagesNumbers.length > 1)
+    for (let i = 0; i < pagesNumbers.length - 1; i++) {
+      let pageNbr = pagesNumbers[i];
+      let pageNbrNext = pagesNumbers[i + 1];
+      steps.add(pageNbrNext - pageNbr);
+    }
+  else
+    steps.add(pageNbrsArray[0]);
+  return [...steps];
+}
+
+function getPrefix(pertinentLinks) {
+  let prefix = "";
+  var A = pertinentLinks.concat().sort(),
+    a1 = A[0],
+    a2 = A[A.length - 1],
+    L = a1.length,
+    i = 0;
+  while (i < L && a1.charAt(i) === a2.charAt(i)) i++;
+  prefix = a1.substring(0, i);
+  return prefix;
+}
+
+function getDifferenceBetweenLinks(a, b) {
+  var i = 0;
+  var j = 0;
+  var result = "";
+  while (j < b.length) {
+    if (a[i] != b[j] || i == a.length)
+      result += b[j];
+    else
+      i++;
+    j++;
+  }
+  return result;
+}
+
+function createPaginationLinks(prefix, start, step, upTo, fileExtension) {
+  let paginationLinks = new Set();
+  console.log("Create link with prefix = " + prefix + " | start = " + start + " | step = " + step + " | upTo = " + upTo + " | fileExtension = " + fileExtension);
+  for (let i = start; i < upTo + 1;) {
+    let paginationLink = prefix + i;
+    if (fileExtension !== "")
+      paginationLink += fileExtension;
+    console.log("paginationLink = ", paginationLink);
+    paginationLinks.add(paginationLink);
+    i += step;
+  }
+  return [...paginationLinks];
+}
+
+function getPaginationUrlsVariables(links) {
+  let paginationUrlsVariables = {},
+    prefix = "",
+    start = 0,
+    upTo = 0,
+    steps = [],
+    pagesNumbers = [],
+    pertinentLinks = [],
+    fileExtension;
+  // pertinentLinks
+  pertinentLinks = getPertinentLinks(links);
+  console.log("Pertinent links found : ", pertinentLinks);
+
+  // fileExtension
+  fileExtension = getFileExtension(pertinentLinks);
+  console.log("fileExtension found : ", fileExtension);
+  paginationUrlsVariables.fileExtension = fileExtension;
+
+  // prefix
+  prefix = getPrefix(pertinentLinks);
+  console.log("prefix found : ", prefix);
+  paginationUrlsVariables.prefix = prefix;
+
+  // Pages numbers
+  pagesNumbers = getPagesNumbers(pertinentLinks, prefix, "");
+  pagesNumbers.sort(function(a, b) {
+    return a - b
+  });
+  console.log("pages number found : ", pagesNumbers);
+
+  // start & upTo
+  start = getStart(pagesNumbers);
+  upTo = getUpTo(pagesNumbers);
+  console.log("start found : ", start, "\nupTo found : ", upTo);
+  paginationUrlsVariables.start = start;
+  paginationUrlsVariables.upTo = upTo;
+
+  // steps
+  steps = getSteps(pagesNumbers);
+  console.log("steps found : ", steps);
+  paginationUrlsVariables.steps = steps;
+
+  return paginationUrlsVariables;
 }
 
 // function getPaginationLinks(pagination) {
