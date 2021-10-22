@@ -106,19 +106,18 @@ function start() {
     scrapButton.addEventListener("click", function (event) {
         initScraping();
         scrapedObjects = [];
-        console.log("levels_display : scrapedObjects length = " + scrapedObjects.length);
         let newTabId, currentTabId, $scrapingResultsWrapper;
         // options
         let requestLatency = options.find(x => x.name === "request_latency_input").value;
         let scrapingPageInOwnTab = options.find(x => x.name === "scraping_page_in_own_tab_input").value;
-        console.log("levels_display.js : before scraping : requestLatency = " + requestLatency + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
+        console.log("Before scraping : requestLatency = " + requestLatency + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab + " | scrapedObjects length = " + scrapedObjects.length);
         console.log();
         // ouverture du dialog
         $scrapingResultsWrapper = $("#scraping_results_wrapper");
         $scrapingResultsWrapper.show();
 
 
-        console.log("SCRAP LEVELS : ");
+        console.log("SCRAPING PROCESS : ");
 
         // si scrapingPageInOwnTab true
         if (scrapingPageInOwnTab === "true") {
@@ -135,7 +134,7 @@ function start() {
                 .then(function (tabId) {
                     newTabId = tabId;
                     openScrapingResultsDialog(newTabId);
-                    console.log("levels_display.js : newTabId = " + newTabId);
+                    console.log("Scraping process in newTabId = " + newTabId);
                     return scrapLevels(newTabId, requestLatency, scrapingPageInOwnTab);
                 })
                 .then(function () {

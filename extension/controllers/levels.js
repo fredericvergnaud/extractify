@@ -219,7 +219,7 @@ function fillLevelTypes(levelTypeKey, levelType) {
 
 // SCRAPING
 
-let rowNbr, scrapedObjects, scrapedObjectsCount, stopScraping, scrapingErrorsNbr, paginationLinks;
+let rowNbr, scrapedObjects, scrapedObjectsCount, stopScraping, scrapingErrorsNbr, visitedPaginationLinks;
 
 function initScraping() {
   rowNbr = 0;
@@ -228,7 +228,8 @@ function initScraping() {
   stopScraping = 0;
   initScrapingResultsDialog();
   scrapingErrorsNbr = 0;
-  paginationLinks = new Set();
+  paginationScraped = 0;
+  visitedPaginationLinks = new Set();
 }
 
 function getLevelStructureMap(level) {
@@ -280,22 +281,18 @@ function jsonizeScraping() {
 
 async function scrapLevels(tabId, requestLatency, scrapingPageInOwnTab) {
   for (const level of levels) {
-    console.log("scrapLevels : level = " + level.id + " | stopScraping = " + stopScraping + " | requestLatency = " + requestLatency + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
     if (stopScraping === 0) {
       // Scrap du LEVEL 0
       if (level.id === 0) {
-        console.log("scrapLevels : Scraping of " + level.url + " with level id " + level.id + " in tab id " + tabId);
-        console.log("scrapLevels : levels 0 : scrapedObjects lenght = " + scrapedObjects.length);
+        console.log("Scraping of LEVEL 0 (id = " + level.id + ") | scrapedObjects lenght = " + scrapedObjects.length);
         await getScrapedPage(tabId, level.url, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab)
       } else {
         // Scrap des levels en dessous
-        console.log("scrapLevels : other levels : scrapedObjects lenght = " + scrapedObjects.length);
+        console.log("Scraping of LEVEL " + level.id + " | scrapedObjects lenght = " + scrapedObjects.length);
         for (const scrapedObject of scrapedObjects) {
           if (stopScraping === 0) {
-            console.log("scrapLevels : scrapedObject url : " + scrapedObject.url + " | scrapedObject type : " + scrapedObject.type);
             if (scrapingPageInOwnTab === "true")
               tabId = level.tabId;
-            console.log("scrapLevels : Scraping of " + scrapedObject.url + " with level id " + level.id + " and level tab id " + tabId);
             await getScrapedPage(tabId, scrapedObject.url, level.id, scrapedObject.deeperLevel, requestLatency, scrapingPageInOwnTab)
               .then(async function() {
                 if (getLevel(level.id + 1) !== undefined)
@@ -315,13 +312,9 @@ async function scrapLevels(tabId, requestLatency, scrapingPageInOwnTab) {
 }
 
 async function scrapLevel(tabId, level, scrapedObject, requestLatency, scrapingPageInOwnTab) {
-  console.log("scrapLevel : stopScraping = " + stopScraping + " | requestLatency = " + requestLatency + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
-
   let levelIdSup = level.id + 1;
   for (const deeperLevelObject of scrapedObject.deeperLevel) {
     if (stopScraping === 0) {
-      console.log("scrapLevel : deeperLevelObject url : " + deeperLevelObject.url + " | deeperLevelObject type : " + deeperLevelObject.type);
-      console.log("scrapLevel : Scraping of " + deeperLevelObject.url + " with level id " + levelIdSup + " in tab id " + tabId);
       await getScrapedPage(tabId, deeperLevelObject.url, levelIdSup, deeperLevelObject.deeperLevel, requestLatency, scrapingPageInOwnTab)
         .then(async function() {
           if (getLevel(levelIdSup + 1) !== undefined)
@@ -336,23 +329,31 @@ async function scrapLevel(tabId, level, scrapedObject, requestLatency, scrapingP
 
 async function getScrapedPage(tabId, url, levelId, scrapedObjects, requestLatency, scrapingPageInOwnTab) {
   console.log("Scraping of : ", url);
-  // Ajout de l'url scrapée à paginationLinks
-  paginationLinks.add(url);
+  // Ajout de l'url scrapée à visitedPaginationLinks
+  visitedPaginationLinks.add(url);
   // Scraping de la page d'adresse url
   await scrapPage(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
     .then(function(scrapedPage) {
-      console.log("Scraped Page :", scrapedPage);
+      console.log("Scraped Page received :", scrapedPage);
       if (scrapedPage === "noData")
         scrapingErrorsNbr++;
-      return processPageScraping(scrapedPage, levelId, scrapedObjects);
+      else
+        return processPageScraping(scrapedPage, levelId, scrapedObjects);
     })
     .then(async function() {
       let level = getLevel(levelId);
-      if (level.pagination !== null) {
+      if (level.pagination !== null && paginationScraped === 0) {
         console.log("Pagination not null ");
-        if (level.pagination.selector !== "" || level.pagination.upTo === 0) {
+        if (level.pagination.links.length === 0) {
           await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
+        } else {
+          for (const paginationLink of level.pagination.links)
+            if (!visitedPaginationLinks.has(paginationLink)) {
+              await getScrapedPage(tabId, paginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
+              visitedPaginationLinks.add(paginationLink);
+            }
         }
+        paginationScraped = 1;
         // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab);
         // if (level.pagination.links.length > 0)
         //   for (const scrapedPaginationLink of level.pagination.links)
@@ -368,18 +369,18 @@ async function getScrapedPage(tabId, url, levelId, scrapedObjects, requestLatenc
 // SCRAP PAGINATION
 
 async function getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab) {
-  console.log("Search pagination link of : ", url);
+  console.log("Search pagination link in page : ", url);
   await scrapPaginationLinks(tabId, url, level.pagination)
     .then(async function(scrapedPaginationLinks) {
       if (scrapedPaginationLinks === "noData")
         scrapingErrorsNbr++;
       else {
         console.log("Scraped pagination links received = ", scrapedPaginationLinks);
-        if (scrapedPaginationLinks.length > 0) {
+        if (scrapedPaginationLinks !== undefined && scrapedPaginationLinks.length > 0) {
           for (const scrapedPaginationLink of scrapedPaginationLinks) {
-            if (!paginationLinks.has(scrapedPaginationLink)) {
+            if (!visitedPaginationLinks.has(scrapedPaginationLink)) {
               await getScrapedPage(tabId, scrapedPaginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-              paginationLinks.add(scrapedPaginationLink);
+              visitedPaginationLinks.add(scrapedPaginationLink);
             }
           }
         }

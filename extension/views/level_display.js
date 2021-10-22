@@ -227,12 +227,13 @@ function displayLevel(level) {
                       paginationStep = dataArray[2];
                       paginationUpTo = dataArray[3];
                       paginationLinks = [];
-                      // for (let i = paginationStart; i < paginationUpTo + 1;) {
-                      //   let paginationLink = paginationPrefix + i;
-                      //   // console.log("paginationLink = ", paginationLink);
-                      //   paginationLinks.push(paginationLink);
-                      //   i += paginationStep;
-                      // }
+                      if (paginationUpTo !== 0)
+                        for (let i = paginationStart; i < paginationUpTo + 1;) {
+                          let paginationLink = paginationPrefix + i;
+                          // console.log("paginationLink = ", paginationLink);
+                          paginationLinks.push(paginationLink);
+                          i += paginationStep;
+                        }
                       addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
                       displayPagination(level);
                       updateLevelDisplay(level);
@@ -248,7 +249,7 @@ function displayLevel(level) {
                 // on essaye de trouver un intervalle de 1
                 let steps = getPaginationStep(paginationLinks);
                 if (steps.size === 1 && steps.has(1)) {
-                  addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
+                  addPagination(paginationSelector, "", 0, 0, 0, [], level);
                   displayPagination(level);
                   updateLevelDisplay(level);
                   updateLevelsDisplay();
@@ -274,7 +275,7 @@ function displayLevel(level) {
                         updateLevelsDisplay();
                       });
                   } else {
-                    addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
+                    addPagination(paginationSelector, "", 0, 0, 0, [], level);
                     displayPagination(level);
                     updateLevelDisplay(level);
                     updateLevelsDisplay();

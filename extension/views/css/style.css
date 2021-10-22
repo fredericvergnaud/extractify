@@ -357,7 +357,7 @@ p {
 
 .add_paginationlinks_manually_label {
     display: inline-block;
-    width: 35px;
+    width: 75px;
 }
 
 .rows_table_row,
@@ -791,6 +791,7 @@ input:checked + .slider:before {
 
 .ui-dialog-content {
     border: 0 !important;
+    padding: .5em 1.6em;
 }
 
 .ui-widget-content {

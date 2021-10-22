@@ -365,8 +365,8 @@ function addPaginationLinksManually(pagination) {
   let defer = $.Deferred();
   $("#add_paginationlinks_manually_wrapper").dialog({
     autoOpen: true,
-    height: 280,
-    width: 290,
+    height: 300,
+    width: 360,
     modal: true,
     buttons: {
       AddCustomPagination: {
@@ -379,11 +379,27 @@ function addPaginationLinksManually(pagination) {
           let paginationUpto = $("#add_paginationlinks_manually_upto").val();
           if (paginationPrefix !== "" && paginationStep !== "" && paginationStart !== "" && paginationUpto !== "") {
             if (!$.isNumeric(paginationPrefix) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationUpto)) {
-              let dataArray = [paginationPrefix, Number(paginationStart), Number(paginationStep), Number(paginationUpto)];
-              defer.resolve(dataArray);
-              $(this).dialog("close");
-              $(this).dialog("destroy");
-              $(this).css("display", "none");
+              if (Number(paginationUpto) !== 0 && !paginationPrefix.startsWith("http://") && !paginationPrefix.startsWith("https://")) {
+                alert("For an upTo not equal to 0, please enter a prefix starting with http:// or https://");
+                return;
+              } else if (Number(paginationUpto) === 0 && (paginationPrefix.startsWith("http://") || paginationPrefix.startsWith("https://"))) {
+                alert("For an upTo equal to 0, please enter a variable name as prefix");
+                return;
+              } else {
+                if (paginationPrefix.startsWith("/")) {
+                  alert("Prefix can't start with a / (slash)");
+                  return;
+                } else if (paginationPrefix.endsWith("=")) {
+                  alert("Prefix can't end with a = (equal)");
+                  return;
+                } else {
+                  let dataArray = [paginationPrefix, Number(paginationStart), Number(paginationStep), Number(paginationUpto)];
+                  defer.resolve(dataArray);
+                  $(this).dialog("close");
+                  $(this).dialog("destroy");
+                  $(this).css("display", "none");
+                }
+              }
             } else {
               alert("Prefix must be a characters string & Start, Step and Upto must be numeric");
               return;
