@@ -1,11 +1,13 @@
 var levelTypes = {};
 var colTitles = {};
+var extensionWindowId, browserTabUrl, browserTabId, browserWindowId;
 
 document.addEventListener('DOMContentLoaded', function () {
-    let background = chrome.extension.getBackgroundPage();
-    extensionWindowId = background.extensionWindowId;
-    browserTabUrl = background.browserTabUrl;
-    browserTabId = background.browserTabId;
-    browserWindowId = background.browserWindowId;
+    chrome.storage.local.get(["extensionWindowId", "browserTabUrl", "browserTabId", "browserWindowId"], function(data){
+      extensionWindowId = data.extensionWindowId;
+      browserTabUrl = data.browserTabUrl;
+      browserTabId = data.browserTabId;
+      browserWindowId = data.browserWindowId;
+    });
     start();
 });

@@ -246,6 +246,7 @@ function sendMessageToTab(level, action, data) {
   $("#select_content_dialog_wrapper").css("display", "block");
   selectContentDialog(level);
   // on met le focus sur la fenêtre originale
+  console.log("sendMessageToTab : browserWindowId = ", browserWindowId);
   chrome.windows.update(browserWindowId, {
     focused: true
   });

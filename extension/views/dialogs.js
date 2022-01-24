@@ -380,10 +380,10 @@ function addPaginationLinksManually(pagination) {
           if (paginationPrefix !== "" && paginationStep !== "" && paginationStart !== "" && paginationUpto !== "") {
             if (!$.isNumeric(paginationPrefix) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationUpto)) {
               if (Number(paginationUpto) !== 0 && !paginationPrefix.startsWith("http://") && !paginationPrefix.startsWith("https://")) {
-                alert("For an upTo not equal to 0, please enter a prefix starting with http:// or https://");
+                alert("For an stop not equal to 0, please enter a prefix starting with http:// or https://");
                 return;
               } else if (Number(paginationUpto) === 0 && (paginationPrefix.startsWith("http://") || paginationPrefix.startsWith("https://"))) {
-                alert("For an upTo equal to 0, please enter a variable name as prefix");
+                alert("For an stop equal to 0, please enter a variable name as prefix");
                 return;
               } else {
                 if (paginationPrefix.startsWith("/")) {

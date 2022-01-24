@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Extractify",
     "version": "1.4",
     "description": "Companion to extract structured data online",
@@ -7,25 +7,26 @@
     "icons": {
         "48": "extension/views/icons/chrome_logo.png"
     },
+    "host_permissions": [
+      "<all_urls>"
+    ],
     "permissions": [
         "activeTab",
         "tabs",
-        "<all_urls>",
         "webNavigation",
         "storage"
     ],
-    "browser_action": {
+    "action": {
         "default_icon": "extension/views/icons/chrome_logo.png",
         "default_title": "Extractify"
     },
-    "web_accessible_resources": [
-        "/extension/main_panel.html"
-    ],
+    "web_accessible_resources": [{
+      "resources": ["/extension/main_panel.html"],
+      "matches": [],
+      "extension_ids": []
+    }],
     "background": {
-        "scripts": [
-            "/background/background.js"
-        ],
-        "persistent": false
+      "service_worker": "background_loader.js"
     },
     "content_scripts": [{
         "matches": ["http://*/*", "https://*/*"],

@@ -215,6 +215,7 @@ chrome.runtime.onMessage.addListener(
       case "scrapPaginationLinks":
         var pagination = message.data;
         var paginationLinks = getPaginationLinks(pagination);
+        console.log("content : paginationLinks = ", paginationLinks);
         sendResponse({
           response: "paginationLinks",
           responseData: paginationLinks

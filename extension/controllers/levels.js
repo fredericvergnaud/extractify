@@ -342,17 +342,29 @@ async function getScrapedPage(tabId, url, levelId, scrapedObjects, requestLatenc
     })
     .then(async function() {
       let level = getLevel(levelId);
-      if (level.pagination !== null && paginationScraped === 0) {
+      if (level.pagination !== null
+        // && paginationScraped === 0
+      ) {
         console.log("Pagination not null ");
-        if (level.pagination.links.length === 0) {
-          await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
-        } else {
-          for (const paginationLink of level.pagination.links)
-            if (!visitedPaginationLinks.has(paginationLink)) {
-              await getScrapedPage(tabId, paginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-              visitedPaginationLinks.add(paginationLink);
-            }
-        }
+        await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
+          // .then(function (paginationLinks) {
+          //   for (const paginationLink of paginationLinks)
+          //     if (!visitedPaginationLinks.has(paginationLink)) {
+          //       getScrapedPageFromPaginationLink(tabId, paginationLink, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab);
+          //     }
+          // });
+
+
+
+        // if (level.pagination.links.length === 0) {
+        // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
+        // } else {
+        //   for (const paginationLink of level.pagination.links)
+        //     if (!visitedPaginationLinks.has(paginationLink)) {
+        //       await getScrapedPage(tabId, paginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
+        //       visitedPaginationLinks.add(paginationLink);
+        //     }
+        // }
         paginationScraped = 1;
         // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab);
         // if (level.pagination.links.length > 0)
@@ -379,7 +391,7 @@ async function getPaginationLinks(tabId, url, level, scrapedObjects, requestLate
         if (scrapedPaginationLinks !== undefined && scrapedPaginationLinks.length > 0) {
           for (const scrapedPaginationLink of scrapedPaginationLinks) {
             if (!visitedPaginationLinks.has(scrapedPaginationLink)) {
-              await getScrapedPage(tabId, scrapedPaginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
+              await getScrapedPageFromPaginationLink(tabId, scrapedPaginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
               visitedPaginationLinks.add(scrapedPaginationLink);
             }
           }
@@ -388,14 +400,14 @@ async function getPaginationLinks(tabId, url, level, scrapedObjects, requestLate
     });
 }
 
-// async function getScrapedPageFromPaginationLink(tabId, url, levelId, scrapedObjects, requestLatency, scrapingPageInOwnTab) {
-//   await scrapPage(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
-//     .then(function(scrapedPage) {
-//       if (scrapedPage === "noData")
-//         scrapingErrorsNbr++;
-//       return processPageScraping(scrapedPage, levelId, scrapedObjects)
-//     });
-// }
+async function getScrapedPageFromPaginationLink(tabId, url, levelId, scrapedObjects, requestLatency, scrapingPageInOwnTab) {
+  await scrapPage(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
+    .then(function(scrapedPage) {
+      if (scrapedPage === "noData")
+        scrapingErrorsNbr++;
+      return processPageScraping(scrapedPage, levelId, scrapedObjects)
+    });
+}
 
 function processPageScraping(result, levelId, scrapedObjects) {
   if (result !== "noData") {

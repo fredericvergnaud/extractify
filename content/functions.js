@@ -1167,19 +1167,19 @@ function getPaginationLinks(pagination) {
     prefix = pagination.prefix,
     start = pagination.start,
     step = pagination.step,
-    upTo = pagination.upTo;
+    stop = pagination.stop;
   // By selector
   if (selector !== "")
-    paginationLinks = getPaginationLinksWithSelector(selector, prefix, start, step, upTo);
+    paginationLinks = getPaginationLinksWithSelector(selector, prefix, start, step, stop);
   else if (prefix !== "")
     if (!prefix.startsWith("http://") && !prefix.startsWith("https://"))
-      paginationLinks = getPaginationLinksWithPrefixAsVariable(prefix, start, step, upTo);
+      paginationLinks = getPaginationLinksWithPrefixAsVariable(prefix, start, step, stop);
 
-  // return [...paginationLinks];
-  return [...new Set()];
+  return [...paginationLinks];
+  // return [...new Set()];
 }
 
-function getPaginationLinksWithSelector(selector, prefix, start, step, upTo) {
+function getPaginationLinksWithSelector(selector, prefix, start, step, stop) {
   // By Selector
   let tempPaginationLinks = new Set(),
     paginationLinks = new Set(),
@@ -1198,32 +1198,33 @@ function getPaginationLinksWithSelector(selector, prefix, start, step, upTo) {
       }
     });
   console.log("tempPaginationLinks : ", tempPaginationLinks);
-  if ([...tempPaginationLinks].length > 1) {
-    let urlsVariables = getPaginationUrlsVariables([...tempPaginationLinks]);
-    let foundPrefix = urlsVariables.prefix;
-    let foundStart = urlsVariables.start;
-    let foundSteps = urlsVariables.steps;
-    let foundUpTo = urlsVariables.upTo;
-    let fileExtension = urlsVariables.fileExtension;
-    if (foundPrefix !== "") {
-      prefix = foundPrefix;
-      if (start === 0)
-        start = foundStart;
-      if (step === 0)
-        if (foundSteps.length === 1)
-          step = foundSteps[0];
-        else
-          step = 1;
-      upTo = foundUpTo;
-      paginationLinks = createPaginationLinks(prefix, start, step, upTo, fileExtension);
-    }
-  } else {
-    // 1 seul lien reçu
-  }
-  return paginationLinks;
+  // if ([...tempPaginationLinks].length > 1) {
+  //   let urlsVariables = getPaginationUrlsVariables([...tempPaginationLinks]);
+  //   let foundPrefix = urlsVariables.prefix;
+  //   let foundStart = urlsVariables.start;
+  //   let foundSteps = urlsVariables.steps;
+  //   let foundStop = urlsVariables.stop;
+  //   let fileExtension = urlsVariables.fileExtension;
+  //   if (foundPrefix !== "") {
+  //     prefix = foundPrefix;
+  //     if (start === 0)
+  //       start = foundStart;
+  //     if (step === 0)
+  //       if (foundSteps.length === 1)
+  //         step = foundSteps[0];
+  //       else
+  //         step = 1;
+  //     stop = foundStop;
+  //     paginationLinks = createPaginationLinks(prefix, start, step, stop, fileExtension);
+  //   }
+  // } else {
+  //   // 1 seul lien reçu
+  // }
+  // return paginationLinks;
+  return [...tempPaginationLinks];
 }
 
-function getPaginationLinksWithPrefixAsVariable(prefix, start, step, upTo) {
+function getPaginationLinksWithPrefixAsVariable(prefix, start, step, stop) {
   // By prefix as variable
   console.log("Prefix as variable");
   let pathnameUsed = 0,
@@ -1305,19 +1306,19 @@ function getPaginationLinksWithPrefixAsVariable(prefix, start, step, upTo) {
       });
       console.log("pages number found : ", pagesNumbers);
 
-      // upTo
-      upTo = getUpTo(pagesNumbers);
+      // stop
+      stop = getStop(pagesNumbers);
 
-      if (upTo !== 0) {
+      if (stop !== 0) {
         if (step === 0)
           step = 1;
         if (start === 0)
           start = 2;
         if (pathnameUsed === 1)
           searchInUrls = origin + "/" + searchInUrls;
-        paginationLinks = createPaginationLinks(searchInUrls, start, step, upTo, fileExtension);
+        paginationLinks = createPaginationLinks(searchInUrls, start, step, stop, fileExtension);
       } else
-        console.log("Failed to build pagination links (upTo = 0)");
+        console.log("Failed to build pagination links (stop = 0)");
     } else {
       // 1 seul lien de reçu
     }
@@ -1398,16 +1399,16 @@ function getStart(pagesNumbers) {
   return start;
 }
 
-function getUpTo(pagesNumbers) {
-  let upTo = 0;
+function getStop(pagesNumbers) {
+  let stop = 0;
   if (pagesNumbers.length > 0)
     if (pagesNumbers.length > 1)
-      upTo = pagesNumbers[pagesNumbers.length - 1];
+      stop = pagesNumbers[pagesNumbers.length - 1];
     else
-      upTo = pageNbrsArray[0];
+      stop = pageNbrsArray[0];
   else
-    upTo = 0;
-  return upTo;
+    stop = 0;
+  return stop;
 }
 
 function getSteps(pagesNumbers) {
@@ -1449,10 +1450,10 @@ function getDifferenceBetweenLinks(a, b) {
   return result;
 }
 
-function createPaginationLinks(prefix, start, step, upTo, fileExtension) {
+function createPaginationLinks(prefix, start, step, stop, fileExtension) {
   let paginationLinks = new Set();
-  console.log("Create link with prefix = " + prefix + " | start = " + start + " | step = " + step + " | upTo = " + upTo + " | fileExtension = " + fileExtension);
-  for (let i = start; i < upTo + 1;) {
+  console.log("Create link with prefix = " + prefix + " | start = " + start + " | step = " + step + " | stop = " + stop + " | fileExtension = " + fileExtension);
+  for (let i = start; i < stop + 1;) {
     let paginationLink = prefix + i;
     if (fileExtension !== "")
       paginationLink += fileExtension;
@@ -1467,7 +1468,7 @@ function getPaginationUrlsVariables(links) {
   let paginationUrlsVariables = {},
     prefix = "",
     start = 0,
-    upTo = 0,
+    stop = 0,
     steps = [],
     pagesNumbers = [],
     pertinentLinks = [],
@@ -1493,12 +1494,12 @@ function getPaginationUrlsVariables(links) {
   });
   console.log("pages number found : ", pagesNumbers);
 
-  // start & upTo
+  // start & stop
   start = getStart(pagesNumbers);
-  upTo = getUpTo(pagesNumbers);
-  console.log("start found : ", start, "\nupTo found : ", upTo);
+  stop = getStop(pagesNumbers);
+  console.log("start found : ", start, "\nstop found : ", stop);
   paginationUrlsVariables.start = start;
-  paginationUrlsVariables.upTo = upTo;
+  paginationUrlsVariables.stop = stop;
 
   // steps
   steps = getSteps(pagesNumbers);

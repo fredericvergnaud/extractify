@@ -225,16 +225,16 @@ function displayLevel(level) {
                       paginationPrefix = dataArray[0];
                       paginationStart = dataArray[1];
                       paginationStep = dataArray[2];
-                      paginationUpTo = dataArray[3];
+                      paginationStop = dataArray[3];
                       paginationLinks = [];
-                      if (paginationUpTo !== 0)
-                        for (let i = paginationStart; i < paginationUpTo + 1;) {
+                      if (paginationStop !== 0)
+                        for (let i = paginationStart; i < paginationStop + 1;) {
                           let paginationLink = paginationPrefix + i;
                           // console.log("paginationLink = ", paginationLink);
                           paginationLinks.push(paginationLink);
                           i += paginationStep;
                         }
-                      addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
+                      addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationStop, paginationLinks, level);
                       displayPagination(level);
                       updateLevelDisplay(level);
                       updateLevelsDisplay();
@@ -261,15 +261,15 @@ function displayLevel(level) {
                         paginationPrefix = dataArray[0];
                         paginationStart = dataArray[1];
                         paginationStep = dataArray[2];
-                        paginationUpTo = dataArray[3];
+                        paginationStop = dataArray[3];
                         paginationLinks = [];
-                        // for (let i = paginationStart; i < paginationUpTo + 1;) {
+                        // for (let i = paginationStart; i < paginationStop + 1;) {
                         //   let paginationLink = paginationPrefix + i;
                         //   // console.log("paginationLink = ", paginationLink);
                         //   paginationLinks.push(paginationLink);
                         //   i += paginationStep;
                         // }
-                        addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationUpTo, paginationLinks, level);
+                        addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationStop, paginationLinks, level);
                         displayPagination(level);
                         updateLevelDisplay(level);
                         updateLevelsDisplay();
