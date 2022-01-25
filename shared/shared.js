@@ -142,79 +142,79 @@ function highlightPagination(tabId, level, paginationSelector) {
   });
 }
 
-function getDifferenceBetweenLinks(a, b) {
-  var i = 0;
-  var j = 0;
-  var result = "";
-  while (j < b.length) {
-    if (a[i] != b[j] || i == a.length)
-      result += b[j];
-    else
-      i++;
-    j++;
-  }
-  return result;
-}
-
-
-function getPaginationStep(links) {
-  // page numbers
-  let pageNbrs = new Set();
-  // ici, links.length forcément > 1
-  for (let i = 0; i < links.length - 1; i++) {
-    let link = links[i];
-    let linkNext = links[i + 1];
-    let differenceBetweenLinks = parseInt(getDifferenceBetweenLinks(link, linkNext)) || 0;
-    console.log("difference between " + link + " and " + linkNext + " : ", differenceBetweenLinks);
-    if (differenceBetweenLinks !== 0)
-      pageNbrs.add(differenceBetweenLinks);
-  }
-
-  // on trie pageNbrs
-  let pageNbrsArray = [...pageNbrs];
-  pageNbrsArray.sort(function(a, b) {
-    return a - b
-  });
-  console.log("pageNbrs : ", pageNbrs);
-
-  // step
-  let steps = new Set();
-  if (pageNbrsArray.length > 1)
-    for (let i = 0; i < pageNbrsArray.length - 1; i++) {
-      let pageNbr = pageNbrsArray[i];
-      let pageNbrNext = pageNbrsArray[i + 1];
-      console.log("step found = " + (pageNbrNext - pageNbr));
-      steps.add(pageNbrNext - pageNbr);
-    }
-  else
-    steps.add(pageNbrsArray[0]);
-  console.log("steps : ", steps);
-  return steps;
-}
-
-function matchPaginationPrefixAndStep(tabId, prefix, step) {
-  // on met le focus sur la fenêtre originale
-  chrome.windows.update(browserWindowId, {
-    focused: true
-  });
-  return new Promise(function(resolve, reject) {
-    chrome.tabs.sendMessage(tabId, {
-      action: "matchPaginationPrefixAndStep",
-      prefix: prefix,
-      step: step
-    }, function(response) {
-      var lastError = chrome.runtime.lastError;
-      if (lastError) {
-        console.log("lastError.message", lastError.message);
-        // 'Could not establish connection. Receiving end does not exist.'
-        return;
-      }
-      if (response !== undefined) {
-        resolve(response.responseData);
-      }
-    });
-  });
-}
+// function getDifferenceBetweenLinks(a, b) {
+//   var i = 0;
+//   var j = 0;
+//   var result = "";
+//   while (j < b.length) {
+//     if (a[i] != b[j] || i == a.length)
+//       result += b[j];
+//     else
+//       i++;
+//     j++;
+//   }
+//   return result;
+// }
+//
+//
+// function getPaginationStep(links) {
+//   // page numbers
+//   let pageNbrs = new Set();
+//   // ici, links.length forcément > 1
+//   for (let i = 0; i < links.length - 1; i++) {
+//     let link = links[i];
+//     let linkNext = links[i + 1];
+//     let differenceBetweenLinks = parseInt(getDifferenceBetweenLinks(link, linkNext)) || 0;
+//     console.log("difference between " + link + " and " + linkNext + " : ", differenceBetweenLinks);
+//     if (differenceBetweenLinks !== 0)
+//       pageNbrs.add(differenceBetweenLinks);
+//   }
+//
+//   // on trie pageNbrs
+//   let pageNbrsArray = [...pageNbrs];
+//   pageNbrsArray.sort(function(a, b) {
+//     return a - b
+//   });
+//   console.log("pageNbrs : ", pageNbrs);
+//
+//   // step
+//   let steps = new Set();
+//   if (pageNbrsArray.length > 1)
+//     for (let i = 0; i < pageNbrsArray.length - 1; i++) {
+//       let pageNbr = pageNbrsArray[i];
+//       let pageNbrNext = pageNbrsArray[i + 1];
+//       console.log("step found = " + (pageNbrNext - pageNbr));
+//       steps.add(pageNbrNext - pageNbr);
+//     }
+//   else
+//     steps.add(pageNbrsArray[0]);
+//   console.log("steps : ", steps);
+//   return steps;
+// }
+//
+// function matchPaginationPrefixAndStep(tabId, prefix, step) {
+//   // on met le focus sur la fenêtre originale
+//   chrome.windows.update(browserWindowId, {
+//     focused: true
+//   });
+//   return new Promise(function(resolve, reject) {
+//     chrome.tabs.sendMessage(tabId, {
+//       action: "matchPaginationPrefixAndStep",
+//       prefix: prefix,
+//       step: step
+//     }, function(response) {
+//       var lastError = chrome.runtime.lastError;
+//       if (lastError) {
+//         console.log("lastError.message", lastError.message);
+//         // 'Could not establish connection. Receiving end does not exist.'
+//         return;
+//       }
+//       if (response !== undefined) {
+//         resolve(response.responseData);
+//       }
+//     });
+//   });
+// }
 
 function removeBrowserTabs(levelsToRemove) {
   for (let i = 0; i < levelsToRemove.length; i++) {
@@ -265,7 +265,7 @@ function sendMessageToTab(level, action, data) {
         chrome.windows.update(extensionWindowId, {
           focused: true
         });
-        if (response.response === 'selectedRows' || response.response === 'selectedCols' || response.response === 'selectedDepth' || response.response === 'selectedPagination' || response.response === 'selectedCustomPagination')
+        if (response.response === 'selectedRows' || response.response === 'selectedCols' || response.response === 'selectedDepth' || response.response === 'selectedPagination' || response.response === 'selectedCustomPagination' || response.response === 'checkedManualPagination')
           resolve(response.responseData);
         else
           reject('failed');

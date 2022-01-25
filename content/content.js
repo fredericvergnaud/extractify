@@ -156,6 +156,17 @@ chrome.runtime.onMessage.addListener(
             });
           });
         break;
+      case "checkManualPagination":
+        var level = message.level;
+        var paginationData = message.data;
+        checkManualPagination(level, paginationData)
+          .then(function(response) {
+            sendResponse({
+              response: "checkedManualPagination",
+              responseData: response
+            });
+          });
+        break;
       case "matchPaginationPrefixAndStep":
         var prefix = message.prefix;
         var step = message.step;

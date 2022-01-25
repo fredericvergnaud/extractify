@@ -380,17 +380,17 @@ function addPaginationLinksManually(pagination) {
           if (paginationPrefix !== "" && paginationStep !== "" && paginationStart !== "" && paginationUpto !== "") {
             if (!$.isNumeric(paginationPrefix) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationUpto)) {
               if (Number(paginationUpto) !== 0 && !paginationPrefix.startsWith("http://") && !paginationPrefix.startsWith("https://")) {
-                alert("For an stop not equal to 0, please enter a prefix starting with http:// or https://");
+                alert("For a stop not equal to 0, please enter a prefix starting with http:// or https://");
                 return;
               } else if (Number(paginationUpto) === 0 && (paginationPrefix.startsWith("http://") || paginationPrefix.startsWith("https://"))) {
-                alert("For an stop equal to 0, please enter a variable name as prefix");
+                alert("For a stop equal to 0, please enter a variable name as prefix");
                 return;
               } else {
                 if (paginationPrefix.startsWith("/")) {
                   alert("Prefix can't start with a / (slash)");
                   return;
                 } else if (paginationPrefix.endsWith("=")) {
-                  alert("Prefix can't end with a = (equal)");
+                  alert("Prefix can't end with an = (equal)");
                   return;
                 } else {
                   let dataArray = [paginationPrefix, Number(paginationStart), Number(paginationStep), Number(paginationUpto)];

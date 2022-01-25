@@ -16,7 +16,6 @@ function Pagination(dataType, selector) {
     this.start = 0;
     this.step = 0;
     this.stop = 0;
-    this.links = [];
 }
 
 function Row(dataType, id, selector, depth, color) {

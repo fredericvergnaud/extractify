@@ -1,4 +1,4 @@
-function addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationStop, paginationLinks, level) {
+function addPagination(paginationSelector, paginationPrefix, paginationStart, paginationStep, paginationStop, level) {
     var pagination = new Pagination();
     pagination.selector = paginationSelector;
     pagination.prefix = paginationPrefix;

@@ -89,10 +89,10 @@ function displayRow(row, level) {
                         });
 
                 } else {
-                    let dataArray = {
+                    let depthData = {
                         "row": row
                     };
-                    sendMessageToTab(level, "selectDepth", dataArray)
+                    sendMessageToTab(level, "selectDepth", depthData)
                         .then(function (selectedDepth) {
                             level.someDeeperLinks.push(...selectedDepth.deeperLinks);
                             var depth = addDepth(selectedDepth.depthSelector, row);
@@ -155,11 +155,11 @@ function displayRow(row, level) {
 
                 } else if (colArray.length === 2) {
                     // sans tag
-                    let dataArray = {
+                    let colsData = {
                         "row": row,
                         "globalColId": globalColId
                     };
-                    sendMessageToTab(level, "selectCols", dataArray)
+                    sendMessageToTab(level, "selectCols", colsData)
                         .then(function (selectedCols) {
                             //                        console.log("selectedCols : " + selectedCols.colSelector);
                             // add key / title to level type col titles

@@ -183,15 +183,15 @@ function selectRows(rowId, level) {
                 return false;
               } else if ($sameTags.length === 1) {
                 if (confirm(contentLang.RowFewElements)) {
-                  var dataArray = selectRowTags($sameTags, rowSelector, rowId);
-                  resolve(dataArray);
+                  var rowData = selectRowTags($sameTags, rowSelector, rowId);
+                  resolve(rowData);
                 } else {
                   alert(contentLang.RowTooFewElements);
                   return false;
                 }
               } else {
-                var dataArray = selectRowTags($sameTags, rowSelector, rowId);
-                resolve(dataArray);
+                var rowData = selectRowTags($sameTags, rowSelector, rowId);
+                resolve(rowData);
               }
             } else {
               alert(contentLang.RowEmptyClass);
@@ -215,11 +215,11 @@ function selectRowTags($sameTags, rowSelector, rowId) {
   // on récupère la couleur
   var rowColor = $sameTags.first().css("background-color");
 
-  var dataArray = {
+  var rowData = {
     "rowSelector": rowSelector,
     "rowColor": rowColor
   };
-  return dataArray;
+  return rowData;
 }
 
 function highlightRows(rowSelector, rowId, level) {
@@ -235,13 +235,13 @@ function highlightRows(rowSelector, rowId, level) {
         alert(contentLang.RowAlreadySelected);
       else if ($rowSelector.length === 1) {
         if (confirm(contentLang.RowFewElements)) {
-          var dataArray = selectRowTags($rowSelector, rowSelector, rowId);
-          resolve(dataArray);
+          var rowData = selectRowTags($rowSelector, rowSelector, rowId);
+          resolve(rowData);
         } else
           alert(contentLang.RowTooFewElements);
       } else {
-        var dataArray = selectRowTags($rowSelector, rowSelector, rowId)
-        resolve(dataArray);
+        var rowData = selectRowTags($rowSelector, rowSelector, rowId)
+        resolve(rowData);
       }
     } catch (error) {
       alert(error);
@@ -334,15 +334,15 @@ function selectCols(row, colId) {
                 return false;
               } else if ($sameTags.length === 1) {
                 if (confirm(contentLang.ColFewElements)) {
-                  var dataArray = selectColTags(row, colSelector, colId, hasDepth);
-                  resolve(dataArray);
+                  var colData = selectColTags(row, colSelector, colId, hasDepth);
+                  resolve(colData);
                 } else {
                   alert(contentLang.ColTooFewElements);
                   return false;
                 }
               } else {
-                var dataArray = selectColTags(row, colSelector, colId, hasDepth);
-                resolve(dataArray);
+                var colData = selectColTags(row, colSelector, colId, hasDepth);
+                resolve(colData);
               }
             } else {
               alert(contentLang.ColEmptyClass);
@@ -371,10 +371,10 @@ function selectColTags(row, colSelector, colId, hasDepth) {
   //   if (hasDepth)
   //     $selected_col.addClass("selected_depth highlight_depth-" + row.id);
   // });
-  var dataArray = {
+  var colData = {
     "colSelector": colSelector
   };
-  return dataArray;
+  return colData;
 }
 
 function highlightCols(row, colSelector, colId, level) {
@@ -391,14 +391,14 @@ function highlightCols(row, colSelector, colId, level) {
         alert(contentLang.ColNotRowChild);
       else if ($colSelector.length === 1) {
         if (confirm(contentLang.ColFewElements)) {
-          var dataArray = selectColTags(row, colSelector, colId, false);
-          resolve(dataArray);
+          var colData = selectColTags(row, colSelector, colId, false);
+          resolve(colData);
         } else {
           alert(contentLang.ColTooFewElements);
         }
       } else {
-        var dataArray = selectColTags(row, colSelector, colId, false);
-        resolve(dataArray);
+        var colData = selectColTags(row, colSelector, colId, false);
+        resolve(colData);
       }
     } catch (error) {
       alert(error);
@@ -475,15 +475,15 @@ function selectDepth(row) {
                 return false;
               } else if ($sameTags.length === 1) {
                 if (confirm(contentLang.DepthFewElements)) {
-                  var dataArray = selectDepthTags(row, depthSelector, colId, hasCol);
-                  resolve(dataArray);
+                  var depthData = selectDepthTags(row, depthSelector, colId, hasCol);
+                  resolve(depthData);
                 } else {
                   alert(contentLang.ColTooFewElements);
                   return false;
                 }
               } else {
-                var dataArray = selectDepthTags(row, depthSelector, colId, hasCol);
-                resolve(dataArray);
+                var depthData = selectDepthTags(row, depthSelector, colId, hasCol);
+                resolve(depthData);
               }
             } else {
               alert(contentLang.DepthEmptyClass);
@@ -530,11 +530,11 @@ function selectDepthTags(row, depthSelector, colId, hasCol) {
   //       deeperLinks.push(href);
   //   }
   // });
-  var dataArray = {
+  var depthData = {
     "depthSelector": depthSelector,
     "deeperLinks": deeperLinks
   };
-  return dataArray;
+  return depthData;
 }
 
 function highlightDepth(row, depthSelector) {
@@ -552,14 +552,14 @@ function highlightDepth(row, depthSelector) {
         alert(contentLang.DepthUnableToSelect + " (" + depthSelector + ")");
       else if ($depthSelector.length === 0) {
         if (confirm(contentLang.DepthFewElements)) {
-          var dataArray = selectDepthTags(row, depthSelector, null, false);
-          resolve(dataArray);
+          var depthData = selectDepthTags(row, depthSelector, null, false);
+          resolve(depthData);
         } else {
           alert(contentLang.ColTooFewElements);
         }
       } else {
-        var dataArray = selectDepthTags(row, depthSelector, null, false);
-        resolve(dataArray);
+        var depthData = selectDepthTags(row, depthSelector, null, false);
+        resolve(depthData);
       }
     } catch (error) {
       alert(error);
@@ -637,26 +637,18 @@ function selectPagination() {
             if (paginationLinks.size === 0) {
               alert(contentLang.UnableToFindLinksForPaginationPages);
               return false;
-            } else
-            // if (paginationLinks.length === 1)
-            {
-              // if (confirm(contentLang.PaginationFewElements)) {
-              // on highlight
-              $targetPagination.addClass("selected_pagination highlight_pagination");
-              // on resolve
-              var dataArray = {
-                "paginationSelector": paginationSelector,
-                "paginationLinks": [...paginationLinks]
-              };
-              resolve(dataArray);
-              // } else {
-              //   alert(contentLang.PaginationTooFewElements);
-              //   return false;
-              // }
+            } else if (paginationLinks.size === 1) {
+              if (confirm(contentLang.PaginationFewElements)) {
+                // on resolve
+                var paginationData = selectPaginationTags($targetPagination, paginationSelector);
+                resolve(paginationData);
+              } else {
+                alert(contentLang.PaginationTooFewElements);
+                return false;
+              }
+            } else {
+
             }
-            // else {
-            //
-            // }
 
 
             // var paginationClasses = targetPagination.attr("class").split(" ");
@@ -668,20 +660,21 @@ function selectPagination() {
             //   // on highlight
             //   targetPagination.addClass("selected_pagination highlight_pagination");
             //   // on resolve
-            //   var dataArray = {
+            //   var paginationData = {
             //     "paginationSelector": paginationSelector,
             //     "paginationPrefix": prefixAndStep[0],
             //     "paginationStep": prefixAndStep[1]
             //   };
-            //   resolve(dataArray);
+            //   resolve(paginationData);
             //   // on enlève les actions
             //   $('body').children().unbind();
             // } else {
             //   alert(contentLang.UnableToResolvePaginationPages);
             //   return false;
             // }
+
+            $('body').children().unbind();
           }
-          $('body').children().unbind();
         } catch (error) {
           alert(error);
         }
@@ -689,6 +682,16 @@ function selectPagination() {
       }
     });
   });
+}
+
+function selectPaginationTags($targetPagination, paginationSelector) {
+  // on les surligne
+  $targetPagination.addClass("selected_pagination highlight_pagination");
+
+  var paginationData = {
+    "paginationSelector": paginationSelector
+  };
+  return paginationData;
 }
 
 // function selectPagination_old() {
@@ -726,12 +729,12 @@ function selectPagination() {
 //             // on highlight
 //             targetPagination.addClass("selected_pagination highlight_pagination");
 //             // on resolve
-//             var dataArray = {
+//             var paginationData = {
 //               "paginationSelector": paginationSelector,
 //               "paginationPrefix": prefixAndStep[0],
 //               "paginationStep": prefixAndStep[1]
 //             };
-//             resolve(dataArray);
+//             resolve(paginationData);
 //             // on enlève les actions
 //             $('body').children().unbind();
 //           } else {
@@ -746,28 +749,82 @@ function selectPagination() {
 // }
 
 function highlightPagination(level, paginationSelector) {
-  console.log("highlightPagination : paginationSelector received = " + paginationSelector);
   return new Promise(function(resolve, reject) {
     let $paginationSelector;
     try {
       $paginationSelector = $(paginationSelector);
-      if ($paginationSelector !== undefined) {
-        let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
-        if (prefixAndStep.length > 0) {
-          console.log("highlightPagination : prefixAndStep found : ", prefixAndStep);
-          // on highlight
-          $paginationSelector.addClass("selected_pagination highlight_pagination");
-          // on resolve
-          var dataArray = {
-            "paginationSelector": paginationSelector,
-            "paginationPrefix": prefixAndStep[0],
-            "paginationStep": prefixAndStep[1]
-          };
-          resolve(dataArray);
-        } else
-          alert(contentLang.UnableToResolvePaginationPages);
-      } else
-        alert(contentLang.UnableToResolvePaginationPages);
+      if ($paginationSelector.hasClass("selected_pagination"))
+        alert(contentLang.PaginationAlreadySelected);
+      else if ($paginationSelector.length === 0)
+        alert(contentLang.PaginationUnableToSelect + " (" + paginationSelector + ")");
+      else {
+        let paginationLinks = new Set();
+        if ($paginationSelector.prop("tagName") === "A") {
+          paginationLinks.add($paginationSelector.prop("href"));
+        } else {
+          $paginationLinks = $paginationSelector.find("a");
+          $paginationLinks.each(function() {
+            paginationLinks.add($(this).prop("href"));
+          });
+        }
+        console.log("paginationLinks size : ", paginationLinks.size);
+        console.log("paginationLinks : ", paginationLinks);
+        if (paginationLinks.size === 0) {
+          alert(contentLang.UnableToFindLinksForPaginationPages);
+          return false;
+        } else if (paginationLinks.size === 1) {
+          if (confirm(contentLang.PaginationFewElements)) {
+            // on resolve
+            var paginationData = selectPaginationTags($paginationSelector, paginationSelector);
+            resolve(paginationData);
+          } else {
+            alert(contentLang.PaginationTooFewElements);
+            return false;
+          }
+        } else {
+
+        }
+      }
+    } catch (error) {
+      alert(error);
+    }
+  });
+}
+
+// function highlightPagination(level, paginationSelector) {
+//   console.log("highlightPagination : paginationSelector received = " + paginationSelector);
+//   return new Promise(function(resolve, reject) {
+//     let $paginationSelector;
+//     try {
+//       $paginationSelector = $(paginationSelector);
+//       if ($paginationSelector !== undefined) {
+//         let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
+//         if (prefixAndStep.length > 0) {
+//           console.log("highlightPagination : prefixAndStep found : ", prefixAndStep);
+//           // on highlight
+//           $paginationSelector.addClass("selected_pagination highlight_pagination");
+//           // on resolve
+//           var paginationData = {
+//             "paginationSelector": paginationSelector,
+//             "paginationPrefix": prefixAndStep[0],
+//             "paginationStep": prefixAndStep[1]
+//           };
+//           resolve(paginationData);
+//         } else
+//           alert(contentLang.UnableToResolvePaginationPages);
+//       } else
+//         alert(contentLang.UnableToResolvePaginationPages);
+//     } catch (error) {
+//       alert(error);
+//     }
+//   });
+// }
+
+function checkManualPagination(level, paginationData) {
+  console.log("go checking with data ", paginationData);
+  return new Promise(function(resolve, reject) {
+    try {
+      resolve("ok man");
     } catch (error) {
       alert(error);
     }
