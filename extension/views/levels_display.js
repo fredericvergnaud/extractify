@@ -116,7 +116,6 @@ function start() {
         $scrapingResultsWrapper = $("#scraping_results_wrapper");
         $scrapingResultsWrapper.show();
 
-
         console.log("SCRAPING PROCESS : ");
 
         // si scrapingPageInOwnTab true
@@ -145,7 +144,6 @@ function start() {
                     alert(scrapingErrorsNbr + extensionLang.ScrapingError);
                 });
         }
-
         event.preventDefault();
     });
     scrapButton.innerHTML = extensionLang.ScrapButton;
@@ -274,6 +272,17 @@ function closeScrapingResultsDialog() {
         $("#scraping_results_wrapper").dialog("destroy");
         $("#scraping_results_wrapper").css("display", "none");
     }
+}
+
+function switchScrapingResultsDialogButton() {
+  $scrapingResultsWrapper = $("#scraping_results_wrapper");
+  $scrapingResultsWrapper.dialog( "option", "buttons", {
+   "Ok": function() {
+     $(this).dialog("close");
+     $(this).dialog("destroy");
+     $(this).css("display", "none");
+   }
+  });
 }
 
 // function update levels

@@ -25,4 +25,5 @@ let contentLang = {
     UnableToFindLinksForPaginationPages: "Unable to find link(s) for the pagination pages",
     PaginationTooFewElements: "Can't select this pagination (too few elements)",
     PaginationUnableToSelect: "Unable to select pagination with given selector",
+    PaginationConstantStringAndStepNotFound: "The selected links do not seem to take into account all the pagination pages.\nClick OK to continue or Cancel to modify",
 };

@@ -145,6 +145,16 @@ chrome.runtime.onMessage.addListener(
             });
           });
         break;
+      case "selectCustomPagination":
+        var customPaginationData = message.data;
+        selectCustomPagination(customPaginationData)
+          .then(function(response) {
+            sendResponse({
+              response: "selectedPagination",
+              responseData: response
+            });
+          });
+        break;
       case "highlightPagination":
         var level = message.level;
         var paginationSelector = message.paginationSelector;
@@ -156,28 +166,28 @@ chrome.runtime.onMessage.addListener(
             });
           });
         break;
-      case "checkManualPagination":
-        var level = message.level;
-        var paginationData = message.data;
-        checkManualPagination(level, paginationData)
-          .then(function(response) {
-            sendResponse({
-              response: "checkedManualPagination",
-              responseData: response
-            });
-          });
-        break;
-      case "matchPaginationPrefixAndStep":
-        var prefix = message.prefix;
-        var step = message.step;
-        matchPaginationPrefixAndStep(prefix, step)
-          .then(function(response) {
-            sendResponse({
-              response: "foundInvariant",
-              responseData: response
-            });
-          });
-        break;
+        // case "checkManualPagination":
+        //   var level = message.level;
+        //   var paginationData = message.data;
+        //   checkManualPagination(level, paginationData)
+        //     .then(function(response) {
+        //       sendResponse({
+        //         response: "checkedManualPagination",
+        //         responseData: response
+        //       });
+        //     });
+        //   break;
+        // case "matchPaginationConstantStringAndStep":
+        //   var constantString = message.constantString;
+        //   var step = message.step;
+        //   matchPaginationConstantStringAndStep(constantString, step)
+        //     .then(function(response) {
+        //       sendResponse({
+        //         response: "foundInvariant",
+        //         responseData: response
+        //       });
+        //     });
+        //   break;
       case "scrapPage":
         var levelStructureMap = new Map(message.data);
         console.log("levelStructureMap : ", levelStructureMap);

@@ -36,14 +36,14 @@ function displayPagination(level) {
     var paginationRightWrapper = document.createElement('div');
     paginationRightWrapper.setAttribute('class', "pagination_right_wrapper");
 
-    // Prefix & step
-    var prefixAndStepWrapper = document.createElement('div');
-    prefixAndStepWrapper.setAttribute('class', "cols_table_cell cols_table_cell_middle");
-    prefixAndStepWrapper.setAttribute('id', "pagination_prefix_and_step_wrapper_level-" + level.id);
-    if (level.pagination.prefix !== "")
-      prefixAndStepWrapper.innerHTML = '<span class="cell_title">prefix &#126; start &#126; step &#126; stop</span><br/><span class="cell_result">&apos;' + level.pagination.prefix + '&apos; &#126; ' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.stop + '</span>';
+    // ConstantString & step
+    var constantStringAndStepWrapper = document.createElement('div');
+    constantStringAndStepWrapper.setAttribute('class', "cols_table_cell cols_table_cell_middle");
+    constantStringAndStepWrapper.setAttribute('id', "pagination_constantString_and_step_wrapper_level-" + level.id);
+    if (level.pagination.constantString !== "")
+      constantStringAndStepWrapper.innerHTML = '<span class="cell_title">constantString &#126; start &#126; step &#126; stop</span><br/><span class="cell_result">&apos;' + level.pagination.constantString + '&apos; &#126; ' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.stop + '</span>';
     else
-      prefixAndStepWrapper.innerHTML = '<span class="cell_title">prefix &#126; start &#126; step &#126; stop</span><br/><span class="cell_result">None</span>';
+      constantStringAndStepWrapper.innerHTML = '<span class="cell_title">constantString &#126; start &#126; step &#126; stop</span><br/><span class="cell_result">None</span>';
 
     // remove pagination button wrapper
     var removePaginationButtonWrapper = document.createElement('div');
@@ -64,7 +64,7 @@ function displayPagination(level) {
     removePaginationButtonWrapper.appendChild(removePaginationButton);
 
     // Ajout
-    paginationRightWrapper.appendChild(prefixAndStepWrapper);
+    paginationRightWrapper.appendChild(constantStringAndStepWrapper);
     paginationRightWrapper.appendChild(removePaginationButtonWrapper);
 
     // Wrapper total

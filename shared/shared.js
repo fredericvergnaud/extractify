@@ -192,15 +192,15 @@ function highlightPagination(tabId, level, paginationSelector) {
 //   return steps;
 // }
 //
-// function matchPaginationPrefixAndStep(tabId, prefix, step) {
+// function matchPaginationConstantStringAndStep(tabId, constantString, step) {
 //   // on met le focus sur la fenêtre originale
 //   chrome.windows.update(browserWindowId, {
 //     focused: true
 //   });
 //   return new Promise(function(resolve, reject) {
 //     chrome.tabs.sendMessage(tabId, {
-//       action: "matchPaginationPrefixAndStep",
-//       prefix: prefix,
+//       action: "matchPaginationConstantStringAndStep",
+//       constantString: constantString,
 //       step: step
 //     }, function(response) {
 //       var lastError = chrome.runtime.lastError;

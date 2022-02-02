@@ -634,36 +634,22 @@ function selectPagination() {
             }
             console.log("paginationLinks size : ", paginationLinks.size);
             console.log("paginationLinks : ", paginationLinks);
-            if (paginationLinks.size === 0) {
-              alert(contentLang.UnableToFindLinksForPaginationPages);
-              return false;
-            } else if (paginationLinks.size === 1) {
-              if (confirm(contentLang.PaginationFewElements)) {
-                // on resolve
-                var paginationData = selectPaginationTags($targetPagination, paginationSelector);
-                resolve(paginationData);
-              } else {
-                alert(contentLang.PaginationTooFewElements);
-                return false;
-              }
-            } else {
 
-            }
-
+            checkIfPertinentPaginationSelection(resolve, paginationSelector, paginationLinks);
 
             // var paginationClasses = targetPagination.attr("class").split(" ");
             // var paginationClassName = "." + paginationClasses.join(".");
             // var paginationSelector = paginationTagName + paginationClassName;
-            // let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
-            // if (prefixAndStep.length > 0) {
-            //   console.log("selectPagination : prefixAndStep found : ", prefixAndStep);
+            // let constantStringAndStep = getPaginationConstantStringAndStep("selector", paginationSelector);
+            // if (constantStringAndStep.length > 0) {
+            //   console.log("selectPagination : constantStringAndStep found : ", constantStringAndStep);
             //   // on highlight
             //   targetPagination.addClass("selected_pagination highlight_pagination");
             //   // on resolve
             //   var paginationData = {
             //     "paginationSelector": paginationSelector,
-            //     "paginationPrefix": prefixAndStep[0],
-            //     "paginationStep": prefixAndStep[1]
+            //     "paginationConstantString": constantStringAndStep[0],
+            //     "paginationStep": constantStringAndStep[1]
             //   };
             //   resolve(paginationData);
             //   // on enlève les actions
@@ -684,10 +670,12 @@ function selectPagination() {
   });
 }
 
-function selectPaginationTags($targetPagination, paginationSelector) {
-  // on les surligne
-  $targetPagination.addClass("selected_pagination highlight_pagination");
-
+function selectPaginationTags(paginationSelector) {
+  if (paginationSelector !== "noSelector") {
+    let $paginationSelector = $(paginationSelector);
+    // on les surligne
+    $paginationSelector.addClass("selected_pagination highlight_pagination");
+  }
   var paginationData = {
     "paginationSelector": paginationSelector
   };
@@ -723,16 +711,16 @@ function selectPaginationTags($targetPagination, paginationSelector) {
 //           var paginationClasses = targetPagination.attr("class").split(" ");
 //           var paginationClassName = "." + paginationClasses.join(".");
 //           var paginationSelector = paginationTagName + paginationClassName;
-//           let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
-//           if (prefixAndStep.length > 0) {
-//             console.log("selectPagination : prefixAndStep found : ", prefixAndStep);
+//           let constantStringAndStep = getPaginationConstantStringAndStep("selector", paginationSelector);
+//           if (constantStringAndStep.length > 0) {
+//             console.log("selectPagination : constantStringAndStep found : ", constantStringAndStep);
 //             // on highlight
 //             targetPagination.addClass("selected_pagination highlight_pagination");
 //             // on resolve
 //             var paginationData = {
 //               "paginationSelector": paginationSelector,
-//               "paginationPrefix": prefixAndStep[0],
-//               "paginationStep": prefixAndStep[1]
+//               "paginationConstantString": constantStringAndStep[0],
+//               "paginationStep": constantStringAndStep[1]
 //             };
 //             resolve(paginationData);
 //             // on enlève les actions
@@ -767,28 +755,131 @@ function highlightPagination(level, paginationSelector) {
             paginationLinks.add($(this).prop("href"));
           });
         }
-        console.log("paginationLinks size : ", paginationLinks.size);
         console.log("paginationLinks : ", paginationLinks);
-        if (paginationLinks.size === 0) {
-          alert(contentLang.UnableToFindLinksForPaginationPages);
-          return false;
-        } else if (paginationLinks.size === 1) {
-          if (confirm(contentLang.PaginationFewElements)) {
-            // on resolve
-            var paginationData = selectPaginationTags($paginationSelector, paginationSelector);
-            resolve(paginationData);
-          } else {
-            alert(contentLang.PaginationTooFewElements);
-            return false;
-          }
-        } else {
-
-        }
+        checkIfPertinentPaginationSelection(resolve, paginationSelector, paginationLinks);
       }
     } catch (error) {
       alert(error);
     }
   });
+}
+
+function selectCustomPagination(customPaginationData) {
+  console.log("customPaginationData : ", customPaginationData);
+  return new Promise(function(resolve, reject) {
+    // get links from constant string
+    let constantString = customPaginationData[0];
+    let paginationLinks = new Set();
+    try {
+      if (constantString.startsWith("****") || constantString.endsWith("****")) {
+        constantString = constantString.replace("****", "");
+        console.log("constantString : ", constantString);
+        $("a[href*='" + constantString + "']").each(function() {
+          paginationLinks.add($(this).prop("href"));
+        });
+      }
+      else {
+        let constantStringArray = constantString.split("****");
+        console.log("constantStringArray after split : ", constantStringArray);
+        $("a").each(function() {
+          let linkHref = $(this).prop("href");
+          if (linkHref.indexOf(constantStringArray[0]) > -1 && linkHref.indexOf(constantStringArray[1]) > -1)
+            paginationLinks.add(linkHref);
+        });
+      }
+      console.log("paginationLinks : ", paginationLinks);
+      checkIfPertinentPaginationSelection(resolve, "noSelector", paginationLinks);
+    } catch (error) {
+      alert(error);
+    }
+  });
+}
+
+function checkIfPertinentPaginationSelection(resolve, paginationSelector, paginationLinks) {
+  let paginationData;
+  if (paginationLinks.size === 0) {
+    alert(contentLang.UnableToFindLinksForPaginationPages);
+    return false;
+  } else if (paginationLinks.size === 1) {
+    if (confirm(contentLang.PaginationFewElements)) {
+      // on resolve
+      paginationData = selectPaginationTags(paginationSelector);
+      resolve(paginationData);
+    } else
+      return false;
+  } else {
+    // test de pertinence : on essaye de trouver une chaine de caractère constante dans les urls et un step pair, divisible par 5 ou égal à 1
+    let constantStringAndStepInUrls = getConstantStringAndStepInUrls([...paginationLinks]);
+    console.log("constantStringAndStepInUrls : ", constantStringAndStepInUrls);
+    let foundConstantString = constantStringAndStepInUrls.constantString;
+    let foundStep = constantStringAndStepInUrls.step;
+    if ((foundConstantString !== "" && foundConstantString !== undefined) && (foundStep % 2 == 0 || foundStep % 5 == 0 || foundStep == 1)) {
+      // on resolve
+      paginationData = selectPaginationTags(paginationSelector);
+      resolve(paginationData);
+    } else {
+      if (confirm(contentLang.PaginationConstantStringAndStepNotFound)) {
+        // on resolve
+        paginationData = selectPaginationTags(paginationSelector);
+        resolve(paginationData);
+      } else
+        return false;
+    }
+  }
+}
+
+function getConstantStringAndStepInUrls(links) {
+  let constantStringAndStepInUrls = {};
+  // Constant string in urls
+  let constantString, constantStrings = new Map(), step, pagesNumbers = new Set();
+  for (let i = 0; i < links.length; i++) {
+    for (let j = i + 1; j < links.length; j++) {
+      let differenceBetweenLinks = parseInt(getDifferenceBetweenLinks(links[i], links[j])) || 0;
+      // console.log("difference between " + links[i] + " and " + links[j] + " : ", differenceBetweenLinks);
+      if (differenceBetweenLinks !== 0) {
+        pagesNumbers.add(differenceBetweenLinks);
+        let constantStringFound = links[j].replace(differenceBetweenLinks, "****");
+        // console.log("constantStringFound = ", constantStringFound);
+        if (constantStrings.has(constantStringFound))
+          constantStrings.set(constantStringFound, constantStrings.get(constantStringFound)+1);
+        else
+          constantStrings.set(constantStringFound, 1);
+      }
+    }
+  }
+  if (constantStrings.size > 0) {
+    let constantStringsSortedArray = [...constantStrings.entries()].sort((a, b) => b[1] - a[1]);
+    console.log("constantStringsSortedArray : ", constantStringsSortedArray);
+    constantStringAndStepInUrls.constantString = constantStringsSortedArray[0][0];
+  } else {
+    constantStringAndStepInUrls.constantString = "";
+  }
+
+  // Step in urls
+  let steps = new Map(), pagesNumbersArray = [...pagesNumbers];
+  if (pagesNumbersArray.length > 1) {
+    for (let i = 0; i < pagesNumbersArray.length - 1; i++) {
+      let pageNumber = pagesNumbersArray[i];
+      let pageNumberNext = pagesNumbersArray[i + 1];
+      let diff = pageNumberNext - pageNumber;
+      // console.log("diff = ", diff);
+      if (diff > 0) {
+        if (steps.has(diff))
+          steps.set(diff, steps.get(diff)+1);
+        else
+          steps.set(diff, 1);
+      }
+    }
+    // on trie steps
+    if (steps.size > 0) {
+      let stepsSortedArray = [...steps.entries()].sort((a, b) => b[1] - a[1]);
+      console.log("stepsSortedArray : ", stepsSortedArray);
+      constantStringAndStepInUrls.step = stepsSortedArray[0][0];
+    }
+  } else
+    constantStringAndStepInUrls.step = 0;
+
+  return constantStringAndStepInUrls;
 }
 
 // function highlightPagination(level, paginationSelector) {
@@ -798,16 +889,16 @@ function highlightPagination(level, paginationSelector) {
 //     try {
 //       $paginationSelector = $(paginationSelector);
 //       if ($paginationSelector !== undefined) {
-//         let prefixAndStep = getPaginationPrefixAndStep("selector", paginationSelector);
-//         if (prefixAndStep.length > 0) {
-//           console.log("highlightPagination : prefixAndStep found : ", prefixAndStep);
+//         let constantStringAndStep = getPaginationConstantStringAndStep("selector", paginationSelector);
+//         if (constantStringAndStep.length > 0) {
+//           console.log("highlightPagination : constantStringAndStep found : ", constantStringAndStep);
 //           // on highlight
 //           $paginationSelector.addClass("selected_pagination highlight_pagination");
 //           // on resolve
 //           var paginationData = {
 //             "paginationSelector": paginationSelector,
-//             "paginationPrefix": prefixAndStep[0],
-//             "paginationStep": prefixAndStep[1]
+//             "paginationConstantString": constantStringAndStep[0],
+//             "paginationStep": constantStringAndStep[1]
 //           };
 //           resolve(paginationData);
 //         } else
@@ -820,39 +911,39 @@ function highlightPagination(level, paginationSelector) {
 //   });
 // }
 
-function checkManualPagination(level, paginationData) {
-  console.log("go checking with data ", paginationData);
-  return new Promise(function(resolve, reject) {
-    try {
-      resolve("ok man");
-    } catch (error) {
-      alert(error);
-    }
-  });
-}
-
-// function matchPaginationPrefixAndStep(givenPrefix, givenStep) {
-//   console.log("matchPaginationPrefixAndStep : givenPrefix = " + givenPrefix + " | givenStep = " + givenStep);
+// function checkManualPagination(level, paginationData) {
+//   console.log("go checking with data ", paginationData);
 //   return new Promise(function(resolve, reject) {
-//     let prefixAndStep = getPaginationPrefixAndStep("custom", givenPrefix);
-//     console.log("matchPaginationPrefixAndStep : prefixAndStep returned : prefixAndStep.length = " + prefixAndStep.length, prefixAndStep);
-//     if (prefixAndStep.length > 0 && prefixAndStep[0] === givenPrefix && prefixAndStep[1] === givenStep) {
-//       console.log("matchPaginationPrefixAndStep : prefixAndStep found : ", prefixAndStep);
+//     try {
+//       resolve("ok man");
+//     } catch (error) {
+//       alert(error);
+//     }
+//   });
+// }
+
+// function matchPaginationConstantStringAndStep(givenConstantString, givenStep) {
+//   console.log("matchPaginationConstantStringAndStep : givenConstantString = " + givenConstantString + " | givenStep = " + givenStep);
+//   return new Promise(function(resolve, reject) {
+//     let constantStringAndStep = getPaginationConstantStringAndStep("custom", givenConstantString);
+//     console.log("matchPaginationConstantStringAndStep : constantStringAndStep returned : constantStringAndStep.length = " + constantStringAndStep.length, constantStringAndStep);
+//     if (constantStringAndStep.length > 0 && constantStringAndStep[0] === givenConstantString && constantStringAndStep[1] === givenStep) {
+//       console.log("matchPaginationConstantStringAndStep : constantStringAndStep found : ", constantStringAndStep);
 //       resolve(true);
 //     } else
 //       alert(contentLang.UnableToResolvePaginationPages);
 //   });
 // }
 //
-// function getPaginationPrefixAndStep(paramType, param) {
-//   console.log("getPaginationPrefixAndStep with paramType = " + paramType + " and param = " + param);
+// function getPaginationConstantStringAndStep(paramType, param) {
+//   console.log("getPaginationConstantStringAndStep with paramType = " + paramType + " and param = " + param);
 //   let $urls;
 //   let hrefs = new Set();
 //   let currentPage = window.location.href;
-//   let prefixAndStep = [];
+//   let constantStringAndStep = [];
 //   console.log("currentPage : " + currentPage);
 //   let regex;
-//   // custom : on cherche les liens contenant le prefix fourni en paramètre
+//   // custom : on cherche les liens contenant le constantString fourni en paramètre
 //   // selector : on cherche les liens selon expression régulière : chaine de caractères suivi d'un symbole suivi d'une suite de nombres
 //   if (paramType === "custom") {
 //     $urls = $("a[href*='" + param + "']");
@@ -889,20 +980,20 @@ function checkManualPagination(level, paginationData) {
 //
 //   // pageVars doit faire au moins 1
 //   if (pageVars.size > 0) {
-//     // prefix
+//     // constantString
 //     regex = new RegExp("([\d]+)(?!.*\d)");
-//     let prefixes = new Set();
+//     let constantStrings = new Set();
 //     let pageNbrs = new Set();
 //     for (let pageVar of pageVars) {
 //       let pageNbr = pageVar.match(regex);
 //       if (pageNbr !== null) {
 //         let matcher = pageNbr[0];
 //         pageNbrs.add(matcher);
-//         let prefix = pageVar.replace(matcher, "");
-//         prefixes.add(prefix);
+//         let constantString = pageVar.replace(matcher, "");
+//         constantStrings.add(constantString);
 //       }
 //     }
-//     console.log("prefixes : ", prefixes);
+//     console.log("constantStringes : ", constantStringes);
 //
 //     // on trie pageNbrs
 //     let pageNbrsArray = [...pageNbrs];
@@ -928,21 +1019,21 @@ function checkManualPagination(level, paginationData) {
 //     });
 //     console.log("steps : ", steps);
 //
-//     if (prefixes.size === 1 && steps.length > 0)
-//       prefixAndStep.push([...prefixes][0], parseInt(steps[0]));
+//     if (constantStringes.size === 1 && steps.length > 0)
+//       constantStringAndStep.push([...constantStringes][0], parseInt(steps[0]));
 //
-//     console.log("prefixAndStep : ", prefixAndStep);
+//     console.log("constantStringAndStep : ", constantStringAndStep);
 //   }
-//   return prefixAndStep;
+//   return constantStringAndStep;
 // }
 
-//function getCustomPaginationLinks(prefix, startNumber, endNumber, step) {
-//    let invariant = getPaginationPrefix(prefix, startNumber, endNumber);
+//function getCustomPaginationLinks(constantString, startNumber, endNumber, step) {
+//    let invariant = getPaginationConstantString(constantString, startNumber, endNumber);
 //    let paginationLinks = [];
 //    for (let i = startNumber; i < endNumber + step; i += step) {
 //        console.log("i= " + i);
-//        prefix = prefix + i.toString();
-//        let newInvariant = invariant.replace("x***x", prefix);
+//        constantString = constantString + i.toString();
+//        let newInvariant = invariant.replace("x***x", constantString);
 //        console.log("invariant : " + newInvariant);
 //        paginationLinks.push(newInvariant);
 //    }
@@ -1221,299 +1312,39 @@ function getDepthUrls(levelStructureMap) {
 function getPaginationLinks(pagination) {
   let paginationLinks,
     selector = pagination.selector,
-    prefix = pagination.prefix,
+    constantString = pagination.constantString,
     start = pagination.start,
     step = pagination.step,
     stop = pagination.stop;
   // By selector
-  if (selector !== "")
-    paginationLinks = getPaginationLinksWithSelector(selector, prefix, start, step, stop);
-  else if (prefix !== "")
-    if (!prefix.startsWith("http://") && !prefix.startsWith("https://"))
-      paginationLinks = getPaginationLinksWithPrefixAsVariable(prefix, start, step, stop);
+  if (selector !== "noSelector")
+    paginationLinks = getPaginationLinksWithSelector(selector);
+  else
+    paginationLinks = getPaginationLinksWithConstantString(constantString, start, step, stop);
 
-  return [...paginationLinks];
-  // return [...new Set()];
-}
-
-function getPaginationLinksWithSelector(selector, prefix, start, step, stop) {
-  // By Selector
-  let tempPaginationLinks = new Set(),
-    paginationLinks = new Set(),
-    $urls,
-    fileExtension = "";
-  console.log("Selector not empty :");
-  $urls = $(selector).find("a");
-  if ($urls.length > 0)
-    $urls.each(function() {
-      $href = $(this).prop("href");
-      if (prefix !== "") {
-        if ($href.indexOf(prefix) !== -1)
-          tempPaginationLinks.add($href);
-      } else {
-        tempPaginationLinks.add($href);
-      }
-    });
-  console.log("tempPaginationLinks : ", tempPaginationLinks);
-  // if ([...tempPaginationLinks].length > 1) {
-  //   let urlsVariables = getPaginationUrlsVariables([...tempPaginationLinks]);
-  //   let foundPrefix = urlsVariables.prefix;
-  //   let foundStart = urlsVariables.start;
-  //   let foundSteps = urlsVariables.steps;
-  //   let foundStop = urlsVariables.stop;
-  //   let fileExtension = urlsVariables.fileExtension;
-  //   if (foundPrefix !== "") {
-  //     prefix = foundPrefix;
-  //     if (start === 0)
-  //       start = foundStart;
-  //     if (step === 0)
-  //       if (foundSteps.length === 1)
-  //         step = foundSteps[0];
-  //       else
-  //         step = 1;
-  //     stop = foundStop;
-  //     paginationLinks = createPaginationLinks(prefix, start, step, stop, fileExtension);
-  //   }
-  // } else {
-  //   // 1 seul lien reçu
-  // }
-  // return paginationLinks;
-  return [...tempPaginationLinks];
-}
-
-function getPaginationLinksWithPrefixAsVariable(prefix, start, step, stop) {
-  // By prefix as variable
-  console.log("Prefix as variable");
-  let pathnameUsed = 0,
-    $urls,
-    tempPaginationLinks = new Set(),
-    paginationLinks = [],
-    pertinentLinks = [],
-    searchInUrls = "";
-  let currentUrl = new URL(window.location.href);
-  let origin = currentUrl.origin;
-  let pathname = currentUrl.pathname;
-  let search = currentUrl.search;
-  console.log("currentUrl = ", currentUrl);
-  console.log("origin = ", origin);
-  console.log("pathname = ", currentUrl.pathname);
-  console.log("search = ", currentUrl.search);
-
-  if (search !== "" || !pathname.endsWith("/")) {
-    // Variable PHP
-    let paginationVariable = prefix;
-    if (search !== "") {
-      // URL avec variable php présente
-      console.log("Search not empty");
-      let urlParams = new URLSearchParams(search);
-      if (urlParams.has(paginationVariable))
-        urlParams.delete(paginationVariable);
-      if (search.indexOf("/") === -1)
-        search = "?" + urlParams.toString() + "&" + paginationVariable + "=";
-      else // like in https://www.pieandbovril.com/forum/index.php?/forum/124-the-politics-forum/page/2/
-        search = search + paginationVariable;
-    } else if (!pathname.endsWith("/")) {
-      console.log("Pathname doesn't end with /");
-      //  URL avec variable PHP absente
-      // like in https://www.democratichub.com/forums/498/business-economy
-      search = "?" + paginationVariable + "=";
-    }
-    searchInUrls = origin + pathname + search;
-    $urls = $("a[href*=\"" + searchInUrls + "\"]");
-    if ($urls.length === 0) {
-      // on tente de récupérer des urls relatives
-      console.log("Retreive relative urls");
-      // on supprime le / au début du pathname car qui peut le plus peut le moins
-      searchInUrls = pathname.substring(1) + search;
-      pathnameUsed = 1;
-    }
-  } else { // Variable pathname
-    console.log("Search empty");
-    console.log("Retreive absolute urls");
-    searchInUrls = origin + pathname + prefix;
-    $urls = $("a[href*=\"" + searchInUrls + "\"]");
-    if ($urls.length === 0) {
-      // on tente de récupérer des urls relatives
-      console.log("Retreive relative urls");
-      // on supprime le / au début du pathname car qui peut le plus peut le moins
-      searchInUrls = pathname.substring(1) + prefix;
-      pathnameUsed = 1;
-    }
-  }
-  console.log("urls retrieved with searchInUrls = ", searchInUrls);
-
-  $urls = $("a[href*=\"" + searchInUrls + "\"]");
-  if ($urls.length > 0) {
-    $urls.each(function() {
-      tempPaginationLinks.add($(this).prop("href"));
-    });
-    console.log("tempPaginationLinks : ", [...tempPaginationLinks]);
-    if ([...tempPaginationLinks].length > 1) {
-      // pertinentLinks
-      pertinentLinks = getPertinentLinks([...tempPaginationLinks]);
-      console.log("Pertinent links found : ", pertinentLinks);
-
-      // page extension
-      let fileExtension = getFileExtension(pertinentLinks);
-
-      // Pages numbers
-      pagesNumbers = getPagesNumbers(pertinentLinks, searchInUrls, fileExtension);
-      pagesNumbers.sort(function(a, b) {
-        return a - b
-      });
-      console.log("pages number found : ", pagesNumbers);
-
-      // stop
-      stop = getStop(pagesNumbers);
-
-      if (stop !== 0) {
-        if (step === 0)
-          step = 1;
-        if (start === 0)
-          start = 2;
-        if (pathnameUsed === 1)
-          searchInUrls = origin + "/" + searchInUrls;
-        paginationLinks = createPaginationLinks(searchInUrls, start, step, stop, fileExtension);
-      } else
-        console.log("Failed to build pagination links (stop = 0)");
-    } else {
-      // 1 seul lien de reçu
-    }
-  } else
-    console.log("Failed to find some urls with " + searchInUrls);
   return paginationLinks;
 }
 
-function getPertinentLinks(links) {
-  let pertinentLinks = new Set();
-  for (let i = 0; i < links.length - 1; i++) {
-    let link = links[i];
-    let linkNext = links[i + 1];
-    let differenceBetweenLinks = parseInt(getDifferenceBetweenLinks(link, linkNext)) || 0;
-    console.log("difference between " + link + " and " + linkNext + " : ", differenceBetweenLinks);
-    if (differenceBetweenLinks !== 0)
-      pertinentLinks.add(link).add(linkNext);
-  }
-  return [...pertinentLinks];
-}
-
-function getFileExtension(pertinentLinks){
-  let fileExtension = "",
-    filesExtensions = new Set();
-  for (pertinentLink of pertinentLinks){
-    if (pertinentLink.endsWith("html"))
-      filesExtensions.add(".html");
-    else if (pertinentLink.endsWith("htm"))
-      filesExtensions.add(".htm");
-  }
-  if ([...filesExtensions].length === 1)
-    fileExtension = [...filesExtensions][0];
-  console.log("fileExtension found : ", fileExtension);
-  return fileExtension;
-}
-
-function getPagesNumbers(pertinentLinks, prefix, fileExtension) {
-  let pagesNumbers = new Set();
-  // 1er passage avec différence entre liens
-  console.log("1er passage avec différences entre liens");
-  for (let i = 0; i < pertinentLinks.length - 1; i++) {
-    let pertinentLink = pertinentLinks[i];
-    let pertinentLinkNext = pertinentLinks[i + 1];
-    let differenceBetweenPertinentLinks = parseInt(getDifferenceBetweenLinks(pertinentLink, pertinentLinkNext)) || 0;
-    console.log("difference between " + pertinentLink + " and " + pertinentLinkNext + " : ", differenceBetweenPertinentLinks);
-    if (differenceBetweenPertinentLinks !== 0)
-      pagesNumbers.add(differenceBetweenPertinentLinks);
-  }
-  // 2ème passage avec prefix
-  console.log("2ème passage de getPagesNumbers avec prefix : ", prefix)
-  if (prefix !== "") {
-    for (pertinentLink of pertinentLinks) {
-      if (fileExtension !== "")
-        pertinentLink = pertinentLink.replace(fileExtension, "");
-      if (pertinentLink.indexOf(prefix) !== -1) {
-        let prefixPosition = pertinentLink.indexOf(prefix);
-        let prefixLength = prefix.length;
-        let pageNumber = pertinentLink.substring(prefixPosition + prefixLength);
-        console.log("prefixPosition : ", prefixPosition, "\nprefixLength : ", prefixLength, "\npageNumber : ", pageNumber);
-        pageNumber = parseInt(pageNumber.replace(/^\D+/g, ""));
-        if (!isNaN(pageNumber) && pageNumber > 0)
-          pagesNumbers.add(pageNumber);
-      }
-    }
-  }
-  return [...pagesNumbers];
-}
-
-function getStart(pagesNumbers) {
-  let start = 0;
-  if (pagesNumbers.length > 0)
-    if (pagesNumbers.length > 1)
-      start = pagesNumbers[0];
-    else
-      start = 2;
-  else
-    start = 2
-  return start;
-}
-
-function getStop(pagesNumbers) {
-  let stop = 0;
-  if (pagesNumbers.length > 0)
-    if (pagesNumbers.length > 1)
-      stop = pagesNumbers[pagesNumbers.length - 1];
-    else
-      stop = pageNbrsArray[0];
-  else
-    stop = 0;
-  return stop;
-}
-
-function getSteps(pagesNumbers) {
-  let steps = new Set();
-  if (pagesNumbers.length > 1)
-    for (let i = 0; i < pagesNumbers.length - 1; i++) {
-      let pageNbr = pagesNumbers[i];
-      let pageNbrNext = pagesNumbers[i + 1];
-      steps.add(pageNbrNext - pageNbr);
-    }
-  else
-    steps.add(pageNbrsArray[0]);
-  return [...steps];
-}
-
-function getPrefix(pertinentLinks) {
-  let prefix = "";
-  var A = pertinentLinks.concat().sort(),
-    a1 = A[0],
-    a2 = A[A.length - 1],
-    L = a1.length,
-    i = 0;
-  while (i < L && a1.charAt(i) === a2.charAt(i)) i++;
-  prefix = a1.substring(0, i);
-  return prefix;
-}
-
-function getDifferenceBetweenLinks(a, b) {
-  var i = 0;
-  var j = 0;
-  var result = "";
-  while (j < b.length) {
-    if (a[i] != b[j] || i == a.length)
-      result += b[j];
-    else
-      i++;
-    j++;
-  }
-  return result;
-}
-
-function createPaginationLinks(prefix, start, step, stop, fileExtension) {
+function getPaginationLinksWithSelector(selector) {
+  // By Selector
+  console.log("Get pagination links with selector : ")
   let paginationLinks = new Set();
-  console.log("Create link with prefix = " + prefix + " | start = " + start + " | step = " + step + " | stop = " + stop + " | fileExtension = " + fileExtension);
-  for (let i = start; i < stop + 1;) {
-    let paginationLink = prefix + i;
-    if (fileExtension !== "")
-      paginationLink += fileExtension;
+  let $urls = $(selector).find("a");
+  if ($urls.length > 0)
+    $urls.each(function() {
+      $href = $(this).prop("href");
+      paginationLinks.add($href);
+    });
+  console.log("paginationLinks : ", paginationLinks);
+  return [...paginationLinks];
+}
+
+function getPaginationLinksWithConstantString(constantString, start, step, stop) {
+  // Stop est déterminé
+  let paginationLinks = new Set();
+  console.log("Create link with constantString = " + constantString + " | start = " + start + " | step = " + step + " | stop = " + stop);
+  for (let i = start; i < stop + step;) {
+    let paginationLink = constantString.replace("****", i);
     console.log("paginationLink = ", paginationLink);
     paginationLinks.add(paginationLink);
     i += step;
@@ -1521,64 +1352,302 @@ function createPaginationLinks(prefix, start, step, stop, fileExtension) {
   return [...paginationLinks];
 }
 
-function getPaginationUrlsVariables(links) {
-  let paginationUrlsVariables = {},
-    prefix = "",
-    start = 0,
-    stop = 0,
-    steps = [],
-    pagesNumbers = [],
-    pertinentLinks = [],
-    fileExtension;
-  // pertinentLinks
-  pertinentLinks = getPertinentLinks(links);
-  console.log("Pertinent links found : ", pertinentLinks);
+// function getPaginationLinksWithConstantString(constantString, start, step, stop) {
+//   let pathnameUsed = 0,
+//     $urls,
+//     tempPaginationLinks = new Set(),
+//     paginationLinks = [],
+//     pertinentLinks = [],
+//     searchInUrls = "";
+//   let currentUrl = new URL(window.location.href);
+//   let origin = currentUrl.origin;
+//   let pathname = currentUrl.pathname;
+//   let search = currentUrl.search;
+//   console.log("currentUrl = ", currentUrl);
+//   console.log("origin = ", origin);
+//   console.log("pathname = ", currentUrl.pathname);
+//   console.log("search = ", currentUrl.search);
+//
+//   if (search !== "" || !pathname.endsWith("/")) {
+//     // Variable PHP
+//     let paginationVariable = constantString;
+//     if (search !== "") {
+//       // URL avec variable php présente
+//       console.log("Search not empty");
+//       let urlParams = new URLSearchParams(search);
+//       if (urlParams.has(paginationVariable))
+//         urlParams.delete(paginationVariable);
+//       if (search.indexOf("/") === -1)
+//         search = "?" + urlParams.toString() + "&" + paginationVariable + "=";
+//       else // like in https://www.pieandbovril.com/forum/index.php?/forum/124-the-politics-forum/page/2/
+//         search = search + paginationVariable;
+//     } else if (!pathname.endsWith("/")) {
+//       console.log("Pathname doesn't end with /");
+//       //  URL avec variable PHP absente
+//       // like in https://www.democratichub.com/forums/498/business-economy
+//       search = "?" + paginationVariable + "=";
+//     }
+//     searchInUrls = origin + pathname + search;
+//     $urls = $("a[href*=\"" + searchInUrls + "\"]");
+//     if ($urls.length === 0) {
+//       // on tente de récupérer des urls relatives
+//       console.log("Retreive relative urls");
+//       // on supprime le / au début du pathname car qui peut le plus peut le moins
+//       searchInUrls = pathname.substring(1) + search;
+//       pathnameUsed = 1;
+//     }
+//   } else { // Variable pathname
+//     console.log("Search empty");
+//     console.log("Retreive absolute urls");
+//     searchInUrls = origin + pathname + constantString;
+//     $urls = $("a[href*=\"" + searchInUrls + "\"]");
+//     if ($urls.length === 0) {
+//       // on tente de récupérer des urls relatives
+//       console.log("Retreive relative urls");
+//       // on supprime le / au début du pathname car qui peut le plus peut le moins
+//       searchInUrls = pathname.substring(1) + constantString;
+//       pathnameUsed = 1;
+//     }
+//   }
+//   console.log("urls retrieved with searchInUrls = ", searchInUrls);
+//
+//   $urls = $("a[href*=\"" + searchInUrls + "\"]");
+//   if ($urls.length > 0) {
+//     $urls.each(function() {
+//       tempPaginationLinks.add($(this).prop("href"));
+//     });
+//     console.log("tempPaginationLinks : ", [...tempPaginationLinks]);
+//     if ([...tempPaginationLinks].length > 1) {
+//       // pertinentLinks
+//       pertinentLinks = getPertinentLinks([...tempPaginationLinks]);
+//       console.log("Pertinent links found : ", pertinentLinks);
+//
+//       // page extension
+//       let fileExtension = getFileExtension(pertinentLinks);
+//
+//       // Pages numbers
+//       pagesNumbers = getPagesNumbers(pertinentLinks, searchInUrls, fileExtension);
+//       pagesNumbers.sort(function(a, b) {
+//         return a - b
+//       });
+//       console.log("pages number found : ", pagesNumbers);
+//
+//       // stop
+//       stop = getStop(pagesNumbers);
+//
+//       if (stop !== 0) {
+//         if (step === 0)
+//           step = 1;
+//         if (start === 0)
+//           start = 2;
+//         if (pathnameUsed === 1)
+//           searchInUrls = origin + "/" + searchInUrls;
+//         paginationLinks = createPaginationLinks(searchInUrls, start, step, stop, fileExtension);
+//       } else
+//         console.log("Failed to build pagination links (stop = 0)");
+//     } else {
+//       // 1 seul lien de reçu
+//     }
+//   } else
+//     console.log("Failed to find some urls with " + searchInUrls);
+//   return paginationLinks;
+// }
 
-  // fileExtension
-  fileExtension = getFileExtension(pertinentLinks);
-  console.log("fileExtension found : ", fileExtension);
-  paginationUrlsVariables.fileExtension = fileExtension;
+// function getPertinentLinks(links) {
+//   let pertinentLinks = new Set();
+//   for (let i = 0; i < links.length - 1; i++) {
+//     let link = links[i];
+//     let linkNext = links[i + 1];
+//     let differenceBetweenLinks = parseInt(getDifferenceBetweenLinks(link, linkNext)) || 0;
+//     console.log("difference between " + link + " and " + linkNext + " : ", differenceBetweenLinks);
+//     if (differenceBetweenLinks !== 0)
+//       pertinentLinks.add(link).add(linkNext);
+//   }
+//   return [...pertinentLinks];
+// }
+//
+// function getFileExtension(pertinentLinks){
+//   let fileExtension = "",
+//     filesExtensions = new Set();
+//   for (pertinentLink of pertinentLinks){
+//     if (pertinentLink.endsWith("html"))
+//       filesExtensions.add(".html");
+//     else if (pertinentLink.endsWith("htm"))
+//       filesExtensions.add(".htm");
+//   }
+//   if ([...filesExtensions].length === 1)
+//     fileExtension = [...filesExtensions][0];
+//   console.log("fileExtension found : ", fileExtension);
+//   return fileExtension;
+// }
+//
+// function getPagesNumbers(pertinentLinks, constantString, fileExtension) {
+//   let pagesNumbers = new Set();
+//   // 1er passage avec différence entre liens
+//   console.log("1er passage avec différences entre liens");
+//   for (let i = 0; i < pertinentLinks.length - 1; i++) {
+//     let pertinentLink = pertinentLinks[i];
+//     let pertinentLinkNext = pertinentLinks[i + 1];
+//     let differenceBetweenPertinentLinks = parseInt(getDifferenceBetweenLinks(pertinentLink, pertinentLinkNext)) || 0;
+//     console.log("difference between " + pertinentLink + " and " + pertinentLinkNext + " : ", differenceBetweenPertinentLinks);
+//     if (differenceBetweenPertinentLinks !== 0)
+//       pagesNumbers.add(differenceBetweenPertinentLinks);
+//   }
+//   // 2ème passage avec constantString
+//   console.log("2ème passage de getPagesNumbers avec constantString : ", constantString)
+//   if (constantString !== "") {
+//     for (pertinentLink of pertinentLinks) {
+//       if (fileExtension !== "")
+//         pertinentLink = pertinentLink.replace(fileExtension, "");
+//       if (pertinentLink.indexOf(constantString) !== -1) {
+//         let constantStringPosition = pertinentLink.indexOf(constantString);
+//         let constantStringLength = constantString.length;
+//         let pageNumber = pertinentLink.substring(constantStringPosition + constantStringLength);
+//         console.log("constantStringPosition : ", constantStringPosition, "\nconstantStringLength : ", constantStringLength, "\npageNumber : ", pageNumber);
+//         pageNumber = parseInt(pageNumber.replace(/^\D+/g, ""));
+//         if (!isNaN(pageNumber) && pageNumber > 0)
+//           pagesNumbers.add(pageNumber);
+//       }
+//     }
+//   }
+//   return [...pagesNumbers];
+// }
+//
+// function getStart(pagesNumbers) {
+//   let start = 0;
+//   if (pagesNumbers.length > 0)
+//     if (pagesNumbers.length > 1)
+//       start = pagesNumbers[0];
+//     else
+//       start = 2;
+//   else
+//     start = 2
+//   return start;
+// }
+//
+// function getStop(pagesNumbers) {
+//   let stop = 0;
+//   if (pagesNumbers.length > 0)
+//     if (pagesNumbers.length > 1)
+//       stop = pagesNumbers[pagesNumbers.length - 1];
+//     else
+//       stop = pageNbrsArray[0];
+//   else
+//     stop = 0;
+//   return stop;
+// }
+//
+// function getSteps(pagesNumbers) {
+//   let steps = new Set();
+//   if (pagesNumbers.length > 1)
+//     for (let i = 0; i < pagesNumbers.length - 1; i++) {
+//       let pageNbr = pagesNumbers[i];
+//       let pageNbrNext = pagesNumbers[i + 1];
+//       steps.add(pageNbrNext - pageNbr);
+//     }
+//   else
+//     steps.add(pageNbrsArray[0]);
+//   return [...steps];
+// }
+//
+// function getConstantString(pertinentLinks) {
+//   let constantString = "";
+//   var A = pertinentLinks.concat().sort(),
+//     a1 = A[0],
+//     a2 = A[A.length - 1],
+//     L = a1.length,
+//     i = 0;
+//   while (i < L && a1.charAt(i) === a2.charAt(i)) i++;
+//   constantString = a1.substring(0, i);
+//   return constantString;
+// }
+//
+// function getDifferenceBetweenLinks(a, b) {
+//   var i = 0;
+//   var j = 0;
+//   var result = "";
+//   while (j < b.length) {
+//     if (a[i] != b[j] || i == a.length)
+//       result += b[j];
+//     else
+//       i++;
+//     j++;
+//   }
+//   return result;
+// }
 
-  // prefix
-  prefix = getPrefix(pertinentLinks);
-  console.log("prefix found : ", prefix);
-  paginationUrlsVariables.prefix = prefix;
+// function createPaginationLinks(constantString, start, step, stop, fileExtension) {
+//   let paginationLinks = new Set();
+//   console.log("Create link with constantString = " + constantString + " | start = " + start + " | step = " + step + " | stop = " + stop + " | fileExtension = " + fileExtension);
+//   for (let i = start; i < stop + 1;) {
+//     let paginationLink = constantString + i;
+//     if (fileExtension !== "")
+//       paginationLink += fileExtension;
+//     console.log("paginationLink = ", paginationLink);
+//     paginationLinks.add(paginationLink);
+//     i += step;
+//   }
+//   return [...paginationLinks];
+// }
 
-  // Pages numbers
-  pagesNumbers = getPagesNumbers(pertinentLinks, prefix, "");
-  pagesNumbers.sort(function(a, b) {
-    return a - b
-  });
-  console.log("pages number found : ", pagesNumbers);
-
-  // start & stop
-  start = getStart(pagesNumbers);
-  stop = getStop(pagesNumbers);
-  console.log("start found : ", start, "\nstop found : ", stop);
-  paginationUrlsVariables.start = start;
-  paginationUrlsVariables.stop = stop;
-
-  // steps
-  steps = getSteps(pagesNumbers);
-  console.log("steps found : ", steps);
-  paginationUrlsVariables.steps = steps;
-
-  return paginationUrlsVariables;
-}
+// function getPaginationUrlsVariables(links) {
+//   let paginationUrlsVariables = {},
+//     constantString = "",
+//     start = 0,
+//     stop = 0,
+//     steps = [],
+//     pagesNumbers = [],
+//     pertinentLinks = [],
+//     fileExtension;
+//   // pertinentLinks
+//   pertinentLinks = getPertinentLinks(links);
+//   console.log("Pertinent links found : ", pertinentLinks);
+//
+//   // fileExtension
+//   fileExtension = getFileExtension(pertinentLinks);
+//   console.log("fileExtension found : ", fileExtension);
+//   paginationUrlsVariables.fileExtension = fileExtension;
+//
+//   // constantString
+//   constantString = getConstantString(pertinentLinks);
+//   console.log("constantString found : ", constantString);
+//   paginationUrlsVariables.constantString = constantString;
+//
+//   // Pages numbers
+//   pagesNumbers = getPagesNumbers(pertinentLinks, constantString, "");
+//   pagesNumbers.sort(function(a, b) {
+//     return a - b
+//   });
+//   console.log("pages number found : ", pagesNumbers);
+//
+//   // start & stop
+//   start = getStart(pagesNumbers);
+//   stop = getStop(pagesNumbers);
+//   console.log("start found : ", start, "\nstop found : ", stop);
+//   paginationUrlsVariables.start = start;
+//   paginationUrlsVariables.stop = stop;
+//
+//   // steps
+//   steps = getSteps(pagesNumbers);
+//   console.log("steps found : ", steps);
+//   paginationUrlsVariables.steps = steps;
+//
+//   return paginationUrlsVariables;
+// }
 
 // function getPaginationLinks(pagination) {
 //   let paginationLinks = new Set();
 //   let hrefs = new Set();
-//   let prefix = pagination.prefix;
+//   let constantString = pagination.constantString;
 //   let currentPage = window.location.href;
 //   let $urls;
 //   let paginationSelector = pagination.selector;
 //   if (paginationSelector !== "custom pagination") {
 //     let $paginationSelector = $(paginationSelector).first();
 //     //        if ()
-//     $urls = $paginationSelector.find("a[href*='" + prefix + "']");
+//     $urls = $paginationSelector.find("a[href*='" + constantString + "']");
 //   } else {
-//     $urls = $(document).find("a[href*='" + prefix + "']");
+//     $urls = $(document).find("a[href*='" + constantString + "']");
 //   }
 //   $urls.each(function() {
 //     let href = this.href;
@@ -1587,15 +1656,15 @@ function getPaginationUrlsVariables(links) {
 //   });
 //   console.log("hrefs : ", hrefs);
 //
-//   let regex = new RegExp(prefix + "\\d+");
+//   let regex = new RegExp(constantString + "\\d+");
 //   let xHrefs = new Set();
 //   let pageNbrs = new Set();
 //   for (let href of hrefs) {
 //     let xHref = href.replace(regex, "x***x");
 //     xHrefs.add(xHref);
-//     let prefixAndPageNbr = href.match(regex);
-//     if (prefixAndPageNbr !== null) {
-//       let matcher = prefixAndPageNbr[0];
+//     let constantStringAndPageNbr = href.match(regex);
+//     if (constantStringAndPageNbr !== null) {
+//       let matcher = constantStringAndPageNbr[0];
 //       let pageNbr = matcher.match("\\d+");
 //       if (pageNbr !== null) {
 //         matcher = pageNbr[0];
@@ -1617,9 +1686,9 @@ function getPaginationUrlsVariables(links) {
 //     let step = pagination.step;
 //     for (let i = step; i < lastPage + step; i += step) {
 //       console.log("i= " + i);
-//       let newPrefix = prefix + i;
-//       console.log("newPrefix : " + newPrefix);
-//       let link = invariantUrl.replace("x***x", newPrefix);
+//       let newConstantString = constantString + i;
+//       console.log("newConstantString : " + newConstantString);
+//       let link = invariantUrl.replace("x***x", newConstantString);
 //       console.log("link : " + link);
 //       paginationLinks.add(link);
 //     }

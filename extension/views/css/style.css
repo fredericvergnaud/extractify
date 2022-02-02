@@ -342,11 +342,11 @@ p {
     width: 170px;
 }
 
-#pagination_prefix,
+#pagination_constantString,
 #pagination_start_number,
 #pagination_end_number,
 #pagination_step,
-#pagination_upto {
+#pagination_stop {
     width: 100px;
 }
 
@@ -355,7 +355,7 @@ p {
     width: 35px;
 }
 
-.add_paginationlinks_manually_label {
+.add_custom_pagination_label {
     display: inline-block;
     width: 75px;
 }
@@ -593,8 +593,7 @@ p {
 .select_level_type_form,
 .add_depth_form,
 .add_pagination_form,
-.add_custom_pagination_form,
-.add_paginationlinks_manually_form {
+.add_custom_pagination_form {
     margin: 10%;
 }
 

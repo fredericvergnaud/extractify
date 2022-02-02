@@ -328,54 +328,59 @@ async function scrapLevel(tabId, level, scrapedObject, requestLatency, scrapingP
 }
 
 async function getScrapedPage(tabId, url, levelId, scrapedObjects, requestLatency, scrapingPageInOwnTab) {
-  console.log("Scraping of : ", url);
+  console.log("Scraping of " + url + " with stopScraping = " + stopScraping);
   // Ajout de l'url scrapée à visitedPaginationLinks
   visitedPaginationLinks.add(url);
   // Scraping de la page d'adresse url
-  await scrapPage(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
-    .then(function(scrapedPage) {
-      console.log("Scraped Page received :", scrapedPage);
-      if (scrapedPage === "noData")
-        scrapingErrorsNbr++;
-      else
-        return processPageScraping(scrapedPage, levelId, scrapedObjects);
-    })
-    .then(async function() {
-      let level = getLevel(levelId);
-      if (level.pagination !== null
-        // && paginationScraped === 0
-      ) {
-        console.log("Pagination not null ");
-        await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
-          // .then(function (paginationLinks) {
-          //   for (const paginationLink of paginationLinks)
+  if (stopScraping === 0) {
+    await scrapPage(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
+      .then(function(scrapedPage) {
+        console.log("Scraped Page received :", scrapedPage);
+        if (scrapedPage === "noData")
+          scrapingErrorsNbr++;
+        else
+          return processPageScraping(scrapedPage, levelId, scrapedObjects);
+      })
+      .then(async function() {
+        let level = getLevel(levelId);
+        if (level.pagination !== null
+          // && paginationScraped === 0
+        ) {
+          console.log("Pagination not null ");
+          await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
+            // .then(function (paginationLinks) {
+            //   for (const paginationLink of paginationLinks)
+            //     if (!visitedPaginationLinks.has(paginationLink)) {
+            //       getScrapedPageFromPaginationLink(tabId, paginationLink, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab);
+            //     }
+            // });
+
+
+
+          // if (level.pagination.links.length === 0) {
+          // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
+          // } else {
+          //   for (const paginationLink of level.pagination.links)
           //     if (!visitedPaginationLinks.has(paginationLink)) {
-          //       getScrapedPageFromPaginationLink(tabId, paginationLink, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab);
+          //       await getScrapedPage(tabId, paginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
+          //       visitedPaginationLinks.add(paginationLink);
           //     }
-          // });
-
-
-
-        // if (level.pagination.links.length === 0) {
-        // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
-        // } else {
-        //   for (const paginationLink of level.pagination.links)
-        //     if (!visitedPaginationLinks.has(paginationLink)) {
-        //       await getScrapedPage(tabId, paginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-        //       visitedPaginationLinks.add(paginationLink);
-        //     }
-        // }
-        paginationScraped = 1;
-        // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-        // if (level.pagination.links.length > 0)
-        //   for (const scrapedPaginationLink of level.pagination.links)
-        //     await getScrapedPageFromPaginationLink(tabId, scrapedPaginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-        // else {
-        //   await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-        // }
-      } else
-        console.log("pagination null ");
-    });
+          // }
+          paginationScraped = 1;
+          // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab);
+          // if (level.pagination.links.length > 0)
+          //   for (const scrapedPaginationLink of level.pagination.links)
+          //     await getScrapedPageFromPaginationLink(tabId, scrapedPaginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
+          // else {
+          //   await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab);
+          // }
+        } else
+          console.log("pagination null ");
+      });
+  } else {
+    console.log("scraping aborted");
+    return;
+  }
 }
 
 // SCRAP PAGINATION
@@ -401,12 +406,18 @@ async function getPaginationLinks(tabId, url, level, scrapedObjects, requestLate
 }
 
 async function getScrapedPageFromPaginationLink(tabId, url, levelId, scrapedObjects, requestLatency, scrapingPageInOwnTab) {
-  await scrapPage(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
-    .then(function(scrapedPage) {
-      if (scrapedPage === "noData")
-        scrapingErrorsNbr++;
-      return processPageScraping(scrapedPage, levelId, scrapedObjects)
-    });
+  console.log("Scraping of " + url + " with stopScraping = " + stopScraping);
+  if (stopScraping === 0) {
+    await scrapPage(tabId, url, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab)
+      .then(function(scrapedPage) {
+        if (scrapedPage === "noData")
+          scrapingErrorsNbr++;
+        return processPageScraping(scrapedPage, levelId, scrapedObjects)
+      });
+  } else {
+    console.log("scraping aborted");
+    return;
+  }
 }
 
 function processPageScraping(result, levelId, scrapedObjects) {
@@ -428,11 +439,9 @@ function processPageScraping(result, levelId, scrapedObjects) {
         if (containsScrapedObject(scrapedObject, scrapedObjects) === false) {
           scrapedObjects.push(scrapedObject);
           // update results
-          if (scrapedObjectsCount.has(scrapedObject.type)) {
-            let i = scrapedObjectsCount.get(scrapedObject.type);
-            i++;
-            scrapedObjectsCount.set(scrapedObject.type, i);
-          } else
+          if (scrapedObjectsCount.has(scrapedObject.type))
+            scrapedObjectsCount.set(scrapedObject.type, scrapedObjectsCount.get(scrapedObject.type)+1);
+          else
             scrapedObjectsCount.set(scrapedObject.type, 1);
           updateScrapingResultsDialog(scrapedObject.type);
         } else
@@ -458,7 +467,8 @@ function endScrap(tabId, scrapingPageInOwnTab) {
   jsonizeScraping();
   // if (scrapingPageInOwnTab === "false" && tabId !== null)
   //   chrome.tabs.remove(tabId);
-  if (stopScraping === 0)
-    closeScrapingResultsDialog();
+  // if (stopScraping === 0)
+    switchScrapingResultsDialogButton();
+    //closeScrapingResultsDialog();
 
 }
