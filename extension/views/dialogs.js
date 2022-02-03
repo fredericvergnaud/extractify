@@ -450,30 +450,40 @@ function selectCustomPagination(pagination) {
           let paginationConstantString = $("#add_custom_pagination_constantString").val();
           let paginationStart = $("#add_custom_pagination_start").val();
           let paginationStep = $("#add_custom_pagination_step").val();
-          let paginationUpto = $("#add_custom_pagination_stop").val();
+          let paginationStop = $("#add_custom_pagination_stop").val();
           if (paginationConstantString !== "" && paginationStep !== "" && paginationStart !== "" && paginationUpto !== "") {
-            if (!$.isNumeric(paginationConstantString) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationUpto)) {
-              if (Number(paginationUpto) !== 0 && !paginationConstantString.startsWith("http://") && !paginationConstantString.startsWith("https://")) {
-                alert("For a stop not equal to 0, please enter a constantString starting with http:// or https://");
+            if (!$.isNumeric(paginationConstantString) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationStop)) {
+              var countFourStars = (paginationConstantString.match(/\*\*\*\*/g) || []).length;
+              console.log("countFourStars = ", countFourStars);
+              if (!paginationConstantString.startsWith("http://") || !paginationConstantString.startsWith("https://")) {
+                alert("Constant string must start with http:// or https://");
                 return;
-              } else if (Number(paginationUpto) === 0 && (paginationConstantString.startsWith("http://") || paginationConstantString.startsWith("https://"))) {
-                alert("For a stop equal to 0, please enter a variable name as constantString");
+              } else if (countFourStars != 4) {
+                alert("You must specify the variable number in constant string with '****' (4 stars)");
+                return;
+              } else if (paginationStart < 1) {
+                alert("Start number must be stricly greater than 0");
+                return;
+              } else if (paginationStart >= paginationStop) {
+                alert("Start number must be stricly less than Stop number");
+                return;
+              } else if (paginationStep < 1) {
+                alert("Step number must be stricly greater than 0");
+                return;
+              } else if (paginationStop < 1) {
+                alert("Stop number must be stricly greater than 0");
+                return;
+              } else if (paginationStop <= paginationStart + paginationStep) {
+                alert("Stop number must be stricly greater than start number + step number");
                 return;
               } else {
-                if (paginationConstantString.startsWith("/")) {
-                  alert("ConstantString can't start with a / (slash)");
-                  return;
-                } else if (paginationConstantString.endsWith("=")) {
-                  alert("ConstantString can't end with an = (equal)");
-                  return;
-                } else {
-                  let dataArray = [paginationConstantString, Number(paginationStart), Number(paginationStep), Number(paginationUpto)];
-                  defer.resolve(dataArray);
-                  $(this).dialog("close");
-                  $(this).dialog("destroy");
-                  $(this).css("display", "none");
-                }
+                let dataArray = [paginationConstantString, Number(paginationStart), Number(paginationStep), Number(paginationStop)];
+                defer.resolve(dataArray);
+                $(this).dialog("close");
+                $(this).dialog("destroy");
+                $(this).css("display", "none");
               }
+
             } else {
               alert("ConstantString must be a characters string & Start, Step and Upto must be numeric");
               return;

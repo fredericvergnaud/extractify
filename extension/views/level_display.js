@@ -218,90 +218,6 @@ function displayLevel(level) {
               displayPagination(level);
               updateLevelDisplay(level);
               updateLevelsDisplay();
-
-
-                  // addPaginationLinksManually()
-                  //   .then(function(dataArray) {
-                  //     console.log("dataArray received from dialogs: " + dataArray);
-                  //     paginationConstantString = dataArray[0];
-                  //     paginationStart = dataArray[1];
-                  //     paginationStep = dataArray[2];
-                  //     paginationStop = dataArray[3];
-                  //     var paginationData = {
-                  //       "paginationSelector": paginationSelector,
-                  //       "paginationConstantString": paginationConstantString,
-                  //       "paginationStart": paginationStart,
-                  //       "paginationStep": paginationStep,
-                  //       "paginationStop": paginationStop,
-                  //     };
-                  //     sendMessageToTab(level, "checkManualPagination", paginationData)
-                  //       .then(function(response) {
-                  //         console.log("response = ", response);
-                  //       });
-                  //   });
-
-
-
-
-
-
-                    // .then(function(dataArray) {
-
-                      // paginationLinks = [];
-                      // if (paginationStop !== 0)
-                      //   for (let i = paginationStart; i < paginationStop + 1;) {
-                      //     let paginationLink = paginationConstantString + i;
-                      //     // console.log("paginationLink = ", paginationLink);
-                      //     paginationLinks.push(paginationLink);
-                      //     i += paginationStep;
-                      //   }
-                      // addPagination(paginationSelector, paginationConstantString, paginationStart, paginationStep, paginationStop, paginationLinks, level);
-                      // displayPagination(level);
-                      // updateLevelDisplay(level);
-                      // updateLevelsDisplay();
-                    // });
-
-
-
-
-
-
-                // // on essaye de trouver un intervalle de 1
-                // let steps = getPaginationStep(paginationLinks);
-                // if (steps.size === 1 && steps.has(1)) {
-                //   addPagination(paginationSelector, "", 0, 0, 0, [], level);
-                //   displayPagination(level);
-                //   updateLevelDisplay(level);
-                //   updateLevelsDisplay();
-                // } else {
-                //   if (confirm(extensionLang.PaginationNoStepOneFound)) {
-                //     addPaginationLinksManually()
-                //       .then(function(dataArray) {
-                //         console.log("dataArray : ", dataArray);
-                //         paginationConstantString = dataArray[0];
-                //         paginationStart = dataArray[1];
-                //         paginationStep = dataArray[2];
-                //         paginationStop = dataArray[3];
-                //         paginationLinks = [];
-                //         // for (let i = paginationStart; i < paginationStop + 1;) {
-                //         //   let paginationLink = paginationConstantString + i;
-                //         //   // console.log("paginationLink = ", paginationLink);
-                //         //   paginationLinks.push(paginationLink);
-                //         //   i += paginationStep;
-                //         // }
-                //         addPagination(paginationSelector, paginationConstantString, paginationStart, paginationStep, paginationStop, paginationLinks, level);
-                //         displayPagination(level);
-                //         updateLevelDisplay(level);
-                //         updateLevelsDisplay();
-                //       });
-                //   } else {
-                //     addPagination(paginationSelector, "", 0, 0, 0, [], level);
-                //     displayPagination(level);
-                //     updateLevelDisplay(level);
-                //     updateLevelsDisplay();
-                //   }
-                // }
-
             });
         }
       });
@@ -443,7 +359,8 @@ function updateLevelDisplay(level) {
   if (getColsNbr(level) > 0) {
     if (level.pagination === null) {
       enableAddPaginationButton(level);
-      enableAddCustomPaginationButton(level);
+      if (level.id === 0)
+        enableAddCustomPaginationButton(level);
     } else {
       disableAddPaginationButton(level);
       disableAddCustomPaginationButton(level);

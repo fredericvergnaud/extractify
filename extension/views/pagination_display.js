@@ -23,10 +23,10 @@ function displayPagination(level) {
     classNameWrapper.setAttribute('class', "rows_table_cell rows_table_cell_big");
     classNameWrapper.setAttribute('id', "pagination_class_name_wrapper_level-" + level.id);
     var paginationSelector = "";
-    if (level.pagination.selector !== "")
+    if (level.pagination.selector !== "noSelector")
       classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + level.pagination.selector;
     else
-      classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/><i>no selector</i>';
+      classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/><i>None</i>';
     // Ajout
     paginationLeftWrapper.appendChild(dataTypeWrapper);
     paginationLeftWrapper.appendChild(colorWrapper);
@@ -41,7 +41,7 @@ function displayPagination(level) {
     constantStringAndStepWrapper.setAttribute('class', "cols_table_cell cols_table_cell_middle");
     constantStringAndStepWrapper.setAttribute('id', "pagination_constantString_and_step_wrapper_level-" + level.id);
     if (level.pagination.constantString !== "")
-      constantStringAndStepWrapper.innerHTML = '<span class="cell_title">constantString &#126; start &#126; step &#126; stop</span><br/><span class="cell_result">&apos;' + level.pagination.constantString + '&apos; &#126; ' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.stop + '</span>';
+      constantStringAndStepWrapper.innerHTML = '<span class="cell_title">Constant string &#126; start &#126; step &#126; stop</span><br/><span class="cell_result">&apos;' + level.pagination.constantString + '&apos; &#126; ' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.stop + '</span>';
     else
       constantStringAndStepWrapper.innerHTML = '<span class="cell_title">constantString &#126; start &#126; step &#126; stop</span><br/><span class="cell_result">None</span>';
 

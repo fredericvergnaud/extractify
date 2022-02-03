@@ -774,8 +774,10 @@ function selectCustomPagination(customPaginationData) {
       if (constantString.startsWith("****") || constantString.endsWith("****")) {
         constantString = constantString.replace("****", "");
         console.log("constantString : ", constantString);
-        $("a[href*='" + constantString + "']").each(function() {
-          paginationLinks.add($(this).prop("href"));
+        $("a").each(function() {
+          let linkHref = $(this).prop("href");
+          if (linkHref.indexOf(constantString) > -1)
+            paginationLinks.add(linkHref);
         });
       }
       else {
@@ -1287,27 +1289,27 @@ function getScrapedPage(levelStructureMap, rowNbr) {
   return map;
 }
 
-function getDepthUrls(levelStructureMap) {
-  let depthUrls = [];
-  for (let [rowSelector, rowChildrenSelector] of levelStructureMap) {
-    $rowSelector = $(rowSelector);
-    let childUrl = "";
-    $rowSelector.each(function() {
-      let rowChildren = {};
-      for (rowChildSelectors of rowChildrenSelector) {
-        let rowChildSelectorArray = rowChildSelectors.split("***");
-        let rowChildTitle = rowChildSelectorArray[0];
-        let rowChildSelector = rowChildSelectorArray[1];
-        if (rowChildTitle === "url") {
-          let childUrl = $(this).find(rowChildSelector).prop("href");
-          depthUrls.push(childUrl);
-          break;
-        }
-      }
-    });
-  }
-  return depthUrls;
-}
+// function getDepthUrls(levelStructureMap) {
+//   let depthUrls = [];
+//   for (let [rowSelector, rowChildrenSelector] of levelStructureMap) {
+//     $rowSelector = $(rowSelector);
+//     let childUrl = "";
+//     $rowSelector.each(function() {
+//       let rowChildren = {};
+//       for (rowChildSelectors of rowChildrenSelector) {
+//         let rowChildSelectorArray = rowChildSelectors.split("***");
+//         let rowChildTitle = rowChildSelectorArray[0];
+//         let rowChildSelector = rowChildSelectorArray[1];
+//         if (rowChildTitle === "url") {
+//           let childUrl = $(this).find(rowChildSelector).prop("href");
+//           depthUrls.push(childUrl);
+//           break;
+//         }
+//       }
+//     });
+//   }
+//   return depthUrls;
+// }
 
 function getPaginationLinks(pagination) {
   let paginationLinks,
@@ -1345,10 +1347,10 @@ function getPaginationLinksWithConstantString(constantString, start, step, stop)
   console.log("Create link with constantString = " + constantString + " | start = " + start + " | step = " + step + " | stop = " + stop);
   for (let i = start; i < stop + step;) {
     let paginationLink = constantString.replace("****", i);
-    console.log("paginationLink = ", paginationLink);
     paginationLinks.add(paginationLink);
     i += step;
   }
+  console.log("paginationLinks = ", paginationLinks);
   return [...paginationLinks];
 }
 
@@ -1562,19 +1564,19 @@ function getPaginationLinksWithConstantString(constantString, start, step, stop)
 //   return constantString;
 // }
 //
-// function getDifferenceBetweenLinks(a, b) {
-//   var i = 0;
-//   var j = 0;
-//   var result = "";
-//   while (j < b.length) {
-//     if (a[i] != b[j] || i == a.length)
-//       result += b[j];
-//     else
-//       i++;
-//     j++;
-//   }
-//   return result;
-// }
+function getDifferenceBetweenLinks(a, b) {
+  var i = 0;
+  var j = 0;
+  var result = "";
+  while (j < b.length) {
+    if (a[i] != b[j] || i == a.length)
+      result += b[j];
+    else
+      i++;
+    j++;
+  }
+  return result;
+}
 
 // function createPaginationLinks(constantString, start, step, stop, fileExtension) {
 //   let paginationLinks = new Set();
