@@ -15,13 +15,13 @@ function displayRow(row, level) {
     var colorWrapper = document.createElement('div');
     colorWrapper.setAttribute('class', "rows_table_cell rows_table_cell_small");
     colorWrapper.setAttribute('id', "color_wrapper_row-" + row.id);
-    colorWrapper.innerHTML = '<span class="cell_title">color</span><br/><div class="row-color highlight_row-' + row.id + '" style="background-color:' + row.color + '">&nbsp;</div>';
+    colorWrapper.innerHTML = '<div class="row-color highlight_row-' + row.id + '" style="background-color:' + row.color + '">&nbsp;</div>';
 
-    // tag & class
+    // Selector
     var classNameWrapper = document.createElement('div');
     classNameWrapper.setAttribute('class', "rows_table_cell rows_table_cell_big");
     classNameWrapper.setAttribute('id', "class_name_wrapper_row-" + row.id);
-    classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + row.selector;
+    classNameWrapper.innerHTML = row.selector;
 
     // Ajout
     rowLeftWrapper.appendChild(dataTypeWrapper);

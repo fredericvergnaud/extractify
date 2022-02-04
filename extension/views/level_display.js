@@ -56,11 +56,11 @@ function displayLevel(level) {
   text = document.createTextNode("Url : " + level.url);
   levelUrlWrapper.appendChild(text);
 
-  // Détails
-  var levelDetailsWrapper = document.createElement("div");
-  levelDetailsWrapper.setAttribute("class", "level_details");
-  levelDetailsWrapper.setAttribute("id", "level_details_wrapper_level-" + level.id);
-  levelDetailsWrapper.innerHTML = 'Details : ' + getRowsNbr(level) + ' row(s) | ' + getColsNbr(level) + ' colum(s) | ' + getPaginationNbr(level) + ' pagination';
+  // // Détails
+  // var levelDetailsWrapper = document.createElement("div");
+  // levelDetailsWrapper.setAttribute("class", "level_details");
+  // levelDetailsWrapper.setAttribute("id", "level_details_wrapper_level-" + level.id);
+  // levelDetailsWrapper.innerHTML = 'Details : ' + getRowsNbr(level) + ' row(s) | ' + getColsNbr(level) + ' colum(s) | ' + getPaginationNbr(level) + ' pagination';
 
   // level buttons wrapper
   var levelButtonsWrapper = document.createElement("div");
@@ -278,6 +278,54 @@ function displayLevel(level) {
   // Wrapper du tableau de sélection
   var selectionTableWrapper = document.createElement("div");
   selectionTableWrapper.setAttribute("id", "selection_table_wrapper_level-" + level.id);
+  selectionTableWrapper.setAttribute("class", "selection_table_wrapper");
+
+  // Header du tableau
+  var selectionHeaderTableWrapper = document.createElement("div");
+  selectionHeaderTableWrapper.setAttribute("id", "selection_table_header_wrapper");
+  selectionHeaderTableWrapper.setAttribute("class", "selection_table_header");
+
+  var headerLeftWrapper = document.createElement('div');
+  headerLeftWrapper.setAttribute('class', "row_left_wrapper");
+
+  // Header Type
+  var headerDataTypeWrapper = document.createElement('div');
+  headerDataTypeWrapper.setAttribute('class', "header_table_cell header_table_cell_small");
+  headerDataTypeWrapper.setAttribute('id', "header_data_type_wrapper");
+  headerDataTypeWrapper.innerHTML = "Type";
+
+  // Header Couleur
+  var headerColorWrapper = document.createElement('div');
+  headerColorWrapper.setAttribute('class', "header_table_cell header_table_cell_small");
+  headerColorWrapper.setAttribute('id', "header_color_wrapper");
+  headerColorWrapper.innerHTML = "Color";
+
+  // Header selector
+  var headerSelectorWrapper = document.createElement('div');
+  headerSelectorWrapper.setAttribute('class', "header_table_cell header_table_cell_small");
+  headerSelectorWrapper.setAttribute('id', "header_selector_wrapper");
+  headerSelectorWrapper.innerHTML = "Selector";
+
+  headerLeftWrapper.appendChild(headerDataTypeWrapper);
+  headerLeftWrapper.appendChild(headerColorWrapper);
+  headerLeftWrapper.appendChild(headerSelectorWrapper);
+
+  var headerRightWrapper = document.createElement('div');
+  headerRightWrapper.setAttribute('class', "row_right_wrapper");
+
+  // Buttons
+
+  // Wrapper total
+  var selectionHeaderTable = document.createElement("div");
+  selectionHeaderTable.setAttribute("id", "selection_table_header");
+  selectionHeaderTable.setAttribute("class", "selection_table_header");
+
+  selectionHeaderTable.appendChild(headerLeftWrapper);
+  selectionHeaderTable.appendChild(headerRightWrapper);
+
+  selectionHeaderTableWrapper.appendChild(selectionHeaderTable);
+  selectionTableWrapper.appendChild(selectionHeaderTableWrapper);
+
 
   // Ajouts
   // Container
@@ -287,7 +335,7 @@ function displayLevel(level) {
 
   levelWrapper.appendChild(typeWrapper);
   levelWrapper.appendChild(levelUrlWrapper);
-  levelWrapper.appendChild(levelDetailsWrapper);
+  // levelWrapper.appendChild(levelDetailsWrapper);
   if (level.id > 0)
     levelWrapper.appendChild(removeLevelButtonWrapper);
   levelWrapper.appendChild(levelButtonsWrapper);
@@ -371,9 +419,9 @@ function updateLevelDisplay(level) {
     disableAddCustomPaginationButton(level);
   }
 
-  // Details
-  var levelDetailsWrapper = document.getElementById("level_details_wrapper_level-" + level.id);
-  levelDetailsWrapper.innerHTML = 'Details : ' + getRowsNbr(level) + ' row(s) | ' + getColsNbr(level) + ' colum(s) | ' + getPaginationNbr(level) + ' pagination';
+  // // Details
+  // var levelDetailsWrapper = document.getElementById("level_details_wrapper_level-" + level.id);
+  // levelDetailsWrapper.innerHTML = 'Details : ' + getRowsNbr(level) + ' row(s) | ' + getColsNbr(level) + ' colum(s) | ' + getPaginationNbr(level) + ' pagination';
 }
 
 function removeLevelsTabs(levelsToRemove) {

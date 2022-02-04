@@ -1,7 +1,7 @@
-function getRowsNbr(level) {
-    return level.rows.length;
-}
-
+// function getRowsNbr(level) {
+//     return level.rows.length;
+// }
+//
 function getColsNbr(level) {
     var colsNbr = 0;
     var rows = level.rows;
@@ -25,13 +25,13 @@ function getDepthNbr(level) {
     }
     return depthNbr;
 }
-
-function getPaginationNbr(level) {
-    if (level.pagination != null)
-        return 1;
-    else
-        return 0;
-}
+//
+// function getPaginationNbr(level) {
+//     if (level.pagination != null)
+//         return 1;
+//     else
+//         return 0;
+// }
 
 function addLevel(levelId, levelTypeArray, levelUrl, levelTabId) {
     var level = new Level();

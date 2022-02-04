@@ -14,16 +14,16 @@ function displayCol(col, row, level) {
     var colorWrapper = document.createElement('div');
     colorWrapper.setAttribute('class', "cols_table_cell cols_table_cell_small");
     colorWrapper.setAttribute('id', "color_wrapper_col-" + col.id);
-    colorWrapper.innerHTML = '<span class="cell_title">color</span><br/><div class="col-color highlight_col">&nbsp;</div>';
+    colorWrapper.innerHTML = '<div class="col-color highlight_col">&nbsp;</div>';
 
     // Nom de la classe
     var classNameWrapper = document.createElement('div');
     classNameWrapper.setAttribute('class', "cols_table_cell cols_table_cell_big");
     classNameWrapper.setAttribute('id', "col_class_name_wrapper_col-" + col.id);
     if (col.className != '')
-        classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + col.selector;
+        classNameWrapper.innerHTML = col.selector;
     else
-        classNameWrapper.innerHTML = '<span class="cell_title">id</span><br/>' + col.idName;
+        classNameWrapper.innerHTML = col.idName;
 
     // Ajout
     colLeftWrapper.appendChild(dataTypeWrapper);

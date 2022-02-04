@@ -2,7 +2,7 @@ function start() {
     // DEJSONIZE
     var dejsonizeButtonWrapper = document.createElement("div");
     dejsonizeButtonWrapper.setAttribute("id", "dejsonize_button_wrapper");
-    dejsonizeButtonWrapper.setAttribute("class", "level_buttons_wrapper");
+    dejsonizeButtonWrapper.setAttribute("class", "header_buttons_wrapper");
     // label
     var dejsonizeLabel = document.createElement("label");
     dejsonizeLabel.setAttribute("for", "dejsonize");
@@ -29,7 +29,7 @@ function start() {
     // NEW
     var newButtonWrapper = document.createElement("div");
     newButtonWrapper.setAttribute("id", "new_button_wrapper");
-    newButtonWrapper.setAttribute("class", "level_buttons_wrapper");
+    newButtonWrapper.setAttribute("class", "header_buttons_wrapper");
     // button
     var newButton = document.createElement("button");
     newButton.setAttribute("class", "header_button");
@@ -80,7 +80,7 @@ function start() {
     // JSONIZE
     var jsonizeButtonWrapper = document.createElement("div");
     jsonizeButtonWrapper.setAttribute("id", "jsonize_button_wrapper");
-    jsonizeButtonWrapper.setAttribute("class", "level_buttons_wrapper");
+    jsonizeButtonWrapper.setAttribute("class", "header_buttons_wrapper");
     // button
     var jsonizeButton = document.createElement("button");
     jsonizeButton.setAttribute("class", "header_button");
@@ -98,7 +98,7 @@ function start() {
     // SCRAP
     var scrapButtonWrapper = document.createElement("div");
     scrapButtonWrapper.setAttribute("id", "scrap_button_wrapper");
-    scrapButtonWrapper.setAttribute("class", "level_buttons_wrapper");
+    scrapButtonWrapper.setAttribute("class", "header_buttons_wrapper");
     // button
     var scrapButton = document.createElement("button");
     scrapButton.setAttribute("class", "header_button");
@@ -155,7 +155,7 @@ function start() {
     // OPTION
     var optionButtonWrapper = document.createElement("div");
     optionButtonWrapper.setAttribute("id", "options_button_wrapper");
-    optionButtonWrapper.setAttribute("class", "level_buttons_wrapper");
+    optionButtonWrapper.setAttribute("class", "header_buttons_wrapper");
     // button
     var optionButton = document.createElement("button");
     optionButton.setAttribute("class", "header_button");

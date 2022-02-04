@@ -14,13 +14,13 @@ function displayDepth(depth, row, level) {
     var colorWrapper = document.createElement('div');
     colorWrapper.setAttribute('class', "cols_table_cell cols_table_cell_small");
     colorWrapper.setAttribute('id', "depth_color_wrapper_row-" + row.id);
-    colorWrapper.innerHTML = '<span class="cell_title">color</span><br/><div class="depth-color highlight_depth">&nbsp;</div>';
+    colorWrapper.innerHTML = '<div class="depth-color highlight_depth">&nbsp;</div>';
 
     // class name
     var classNameWrapper = document.createElement('div');
     classNameWrapper.setAttribute('class', "cols_table_cell cols_table_cell_big");
     classNameWrapper.setAttribute('id', "depth_class_name_wrapper_row-" + row.id);
-    classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + depth.selector;
+    classNameWrapper.innerHTML = depth.selector;
 
     // Ajout
     depthLeftWrapper.appendChild(dataTypeWrapper);

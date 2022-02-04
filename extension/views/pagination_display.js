@@ -15,7 +15,7 @@ function displayPagination(level) {
     colorWrapper.setAttribute('id', "pagination_color_wrapper_level-" + level.id);
     let colorclass = "";
     if (level.pagination.selector !== "custom pagination")
-        colorclass = '<span class="cell_title">color</span><br/><div class="pagination-color highlight_pagination">&nbsp;</div>';
+        colorclass = '<div class="pagination-color highlight_pagination">&nbsp;</div>';
     colorWrapper.innerHTML = colorclass;
 
     // class name
@@ -24,9 +24,9 @@ function displayPagination(level) {
     classNameWrapper.setAttribute('id', "pagination_class_name_wrapper_level-" + level.id);
     var paginationSelector = "";
     if (level.pagination.selector !== "noSelector")
-      classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/>' + level.pagination.selector;
+      classNameWrapper.innerHTML = level.pagination.selector;
     else
-      classNameWrapper.innerHTML = '<span class="cell_title">selector</span><br/><i>None</i>';
+      classNameWrapper.innerHTML = '<i>None</i>';
     // Ajout
     paginationLeftWrapper.appendChild(dataTypeWrapper);
     paginationLeftWrapper.appendChild(colorWrapper);
@@ -74,8 +74,8 @@ function displayPagination(level) {
     paginationWrapper.appendChild(paginationLeftWrapper);
     paginationWrapper.appendChild(paginationRightWrapper);
 
-    var tWrapper = document.getElementById("selection_table_wrapper_level-" + level.id);
-    tWrapper.insertBefore(paginationWrapper, tWrapper.firstChild);
+    var tableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
+    tableHeaderWrapper.appendChild(paginationWrapper);
 }
 
 function removePaginationDisplay(level) {
