@@ -474,7 +474,7 @@ function selectCustomPagination(pagination) {
                 alert("Stop number must be stricly greater than 0");
                 return;
               } else if (paginationStop <= paginationStart + paginationStep) {
-                alert("Stop number must be stricly greater than start number + step number");
+                alert("Stop number must be stricly greater than Start number + Step number");
                 return;
               } else {
                 let dataArray = [paginationConstantString, Number(paginationStart), Number(paginationStep), Number(paginationStop)];
