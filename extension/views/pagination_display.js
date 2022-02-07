@@ -59,7 +59,8 @@ function displayPagination(level) {
   removePaginationButton.setAttribute('id', "remove_pagination_level-" + level.id);
   removePaginationButton.setAttribute('class', "button_remove_pagination");
   removePaginationButton.setAttribute('title', "Remove pagination for level " + level.id);
-  removePaginationButton.innerHTML = extensionLang.RemoveButton;
+  // removePaginationButton.innerHTML = extensionLang.RemoveButton;
+  removePaginationButton.innerHTML = "";
   removePaginationButton.addEventListener("click", function(event) {
     removePagination(level);
     removePaginationDisplay(level);

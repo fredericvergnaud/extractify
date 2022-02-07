@@ -40,7 +40,8 @@ function displayRow(row, level) {
     removeRowButton.setAttribute('id', "remove_row-" + row.id);
     removeRowButton.setAttribute('class', "button_remove_row");
     removeRowButton.setAttribute('title', "Remove row " + row.id);
-    removeRowButton.innerHTML = extensionLang.RemoveButton;
+    // removeRowButton.innerHTML = extensionLang.RemoveButton;
+    removeRowButton.innerHTML = "";
     removeRowButton.addEventListener("click", function (event) {
         // on supprime le row
         removeRow(row, level);
@@ -63,7 +64,8 @@ function displayRow(row, level) {
     addDepthButton.setAttribute('id', "add_depth_button_row-" + row.id);
     addDepthButton.setAttribute('class', "button_add_depth");
     addDepthButton.setAttribute('title', "Add deeper links for row " + row.id);
-    addDepthButton.innerHTML = extensionLang.AddDepthButton;
+    // addDepthButton.innerHTML = extensionLang.AddDepthButton;
+    addDepthButton.innerHTML = "";
     addDepthButton.addEventListener("click", function (event) {
 
         // on efface l'input de tag & class
@@ -117,7 +119,8 @@ function displayRow(row, level) {
     addColButton.setAttribute('id', "add_col_row-" + row.id);
     addColButton.setAttribute('class', "button_add_col");
     addColButton.setAttribute('title', "Add a column for row " + row.id);
-    addColButton.innerHTML = extensionLang.AddColButton;
+    // addColButton.innerHTML = extensionLang.AddColButton;
+    addColButton.innerHTML = "";
     addColButton.addEventListener("click", function (event) {
         // on efface l'input de title
         let colTitleInput = document.getElementById("col_title");

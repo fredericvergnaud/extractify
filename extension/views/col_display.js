@@ -8,7 +8,7 @@ function displayCol(col, row, level) {
   var dataTypeWrapper = document.createElement('div');
   dataTypeWrapper.setAttribute('class', "cols_table_cell cols_table_cell_small");
   dataTypeWrapper.setAttribute('id', "col_data_type_wrapper_col-" + col.id);
-  dataTypeWrapper.innerHTML = col.dataType;
+  dataTypeWrapper.innerHTML = col.dataType + "umn";
 
   // Couleur
   var colorWrapper = document.createElement('div');
@@ -55,7 +55,8 @@ function displayCol(col, row, level) {
   removeColButton.setAttribute('id', "remove_col-" + col.id);
   removeColButton.setAttribute('class', "button_remove_col");
   removeColButton.setAttribute('title', "Remove column " + col.id + " for row " + row.id);
-  removeColButton.innerHTML = "Remove";
+  // removeColButton.innerHTML = "Remove";
+  removeColButton.innerHTML = "";
   removeColButton.addEventListener("click", function(event) {
     // on supprime le col
     removeCol(col, row, level);

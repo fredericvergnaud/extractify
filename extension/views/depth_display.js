@@ -44,7 +44,8 @@ function displayDepth(depth, row, level) {
     removeDepthButton.setAttribute('id', "remove_depth_row-" + row.id);
     removeDepthButton.setAttribute('class', "button_remove_depth");
     removeDepthButton.setAttribute('title', "Remove depth for row " + row.id);
-    removeDepthButton.innerHTML = extensionLang.RemoveButton;
+    // removeDepthButton.innerHTML = extensionLang.RemoveButton;
+    removeDepthButton.innerHTML = "";
     removeDepthButton.addEventListener("click", function (event) {
         removeDepth(depth, row, level);
         removeDepthDisplay(depth);
