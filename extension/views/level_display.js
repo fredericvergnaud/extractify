@@ -190,7 +190,7 @@ function displayLevel(level) {
   addPaginationButton.innerHTML = extensionLang.AddPaginationButton;
   addPaginationButton.addEventListener("click", function(event) {
 
-    // on efface l'input de tag & class
+    // on efface l'input de selector
     let paginationSelectorInput = document.getElementById("pagination_tag_class");
     paginationSelectorInput.value = "";
 
@@ -302,13 +302,20 @@ function displayLevel(level) {
 
   // Header selector
   var headerSelectorWrapper = document.createElement('div');
-  headerSelectorWrapper.setAttribute('class', "header_table_cell header_table_cell_small");
+  headerSelectorWrapper.setAttribute('class', "header_table_cell header_table_cell_middle");
   headerSelectorWrapper.setAttribute('id', "header_selector_wrapper");
   headerSelectorWrapper.innerHTML = "Selector";
+
+  // Header title
+  var headerTitleWrapper = document.createElement('div');
+  headerTitleWrapper.setAttribute('class', "header_table_cell header_table_cell_middle");
+  headerTitleWrapper.setAttribute('id', "header_title_wrapper");
+  headerTitleWrapper.innerHTML = "Title";
 
   headerLeftWrapper.appendChild(headerDataTypeWrapper);
   headerLeftWrapper.appendChild(headerColorWrapper);
   headerLeftWrapper.appendChild(headerSelectorWrapper);
+  headerLeftWrapper.appendChild(headerTitleWrapper);
 
   var headerRightWrapper = document.createElement('div');
   headerRightWrapper.setAttribute('class', "row_right_wrapper");

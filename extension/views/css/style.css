@@ -271,7 +271,7 @@ p {
 .pagination_left_wrapper {
   float: left;
   height: 50px;
-  width: 400px;
+  width: 64%;
   margin-left: 20px;
 }
 
@@ -281,7 +281,7 @@ p {
   float: right;
   vertical-align: middle;
   height: auto;
-  width: 200px;
+  width: 29%;
   margin-right: 20px;
 }
 
@@ -300,17 +300,26 @@ p {
   margin: 0 auto;
   width: 100%;
   box-shadow: 0 0 0px #fff !important;
-  background-color: #323f4e;
+  background-color: #28323e;
   font-weight: bold;
   border-top-left-radius: 10px 10px;
   border-top-right-radius: 10px 10px;
+}
+
+.pagination_table {
+  display: table;
+  min-width: 570px;
+  margin: 0 auto;
+  background-color: #3c4a5d;
+  width: 100%;
+  font-weight: normal;
 }
 
 .rows_table {
   display: table;
   min-width: 570px;
   margin: 0 auto;
-  background-color: #46596d;
+  background-color: #50637c;
   width: 100%;
 }
 
@@ -335,7 +344,7 @@ p {
   margin: 0 auto;
   width: 100%;
   border-collapse: collapse;
-  background-color: #50637c;
+  background-color: #637c9c;
   border-bottom-left-radius: 10px 10px;
   border-bottom-right-radius: 10px 10px;
 
@@ -388,6 +397,7 @@ p {
 
 .depth_row {
   cursor: default !important;
+  background-color: #5a6f8c;
 }
 
 .highlight_depth {
@@ -415,9 +425,7 @@ p {
 .header_table_cell_middle,
 .rows_table_cell_middle,
 .cols_table_cell_middle {
-  width: 78px;
-  max-width: 78px;
-  min-width: 78px;
+  width: 158px;
   text-align: left;
   word-wrap: break-word;
 }

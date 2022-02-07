@@ -18,15 +18,15 @@ function displayRow(row, level) {
     colorWrapper.innerHTML = '<div class="row-color highlight_row-' + row.id + '" style="background-color:' + row.color + '">&nbsp;</div>';
 
     // Selector
-    var classNameWrapper = document.createElement('div');
-    classNameWrapper.setAttribute('class', "rows_table_cell rows_table_cell_big");
-    classNameWrapper.setAttribute('id', "class_name_wrapper_row-" + row.id);
-    classNameWrapper.innerHTML = row.selector;
+    var selectorWrapper = document.createElement('div');
+    selectorWrapper.setAttribute('class', "rows_table_cell rows_table_cell_big");
+    selectorWrapper.setAttribute('id', "class_name_wrapper_row-" + row.id);
+    selectorWrapper.innerHTML = row.selector;
 
     // Ajout
     rowLeftWrapper.appendChild(dataTypeWrapper);
     rowLeftWrapper.appendChild(colorWrapper);
-    rowLeftWrapper.appendChild(classNameWrapper);
+    rowLeftWrapper.appendChild(selectorWrapper);
 
     // right wrapper
     var rowRightWrapper = document.createElement('div');

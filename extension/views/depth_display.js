@@ -16,16 +16,21 @@ function displayDepth(depth, row, level) {
     colorWrapper.setAttribute('id', "depth_color_wrapper_row-" + row.id);
     colorWrapper.innerHTML = '<div class="depth-color highlight_depth">&nbsp;</div>';
 
-    // class name
-    var classNameWrapper = document.createElement('div');
-    classNameWrapper.setAttribute('class', "cols_table_cell cols_table_cell_big");
-    classNameWrapper.setAttribute('id', "depth_class_name_wrapper_row-" + row.id);
-    classNameWrapper.innerHTML = depth.selector;
+    // Selector
+    var selectorWrapper = document.createElement('div');
+    selectorWrapper.setAttribute('class', "cols_table_cell cols_table_cell_big");
+    selectorWrapper.setAttribute('id', "depth_class_name_wrapper_row-" + row.id);
+    let selector = depth.selector;
+    if (selector.length > 19) {
+      let trimmedSelector = selector.substr(0, 20);
+      selector = trimmedSelector + "...";
+    }
+    selectorWrapper.innerHTML = selector;
 
     // Ajout
     depthLeftWrapper.appendChild(dataTypeWrapper);
     depthLeftWrapper.appendChild(colorWrapper);
-    depthLeftWrapper.appendChild(classNameWrapper);
+    depthLeftWrapper.appendChild(selectorWrapper);
 
     // right wrapper
     var depthRightWrapper = document.createElement('div');
