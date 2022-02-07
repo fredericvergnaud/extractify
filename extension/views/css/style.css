@@ -522,11 +522,25 @@ p {
 }
 
 .remove_level_button {
-  width: 52px;
-  margin-right: -13px;
-  background-color: #ee4648;
+  background-image: url("../icons/remove_icon_24x24.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
   border: 0px;
-  margin-top: 10px;
+  height: 24px;
+  width: 24px;
+}
+
+.remove_level_button:hover,
+.remove_level_button:active {
+  background-image: url("../icons/remove_icon_24x24_hover.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  border: 0px;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
 }
 
 .remove_level_button_wrapper {
@@ -534,8 +548,8 @@ p {
   height: 16px;
   vertical-align: top;
   padding-right: 5px;
-  margin-right: 20px;
-  margin-top: -35px;
+  margin-right: 15px;
+  display: flex;
 }
 
 .button_add_pagination,

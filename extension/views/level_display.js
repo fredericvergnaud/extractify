@@ -32,6 +32,13 @@ function displayLevel(level) {
   text = document.createTextNode("Type : " + levelTypes[level.typeKey]);
   typeWrapper.appendChild(text);
 
+  // level url wrapper
+  var levelUrlWrapper = document.createElement("div");
+  levelUrlWrapper.setAttribute("class", "level_url_wrapper");
+  levelUrlWrapper.setAttribute("id", "level_url_wrapper_level-" + level.id);
+  text = document.createTextNode("Url : " + level.url);
+  levelUrlWrapper.appendChild(text);
+
   // remove level button wrapper
   var removeLevelButtonWrapper = document.createElement("div");
   removeLevelButtonWrapper.setAttribute("id", "remove_level_button_wrapper_level-" + level.id);
@@ -39,22 +46,16 @@ function displayLevel(level) {
 
   // remove level button
   var removeLevelButton = document.createElement("button");
-  removeLevelButton.setAttribute("class", "button_select button_img remove_level_button");
+  removeLevelButton.setAttribute("class", "remove_level_button");
   removeLevelButton.setAttribute("id", "remove_level-" + level.id);
   removeLevelButton.setAttribute("title", "Remove level " + level.id);
-  removeLevelButton.innerHTML = extensionLang.RemoveButton;
+  // removeLevelButton.innerHTML = extensionLang.RemoveButton;
+  removeLevelButton.innerHTML = "";
   removeLevelButton.addEventListener("click", function(event) {
     removeLevel(level.id);
     event.preventDefault();
   });
   removeLevelButtonWrapper.appendChild(removeLevelButton);
-
-  // level url wrapper
-  var levelUrlWrapper = document.createElement("div");
-  levelUrlWrapper.setAttribute("class", "level_url_wrapper");
-  levelUrlWrapper.setAttribute("id", "level_url_wrapper_level-" + level.id);
-  text = document.createTextNode("Url : " + level.url);
-  levelUrlWrapper.appendChild(text);
 
   // // Détails
   // var levelDetailsWrapper = document.createElement("div");
