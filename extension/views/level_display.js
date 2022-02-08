@@ -458,13 +458,10 @@ function updateLevelDisplay(level) {
     console.log("selection_table_row length for level " + levelId + ": ", nbrSelectionTableRows);
     let $i = 1;
     $('.selection_table_row_level-' + levelId).each(function() {
-      if (($i % 2) == 1) {
+      if (($i % 2) == 1)
         $(this).css('background-color', '#4e5d7e');
-        console.log("$i = " + $i + ": red");
-      } else {
+      else
         $(this).css('background-color', '#44516f');
-        console.log("$i = " + $i + ": blue");
-      }
       $i++;
     });
   }
