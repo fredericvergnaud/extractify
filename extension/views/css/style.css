@@ -37,9 +37,12 @@ p {
 }
 
 .level_buttons_wrapper {
+  height: 100%;
   text-align: center;
   background-color: #5BB9B8;
-  margin: 20px 6px 20px 10px;
+  margin: 0px 0px 0px 20px;
+  display: inline-block;
+  width: 100%;
 }
 
 .header_buttons_wrapper {
@@ -224,27 +227,28 @@ p {
   text-align: center;
   background-color: #5BB9B8;
   padding: 5px 0;
+  display: table;
+  width: 100%;
 }
 
-.level_details {
+/* .level_details {
   color: white;
   width: 100%;
   height: auto;
   margin: 0 auto;
-}
-
+} */
 .level_type_wrapper {
   color: white;
   font-family: Cuprum;
   margin-top: 7px;
-  position: relative;
+  margin-left: 23px;
+  text-align: left;
 }
 
-.level_details_deeper_links {
+/* .level_details_deeper_links {
   color: black;
   margin: 0 auto;
-}
-
+} */
 .level_url_wrapper {
   height: auto;
   margin: 0 auto;
@@ -261,11 +265,25 @@ p {
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
-  /*    padding-left: 60px;*/
+  text-align: left;
+  margin-left: 23px;
 }
 
-.level_buttons_wrapper div {
+/* .level_buttons_wrapper div {
   display: block;
+} */
+.level_infos_left_wrapper {
+  float: left;
+  width: 92%;
+  display: table-row;
+  margin-bottom: 15px;
+}
+
+.level_infos_right_wrapper {
+  float: right;
+  width: 8%;
+  display: table-row;
+  margin-top: 10px;
 }
 
 /* ROW */
@@ -309,7 +327,7 @@ p {
   border-top-right-radius: 10px 10px;
 }
 
-.pagination_table {
+.pagination_table_row {
   display: table;
   min-width: 570px;
   margin: 0 auto;
@@ -322,7 +340,6 @@ p {
   display: table;
   min-width: 570px;
   margin: 0 auto;
-  background-color: #50637c;
   width: 100%;
 }
 
@@ -347,7 +364,6 @@ p {
   margin: 0 auto;
   width: 100%;
   border-collapse: collapse;
-  background-color: #637c9c;
   border-bottom-left-radius: 10px 10px;
   border-bottom-right-radius: 10px 10px;
 }
@@ -358,11 +374,11 @@ p {
 
 .rows_table_row {
   box-shadow: 0 0 0px #fff !important;
-  /*    cursor: move;*/
+  background-color: #50637c;
 }
 
 .cols_table_row {
-  /*    cursor: move;*/
+  background-color: #637c9c;
 }
 
 #row_tag_class,
@@ -403,7 +419,7 @@ p {
 }
 
 .highlight_depth {
-  background-color: #77dd77;
+  background-color: #fcf695;
 }
 
 .header_table_cell,
@@ -498,7 +514,7 @@ p {
 .button_select {
   display: block;
   float: left;
-  width: 24.4%;
+  width: 23.7%;
   height: 25px;
   margin-right: 2px;
   margin-bottom: 20px;
@@ -570,7 +586,7 @@ p {
   border: 0px;
   height: 24px;
   width: 24px;
-  margin-right:5px;
+  margin-right: 5px;
 }
 
 .button_add_col:hover,
@@ -582,10 +598,9 @@ p {
   border: 0px;
   height: 24px;
   width: 24px;
-  margin-right:5px;
+  margin-right: 5px;
   cursor: pointer;
 }
-
 
 .button_add_depth {
   background-image: url("../icons/add_depth_icon_16x16.png");
@@ -597,7 +612,7 @@ p {
   border: 0px;
   height: 24px;
   width: 24px;
-  margin-right:5px;
+  margin-right: 5px;
 }
 
 .button_add_depth:hover,
@@ -610,12 +625,10 @@ p {
   border: 0px;
   height: 24px;
   width: 24px;
-  margin-right:5px;
+  margin-right: 5px;
   background-color: #28323e;
   cursor: pointer;
 }
-
-
 
 .button_remove_row,
 .button_remove_col,
@@ -629,7 +642,6 @@ p {
   height: 24px;
   width: 24px;
 }
-
 
 .button_add_row:hover,
 .button_add_row:active,
@@ -659,7 +671,6 @@ p {
   cursor: pointer;
 }
 
-
 .button_add_row:disabled,
 .button_add_col:disabled,
 .button_add_depth:disabled,
@@ -673,9 +684,7 @@ p {
 .button_remove_row:disabled,
 .button_remove_col:disabled,
 .button_remove_depth:disabled,
-.button_remove_pagination:disabled {
-}
-
+.button_remove_pagination:disabled {}
 
 #rows_txt,
 #cols_txt {
@@ -898,6 +907,7 @@ input:checked+.slider:before {
 
 .custom-dialog.ui-dialog {
   background: black !important;
+  border: 1px solid white;
 }
 
 .custom-dialog.ui-dialog button {
@@ -913,9 +923,10 @@ input:checked+.slider:before {
 
 .custom-dialog.ui-dialog form input {
   border: 0px;
-  color: white;
+  color: black;
   font-family: Cuprum;
-  font-size: small;
+  font-size: normal;
+  background-color: #c0c8d8;
 }
 
 .custom-dialog.ui-dialog form label {
@@ -932,6 +943,7 @@ input:checked+.slider:before {
 .ui-dialog-content {
   border: 0 !important;
   padding: .5em 1.6em;
+  background-color: #1e252f !important;
 }
 
 .ui-widget-content {
@@ -942,6 +954,7 @@ input:checked+.slider:before {
 .ui-dialog .ui-dialog-buttonpane {
   margin: 0 !important;
   border: 0px;
+  background-color: #1e252f !important;
 }
 
 .ui-dialog-titlebar {

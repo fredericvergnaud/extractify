@@ -46,7 +46,7 @@ function injectColsDepthsStyles() {
     for (var i = 0; i < 100; i++) {
       // col-depth
       for (var j = 0; j < 100; j++) {
-        colDepthColors += ".highlight_col-" + i + ".highlight_depth-" + j + " { box-shadow: 0 0 3px #000; background: white; background: linear-gradient(coral,#77dd77) !important; }\n";
+        colDepthColors += ".highlight_col-" + i + ".highlight_depth-" + j + " { box-shadow: 0 0 3px #000; background: white; background: linear-gradient(coral,#fcf695) !important; }\n";
       }
     }
     var head = document.head || document.getElementsByTagName('head')[0];
@@ -60,7 +60,7 @@ function injectColsDepthsStyles() {
     for (var j = 0; j < 100; j++) {
       // col-depth
       for (var k = 0; k < 100; k++) {
-        colDepthColors += ".highlight_col-" + j + ".highlight_depth-" + k + " { box-shadow: 0 0 3px #000; background: white; background: linear-gradient(coral,#77dd77) !important; }\n";
+        colDepthColors += ".highlight_col-" + j + ".highlight_depth-" + k + " { box-shadow: 0 0 3px #000; background: white; background: linear-gradient(coral,#fcf695) !important; }\n";
       }
     }
     style.appendChild(document.createTextNode(colDepthColors));

@@ -75,7 +75,7 @@ function displayCol(col, row, level) {
 
   // Wrapper total
   var colWrapper = document.createElement('div');
-  colWrapper.setAttribute('class', "cols_table_row");
+  colWrapper.setAttribute('class', "cols_table_row selection_table_row_level-" + level.id);
   colWrapper.setAttribute('id', "col_" + col.id);
   colWrapper.appendChild(colLeftWrapper);
   colWrapper.appendChild(colRightWrapper);

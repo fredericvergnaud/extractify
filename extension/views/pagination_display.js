@@ -75,7 +75,7 @@ function displayPagination(level) {
 
   // Wrapper total
   var paginationWrapper = document.createElement('div');
-  paginationWrapper.setAttribute('class', "pagination_table");
+  paginationWrapper.setAttribute('class', "pagination_table_row selection_table_row_level-" + level.id);
   paginationWrapper.setAttribute('id', 'pagination_wrapper_level-' + level.id);
   paginationWrapper.appendChild(paginationLeftWrapper);
   paginationWrapper.appendChild(paginationRightWrapper);

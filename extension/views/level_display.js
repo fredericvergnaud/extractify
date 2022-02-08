@@ -1,6 +1,4 @@
 function displayLevel(level) {
-  var text;
-
   // jquery-ui tab li
   var levelTab = document.createElement("li");
   levelTab.setAttribute("id", "level_tab_level-" + level.id);
@@ -25,19 +23,39 @@ function displayLevel(level) {
   levelTabWrapper.setAttribute("id", "tabs-" + level.id);
   levelTabWrapper.setAttribute("class", "level_panel");
 
-  // type
-  var typeWrapper = document.createElement("div");
-  typeWrapper.setAttribute("class", "level_type_wrapper");
-  typeWrapper.setAttribute("id", "level_type_wrapper_level-" + level.id);
-  text = document.createTextNode("Type : " + levelTypes[level.typeKey]);
-  typeWrapper.appendChild(text);
+  // Container
+  var levelWrapper = document.createElement("div");
+  levelWrapper.setAttribute("class", "level_wrapper");
+  levelWrapper.setAttribute("id", "level_wrapper_level-" + level.id);
 
-  // level url wrapper
+  // LEFT : Type, URL
+  var levelInfosLeftWrapper = document.createElement("div");
+  levelInfosLeftWrapper.setAttribute("class", "level_infos_left_wrapper");
+  levelInfosLeftWrapper.setAttribute("id", "level_infos_left_wrapper");
+
+  // type
+  var levelTypeWrapper = document.createElement("div");
+  levelTypeWrapper.setAttribute("class", "level_type_wrapper");
+  levelTypeWrapper.setAttribute("id", "level_type_wrapper_level-" + level.id);
+  levelTypeWrapper.innerHTML = "Type : " + levelTypes[level.typeKey];
+
+  // url
   var levelUrlWrapper = document.createElement("div");
   levelUrlWrapper.setAttribute("class", "level_url_wrapper");
   levelUrlWrapper.setAttribute("id", "level_url_wrapper_level-" + level.id);
-  text = document.createTextNode("Url : " + level.url);
-  levelUrlWrapper.appendChild(text);
+  levelUrlWrapper.innerHTML = "Url : " + level.url;
+
+  //Ajout à left
+  levelInfosLeftWrapper.appendChild(levelTypeWrapper);
+  levelInfosLeftWrapper.appendChild(levelUrlWrapper);
+
+  levelWrapper.appendChild(levelInfosLeftWrapper);
+
+  // RIGHT : remove level button
+
+  var levelInfosRightWrapper = document.createElement("div");
+  levelInfosRightWrapper.setAttribute("class", "level_infos_right_wrapper");
+  levelInfosRightWrapper.setAttribute("id", "level_infos_right_wrapper");
 
   // remove level button wrapper
   var removeLevelButtonWrapper = document.createElement("div");
@@ -57,13 +75,12 @@ function displayLevel(level) {
   });
   removeLevelButtonWrapper.appendChild(removeLevelButton);
 
-  // // Détails
-  // var levelDetailsWrapper = document.createElement("div");
-  // levelDetailsWrapper.setAttribute("class", "level_details");
-  // levelDetailsWrapper.setAttribute("id", "level_details_wrapper_level-" + level.id);
-  // levelDetailsWrapper.innerHTML = 'Details : ' + getRowsNbr(level) + ' row(s) | ' + getColsNbr(level) + ' colum(s) | ' + getPaginationNbr(level) + ' pagination';
+  // Ajouts
+  levelInfosRightWrapper.appendChild(removeLevelButtonWrapper);
+  if (level.id > 0)
+    levelWrapper.appendChild(levelInfosRightWrapper);
 
-  // level buttons wrapper
+    // level buttons wrapper
   var levelButtonsWrapper = document.createElement("div");
   levelButtonsWrapper.setAttribute("class", "level_buttons_wrapper");
   levelButtonsWrapper.setAttribute("id", "level_buttons_wrapper_level-" + level.id);
@@ -71,7 +88,7 @@ function displayLevel(level) {
   // add level button
   var addLevelButtonWrapper = document.createElement("div");
   addLevelButtonWrapper.setAttribute("id", "add_level_button_wrapper_level-" + level.id);
-  addLevelButtonWrapper.setAttribute("class", "level_buttons_wrapper");
+
   // button
   var addLevelButton = document.createElement("button");
   addLevelButton.setAttribute("class", "button_select button_img");
@@ -284,7 +301,7 @@ function displayLevel(level) {
   // Header du tableau
   var selectionHeaderTableWrapper = document.createElement("div");
   selectionHeaderTableWrapper.setAttribute("id", "selection_table_header_wrapper");
-  selectionHeaderTableWrapper.setAttribute("class", "selection_table_header");
+  selectionHeaderTableWrapper.setAttribute("class", "selection_table_header_wrapper");
 
   var headerLeftWrapper = document.createElement('div');
   headerLeftWrapper.setAttribute('class', "row_left_wrapper");
@@ -334,18 +351,7 @@ function displayLevel(level) {
   selectionHeaderTableWrapper.appendChild(selectionHeaderTable);
   selectionTableWrapper.appendChild(selectionHeaderTableWrapper);
 
-
   // Ajouts
-  // Container
-  var levelWrapper = document.createElement("div");
-  levelWrapper.setAttribute("class", "level_wrapper");
-  levelWrapper.setAttribute("id", "level_wrapper_level-" + level.id);
-
-  levelWrapper.appendChild(typeWrapper);
-  levelWrapper.appendChild(levelUrlWrapper);
-  // levelWrapper.appendChild(levelDetailsWrapper);
-  if (level.id > 0)
-    levelWrapper.appendChild(removeLevelButtonWrapper);
   levelWrapper.appendChild(levelButtonsWrapper);
   levelWrapper.appendChild(selectionTableWrapper);
 
@@ -362,9 +368,11 @@ function displayLevel(level) {
   var tabs = document.getElementById("tabs");
   tabs.style.display = "block";
 
-  // par défaut : on désactive le pagination button et le add level button
+  // par défaut : on désactive le pagination et custom pagination button, le add level button et on cache le header
   disableAddPaginationButton(level);
+  disableAddCustomPaginationButton(level);
   disableAddLevelButton(level);
+  hideSelectionTableHeader();
 }
 
 function disableAddLevelButton(level) {
@@ -399,11 +407,27 @@ function disableAddCustomPaginationButton(level) {
   addCustomPaginationButton.disabled = true;
 }
 
+function showSelectionTableHeader() {
+  var selectionTableHeader = document.getElementById("selection_table_header");
+  selectionTableHeader.style.display = "table";
+}
+
+function hideSelectionTableHeader() {
+  var selectionTableHeader = document.getElementById("selection_table_header");
+  selectionTableHeader.style.display = "none";
+}
+
 // function d'update du level display
 // => bouton add level
 // => bouton enable / disable add pagination
 // => level details
 function updateLevelDisplay(level) {
+  // Table selection header : si au moins 1 row
+  if (level.rows.length > 0)
+    showSelectionTableHeader();
+  else
+    hideSelectionTableHeader();
+
   // Add level : si au moins 1 depth et 1 col et pas de level supérieur
   const upperLevel = levels[level.id + 1];
   if (getDepthNbr(level) > 0 && getColsNbr(level) > 0 && upperLevel === undefined)
@@ -427,9 +451,23 @@ function updateLevelDisplay(level) {
     disableAddCustomPaginationButton(level);
   }
 
-  // // Details
-  // var levelDetailsWrapper = document.getElementById("level_details_wrapper_level-" + level.id);
-  // levelDetailsWrapper.innerHTML = 'Details : ' + getRowsNbr(level) + ' row(s) | ' + getColsNbr(level) + ' colum(s) | ' + getPaginationNbr(level) + ' pagination';
+  // Selection table row colors
+  for (let i = 0; i < levels.length; i++) {
+    let levelId = levels[i].id;
+    let nbrSelectionTableRows = $('.selection_table_row_level-' + levelId).length;
+    console.log("selection_table_row length for level " + levelId + ": ", nbrSelectionTableRows);
+    let $i = 1;
+    $('.selection_table_row_level-' + levelId).each(function() {
+      if (($i % 2) == 1) {
+        $(this).css('background-color', '#4e5d7e');
+        console.log("$i = " + $i + ": red");
+      } else {
+        $(this).css('background-color', '#44516f');
+        console.log("$i = " + $i + ": blue");
+      }
+      $i++;
+    });
+  }
 }
 
 function removeLevelsTabs(levelsToRemove) {

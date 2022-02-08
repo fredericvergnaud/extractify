@@ -62,7 +62,7 @@ function displayDepth(depth, row, level) {
 
     // Wrapper total
     var depthWrapper = document.createElement('div');
-    depthWrapper.setAttribute('class', "cols_table_row depth_row");
+    depthWrapper.setAttribute('class', "cols_table_row depth_row selection_table_row_level-" + level.id);
     depthWrapper.setAttribute('id', "row-" + row.id + "_depth");
     depthWrapper.appendChild(depthLeftWrapper);
     depthWrapper.appendChild(depthRightWrapper);

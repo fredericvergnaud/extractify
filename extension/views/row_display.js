@@ -192,7 +192,7 @@ function displayRow(row, level) {
 
     // Wrapper total
     var rowWrapper = document.createElement('div');
-    rowWrapper.setAttribute('class', "rows_table_row");
+    rowWrapper.setAttribute('class', "rows_table_row selection_table_row_level-" + level.id);
     rowWrapper.setAttribute('id', "row_" + row.id);
     rowWrapper.appendChild(rowLeftWrapper);
     rowWrapper.appendChild(rowRightWrapper);
