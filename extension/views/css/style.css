@@ -615,8 +615,8 @@ p {
   margin-right: 5px;
 }
 
-.button_add_depth:hover,
-.button_add_depth:active {
+.button_add_depth:enabled:hover,
+.button_add_depth:enabled:active {
   background-image: url("../icons/add_depth_icon_16x16_hover.png");
   background-size: 13px 13px;
   background-repeat: no-repeat;
@@ -643,12 +643,12 @@ p {
   width: 24px;
 }
 
-.button_add_row:hover,
-.button_add_row:active,
-.button_add_pagination:hover,
-.button_add_pagination:active,
-.button_add_custom_pagination:hover,
-.button_add_custom_pagination:active {
+.button_add_row:enabled:hover,
+.button_add_row:enabled:active,
+.button_add_pagination:enabled:hover,
+.button_add_pagination:enabled:active,
+.button_add_custom_pagination:enabled:hover,
+.button_add_custom_pagination:enabled:active {
   background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
 }
@@ -675,10 +675,14 @@ p {
 .button_add_col:disabled,
 .button_add_depth:disabled,
 .button_add_pagination:disabled,
-.button_add_custom_pagination:disabled {
-  text-decoration: none;
-  color: gray;
+.button_add_custom_pagination:disabled,
+.button_add_row:disabled:hover,
+.button_add_col:disabled:hover,
+.button_add_depth:disabled:hover,
+.button_add_pagination:disabled:hover,
+.button_add_custom_pagination:disabled:hover {
   cursor: no-drop;
+  opacity: 0.5;
 }
 
 .button_remove_row:disabled,
