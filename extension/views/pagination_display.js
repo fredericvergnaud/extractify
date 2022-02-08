@@ -77,11 +77,17 @@ function displayPagination(level) {
   var paginationWrapper = document.createElement('div');
   paginationWrapper.setAttribute('class', "pagination_table_row selection_table_row_level-" + level.id);
   paginationWrapper.setAttribute('id', 'pagination_wrapper_level-' + level.id);
+  paginationWrapper.setAttribute('onmouseover', 'showButton()');
   paginationWrapper.appendChild(paginationLeftWrapper);
   paginationWrapper.appendChild(paginationRightWrapper);
 
   var tableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
   tableHeaderWrapper.appendChild(paginationWrapper);
+}
+
+function showButton() {
+  let removePaginationButton = document.getElementsByClassName("button_remove_pagination");
+  removePaginationButton.hidden = true;
 }
 
 function removePaginationDisplay(level) {

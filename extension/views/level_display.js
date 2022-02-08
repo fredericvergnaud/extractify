@@ -455,7 +455,6 @@ function updateLevelDisplay(level) {
   for (let i = 0; i < levels.length; i++) {
     let levelId = levels[i].id;
     let nbrSelectionTableRows = $('.selection_table_row_level-' + levelId).length;
-    console.log("selection_table_row length for level " + levelId + ": ", nbrSelectionTableRows);
     let $i = 1;
     $('.selection_table_row_level-' + levelId).each(function() {
       if (($i % 2) == 1)
