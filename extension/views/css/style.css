@@ -41,8 +41,12 @@ p {
   text-align: center;
   background-color: #5BB9B8;
   margin: 0px 0px 0px 20px;
-  display: inline-block;
+  display: table-row;
   width: 100%;
+}
+
+.level_button_wrapper {
+  display: table-cell;
 }
 
 .header_buttons_wrapper {
@@ -63,6 +67,7 @@ p {
   background-color: #5BB9B8;
   padding: 10px 10px 100px 10px;
   margin-left: 10px;
+  display: table-row;
 }
 
 .title p {
@@ -272,18 +277,22 @@ p {
 /* .level_buttons_wrapper div {
   display: block;
 } */
+.level_infos_wrapper {
+  display: table-row;
+}
+
 .level_infos_left_wrapper {
   float: left;
   width: 92%;
-  display: table-row;
   margin-bottom: 15px;
+  display: table-cell;
 }
 
 .level_infos_right_wrapper {
   float: right;
   width: 8%;
-  display: table-row;
   margin-top: 10px;
+  display: table-cell;
 }
 
 /* ROW */
@@ -336,6 +345,10 @@ p {
   font-weight: normal;
 }
 
+.pagination_table_row:hover {
+  cursor: pointer;
+}
+
 .rows_table {
   display: table;
   min-width: 570px;
@@ -377,8 +390,16 @@ p {
   background-color: #50637c;
 }
 
+.rows_table_row:hover {
+  cursor: pointer;
+}
+
 .cols_table_row {
   background-color: #637c9c;
+}
+
+.cols_table_row:hover {
+  cursor: pointer;
 }
 
 #row_tag_class,
@@ -413,10 +434,16 @@ p {
   display: table-row;
 }
 
-.depth_row {
+.cols_table_row > div:last-child {
+  border-radius: 0 10px 10px 0;
+  -moz-border-radius: 0 10px 10px 0;
+}
+
+
+/* .depth_row {
   cursor: default !important;
   background-color: #5a6f8c;
-}
+} */
 
 .highlight_depth {
   background-color: #fcf695;
@@ -565,7 +592,6 @@ p {
   vertical-align: top;
   padding-right: 5px;
   margin-right: 15px;
-  display: flex;
 }
 
 .button_add_pagination,

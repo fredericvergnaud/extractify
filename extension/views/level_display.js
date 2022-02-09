@@ -29,6 +29,10 @@ function displayLevel(level) {
   levelWrapper.setAttribute("id", "level_wrapper_level-" + level.id);
 
   // LEFT : Type, URL
+
+  var levelInfosWrapper = document.createElement("div");
+  levelInfosWrapper.setAttribute("class", "level_infos_wrapper");
+
   var levelInfosLeftWrapper = document.createElement("div");
   levelInfosLeftWrapper.setAttribute("class", "level_infos_left_wrapper");
   levelInfosLeftWrapper.setAttribute("id", "level_infos_left_wrapper");
@@ -49,7 +53,7 @@ function displayLevel(level) {
   levelInfosLeftWrapper.appendChild(levelTypeWrapper);
   levelInfosLeftWrapper.appendChild(levelUrlWrapper);
 
-  levelWrapper.appendChild(levelInfosLeftWrapper);
+  levelInfosWrapper.appendChild(levelInfosLeftWrapper);
 
   // RIGHT : remove level button
 
@@ -78,7 +82,8 @@ function displayLevel(level) {
   // Ajouts
   levelInfosRightWrapper.appendChild(removeLevelButtonWrapper);
   if (level.id > 0)
-    levelWrapper.appendChild(levelInfosRightWrapper);
+    levelInfosWrapper.appendChild(levelInfosRightWrapper);
+  levelWrapper.appendChild(levelInfosWrapper);
 
     // level buttons wrapper
   var levelButtonsWrapper = document.createElement("div");
@@ -88,6 +93,7 @@ function displayLevel(level) {
   // add level button
   var addLevelButtonWrapper = document.createElement("div");
   addLevelButtonWrapper.setAttribute("id", "add_level_button_wrapper_level-" + level.id);
+  addLevelButtonWrapper.setAttribute("class", "level_button_wrapper");
 
   // button
   var addLevelButton = document.createElement("button");
@@ -149,6 +155,7 @@ function displayLevel(level) {
   // add row button wrapper
   var addRowButtonWrapper = document.createElement("div");
   addRowButtonWrapper.setAttribute("id", "add_row_button_wrapper_level-" + level.id);
+  addRowButtonWrapper.setAttribute("class", "level_button_wrapper");
 
   // select row button
   var addRowButton = document.createElement("button");
@@ -199,6 +206,7 @@ function displayLevel(level) {
   // add pagination button wrapper
   var addPaginationButtonWrapper = document.createElement("div");
   addPaginationButtonWrapper.setAttribute("id", "add_pagination_button_wrapper_level-" + level.id);
+  addPaginationButtonWrapper.setAttribute("class", "level_button_wrapper");
 
   // select pagination button
   var addPaginationButton = document.createElement('button');
@@ -246,6 +254,7 @@ function displayLevel(level) {
   // add custom pagination button wrapper
   var addCustomPaginationButtonWrapper = document.createElement("div");
   addCustomPaginationButtonWrapper.setAttribute("id", "add_custom_pagination_button_wrapper_level-" + level.id);
+  addCustomPaginationButtonWrapper.setAttribute("class", "level_button_wrapper");
 
   // select custom pagination button
   var addCustomPaginationButton = document.createElement('button');
@@ -298,13 +307,15 @@ function displayLevel(level) {
   selectionTableWrapper.setAttribute("id", "selection_table_wrapper_level-" + level.id);
   selectionTableWrapper.setAttribute("class", "selection_table_wrapper");
 
+  // tableau container
+  var selectionTable = document.createElement("div");
+  selectionTable.setAttribute("id", "selection_table_level-" + level.id);
+  selectionTable.setAttribute("class", "selection_table");
+
   // Header du tableau
   var selectionHeaderTableWrapper = document.createElement("div");
   selectionHeaderTableWrapper.setAttribute("id", "selection_table_header_wrapper");
   selectionHeaderTableWrapper.setAttribute("class", "selection_table_header_wrapper");
-
-  var headerLeftWrapper = document.createElement('div');
-  headerLeftWrapper.setAttribute('class', "row_left_wrapper");
 
   // Header Type
   var headerDataTypeWrapper = document.createElement('div');
@@ -330,29 +341,21 @@ function displayLevel(level) {
   headerTitleWrapper.setAttribute('id', "header_title_wrapper");
   headerTitleWrapper.innerHTML = "Title";
 
-  headerLeftWrapper.appendChild(headerDataTypeWrapper);
-  headerLeftWrapper.appendChild(headerColorWrapper);
-  headerLeftWrapper.appendChild(headerSelectorWrapper);
-  headerLeftWrapper.appendChild(headerTitleWrapper);
-
-  var headerRightWrapper = document.createElement('div');
-  headerRightWrapper.setAttribute('class', "row_right_wrapper");
-
-  // Buttons
-
   // Wrapper total
   var selectionHeaderTable = document.createElement("div");
   selectionHeaderTable.setAttribute("id", "selection_table_header");
   selectionHeaderTable.setAttribute("class", "selection_table_header");
 
-  selectionHeaderTable.appendChild(headerLeftWrapper);
-  selectionHeaderTable.appendChild(headerRightWrapper);
+  selectionHeaderTableWrapper.appendChild(headerDataTypeWrapper);
+  selectionHeaderTableWrapper.appendChild(headerColorWrapper);
+  selectionHeaderTableWrapper.appendChild(headerSelectorWrapper);
+  selectionHeaderTableWrapper.appendChild(headerTitleWrapper);
 
-  selectionHeaderTableWrapper.appendChild(selectionHeaderTable);
-  selectionTableWrapper.appendChild(selectionHeaderTableWrapper);
+  selectionTable.appendChild(selectionHeaderTableWrapper);
 
   // Ajouts
   levelWrapper.appendChild(levelButtonsWrapper);
+  selectionTableWrapper.appendChild(selectionTable);
   levelWrapper.appendChild(selectionTableWrapper);
 
   // Ajout du container au tab
@@ -408,13 +411,15 @@ function disableAddCustomPaginationButton(level) {
 }
 
 function showSelectionTableHeader() {
-  var selectionTableHeader = document.getElementById("selection_table_header");
-  selectionTableHeader.style.display = "table";
+  var selectionTableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
+  if (selectionTableHeaderWrapper !== null)
+    selectionTableHeaderWrapper.style.display = "table";
 }
 
 function hideSelectionTableHeader() {
-  var selectionTableHeader = document.getElementById("selection_table_header");
-  selectionTableHeader.style.display = "none";
+  var selectionTableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
+  if (selectionTableHeaderWrapper !== null)
+    selectionTableHeaderWrapper.style.display = "none";
 }
 
 // function d'update du level display

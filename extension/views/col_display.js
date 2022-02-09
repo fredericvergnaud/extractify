@@ -1,9 +1,5 @@
 function displayCol(col, row, level) {
 
-  // left wrapper
-  var colLeftWrapper = document.createElement('div');
-  colLeftWrapper.setAttribute('class', "col_left_wrapper");
-
   // Type
   var dataTypeWrapper = document.createElement('div');
   dataTypeWrapper.setAttribute('class', "cols_table_cell cols_table_cell_small");
@@ -37,16 +33,6 @@ function displayCol(col, row, level) {
   givenTitleWrapper.setAttribute('id', "col_given_title_wrapper_col-" + col.id);
   givenTitleWrapper.innerHTML = '<span class="cell_result">' + col.title + '</span>';
 
-  // Ajout
-  colLeftWrapper.appendChild(dataTypeWrapper);
-  colLeftWrapper.appendChild(colorWrapper);
-  colLeftWrapper.appendChild(selectorWrapper);
-  colLeftWrapper.appendChild(givenTitleWrapper);
-
-  // right wrapper
-  var colRightWrapper = document.createElement('div');
-  colRightWrapper.setAttribute('class', "col_right_wrapper");
-
   // remove col button wrapper
   var removeColButtonWrapper = document.createElement('div');
   removeColButtonWrapper.setAttribute('class', "cols_table_cell cols_table_cell_button");
@@ -70,15 +56,29 @@ function displayCol(col, row, level) {
   // Ajout bouton au wrapper
   removeColButtonWrapper.appendChild(removeColButton);
 
-  // Ajout
-  colRightWrapper.appendChild(removeColButtonWrapper);
-
   // Wrapper total
   var colWrapper = document.createElement('div');
   colWrapper.setAttribute('class', "cols_table_row selection_table_row_level-" + level.id);
   colWrapper.setAttribute('id', "col_" + col.id);
-  colWrapper.appendChild(colLeftWrapper);
-  colWrapper.appendChild(colRightWrapper);
+  colWrapper.addEventListener("mouseover", function(event) {
+    console.log("hello");
+    if (colRightWrapper !== null && colRightWrapper !== undefined)
+      colRightWrapper.style.display = "inline-block";
+    event.preventDefault();
+  });
+  colWrapper.addEventListener("mouseleave", function(event) {
+    if (colRightWrapper !== null && colRightWrapper !== undefined)
+      colRightWrapper.style.display = "none";
+    event.preventDefault();
+  });
+
+  colWrapper.appendChild(dataTypeWrapper);
+  colWrapper.appendChild(colorWrapper);
+  colWrapper.appendChild(selectorWrapper);
+  colWrapper.appendChild(givenTitleWrapper);
+  colWrapper.appendChild(removeColButtonWrapper);
+  // par défaut on cache les boutons
+  removeColButtonWrapper.style.display = "none";
 
   if (document.getElementById("cols_table_row-" + row.id + "_body") === null) {
     // on crée le tableau

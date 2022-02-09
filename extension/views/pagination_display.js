@@ -1,7 +1,4 @@
 function displayPagination(level) {
-  // left wrapper
-  var paginationLeftWrapper = document.createElement('div');
-  paginationLeftWrapper.setAttribute('class', "pagination_left_wrapper");
 
   // dataType
   var dataTypeWrapper = document.createElement('div');
@@ -42,15 +39,6 @@ function displayPagination(level) {
     selectorWrapper.innerHTML = selector;
   }
 
-  // Ajout
-  paginationLeftWrapper.appendChild(dataTypeWrapper);
-  paginationLeftWrapper.appendChild(colorWrapper);
-  paginationLeftWrapper.appendChild(selectorWrapper);
-
-  // right wrapper
-  var paginationRightWrapper = document.createElement('div');
-  paginationRightWrapper.setAttribute('class', "pagination_right_wrapper");
-
   // remove pagination button wrapper
   var removePaginationButtonWrapper = document.createElement('div');
   removePaginationButtonWrapper.setAttribute('class', "cols_table_cell cols_table_cell_button");
@@ -70,24 +58,31 @@ function displayPagination(level) {
   // Ajout button à wrapper
   removePaginationButtonWrapper.appendChild(removePaginationButton);
 
-  // Ajout
-  paginationRightWrapper.appendChild(removePaginationButtonWrapper);
-
   // Wrapper total
   var paginationWrapper = document.createElement('div');
   paginationWrapper.setAttribute('class', "pagination_table_row selection_table_row_level-" + level.id);
   paginationWrapper.setAttribute('id', 'pagination_wrapper_level-' + level.id);
-  paginationWrapper.setAttribute('onmouseover', 'showButton()');
-  paginationWrapper.appendChild(paginationLeftWrapper);
-  paginationWrapper.appendChild(paginationRightWrapper);
+  paginationWrapper.addEventListener("mouseover", function(event) {
+    console.log("hello");
+    if (paginationRightWrapper !== null && paginationRightWrapper !== undefined)
+      paginationRightWrapper.style.display = "inline-block";
+    event.preventDefault();
+  });
+  paginationWrapper.addEventListener("mouseleave", function(event) {
+    if (paginationRightWrapper !== null && paginationRightWrapper !== undefined)
+      paginationRightWrapper.style.display = "none";
+    event.preventDefault();
+  });
+  paginationWrapper.appendChild(dataTypeWrapper);
+  paginationWrapper.appendChild(colorWrapper);
+  paginationWrapper.appendChild(selectorWrapper);
+  paginationWrapper.appendChild(removePaginationButtonWrapper);
+  // par défaut on cache le right wrapper
+  removePaginationButtonWrapper.style.display = "none";
 
   var tableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
-  tableHeaderWrapper.appendChild(paginationWrapper);
-}
-
-function showButton() {
-  let removePaginationButton = document.getElementsByClassName("button_remove_pagination");
-  removePaginationButton.hidden = true;
+  if (tableHeaderWrapper !== null)
+    tableHeaderWrapper.appendChild(paginationWrapper);
 }
 
 function removePaginationDisplay(level) {
