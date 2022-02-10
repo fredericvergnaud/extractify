@@ -16,6 +16,7 @@ function Pagination(dataType, selector) {
     this.start = 0;
     this.step = 0;
     this.stop = 0;
+    this.selectionType = "";
 }
 
 function Row(dataType, id, selector, depth, color) {
@@ -34,12 +35,14 @@ function Col(dataType, id, titleKey, title, selector, url) {
     this.title = title;
     this.selector = selector;
     this.url = url;
+    this.selectionType = "";
 }
 
 function Depth(dataType, id, selector) {
     this.dataType = "depth";
     this.id = id;
     this.selector = selector;
+    this.selectionType = "";
 }
 
 function Option(name, value) {

@@ -77,17 +77,22 @@ function displayPagination(level) {
   var paginationWrapper = document.createElement('div');
   paginationWrapper.setAttribute('class', "pagination_table_row selection_table_row_level-" + level.id);
   paginationWrapper.setAttribute('id', 'pagination_wrapper_level-' + level.id);
-  paginationWrapper.setAttribute('onmouseover', 'showButton()');
+  paginationWrapper.addEventListener("mouseover", function(event) {
+    paginationRightWrapper.style.display = "block";
+    event.preventDefault();
+  });
+  paginationWrapper.addEventListener("mouseleave", function(event) {
+    paginationRightWrapper.style.display = "none";
+    event.preventDefault();
+  });
   paginationWrapper.appendChild(paginationLeftWrapper);
   paginationWrapper.appendChild(paginationRightWrapper);
 
   var tableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
-  tableHeaderWrapper.appendChild(paginationWrapper);
-}
+  tableHeaderWrapper.parentNode.insertBefore(paginationWrapper, tableHeaderWrapper.nextSibling);
 
-function showButton() {
-  let removePaginationButton = document.getElementsByClassName("button_remove_pagination");
-  removePaginationButton.hidden = true;
+  // par défaut on cache le right wrapper
+  paginationRightWrapper.style.display = "none";
 }
 
 function removePaginationDisplay(level) {

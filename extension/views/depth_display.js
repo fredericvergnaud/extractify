@@ -64,6 +64,14 @@ function displayDepth(depth, row, level) {
     var depthWrapper = document.createElement('div');
     depthWrapper.setAttribute('class', "cols_table_row depth_row selection_table_row_level-" + level.id);
     depthWrapper.setAttribute('id', "row-" + row.id + "_depth");
+    depthWrapper.addEventListener("mouseover", function(event) {
+      depthRightWrapper.style.display = "block";
+      event.preventDefault();
+    });
+    depthWrapper.addEventListener("mouseleave", function(event) {
+      depthRightWrapper.style.display = "none";
+      event.preventDefault();
+    });
     depthWrapper.appendChild(depthLeftWrapper);
     depthWrapper.appendChild(depthRightWrapper);
 
@@ -88,6 +96,8 @@ function displayDepth(depth, row, level) {
         var cBody = document.getElementById("cols_table_row-" + row.id + "_body");
         cBody.insertBefore(depthWrapper, cBody.firstChild);
     }
+    // par défaut on cache le right wrapper
+    depthRightWrapper.style.display = "none";
 }
 
 function removeDepthDisplay(depth) {

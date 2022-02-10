@@ -181,19 +181,27 @@ function displayRow(row, level) {
             });
         event.preventDefault();
     });
-    // Ajout bouton au wrapper
+    // Ajout bouton addCol au wrapper
     addColsButtonWrapper.appendChild(addColButton);
 
-    // Ajout
+    // Ajout des boutons au wrapper droite
     rowRightWrapper.appendChild(addDepthButtonWrapper);
     rowRightWrapper.appendChild(addColsButtonWrapper);
-    //    rowRightWrapper.appendChild(addCustomColsButtonWrapper);
     rowRightWrapper.appendChild(removeRowButtonWrapper);
 
     // Wrapper total
     var rowWrapper = document.createElement('div');
     rowWrapper.setAttribute('class', "rows_table_row selection_table_row_level-" + level.id);
     rowWrapper.setAttribute('id', "row_" + row.id);
+    rowWrapper.addEventListener("mouseover", function(event) {
+      rowRightWrapper.style.display = "block";
+      event.preventDefault();
+    });
+    rowWrapper.addEventListener("mouseleave", function(event) {
+      rowRightWrapper.style.display = "none";
+      event.preventDefault();
+    });
+
     rowWrapper.appendChild(rowLeftWrapper);
     rowWrapper.appendChild(rowRightWrapper);
 
@@ -201,8 +209,11 @@ function displayRow(row, level) {
     rTable.setAttribute('class', "rows_table");
     rTable.setAttribute('id', "rows_table_row-" + row.id);
     rTable.appendChild(rowWrapper);
-    var tWrapper = document.getElementById("selection_table_wrapper_level-" + level.id);
-    tWrapper.appendChild(rTable);
+    var selectionTableFooter = document.getElementById("selection_table_footer_level-" + level.id);
+    selectionTableFooter.parentNode.insertBefore(rTable, selectionTableFooter);
+
+    // par défaut on cache le right wrapper
+    rowRightWrapper.style.display = "none";
 }
 
 function removeRowDisplay(row) {

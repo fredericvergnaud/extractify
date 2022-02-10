@@ -54,6 +54,9 @@ function highlightRows(tabId, level, rowSelector, rowId) {
       rowSelector: rowSelector,
       rowId: rowId
     }, function(response) {
+      chrome.windows.update(extensionWindowId, {
+        focused: true
+      });
       var lastError = chrome.runtime.lastError;
       if (lastError) {
         console.log("lastError.message", lastError.message);
@@ -81,6 +84,9 @@ function highlightCols(tabId, row, colSelector, colId, level) {
       colId: colId,
       level: level
     }, function(response) {
+      chrome.windows.update(extensionWindowId, {
+        focused: true
+      });
       var lastError = chrome.runtime.lastError;
       if (lastError) {
         console.log("lastError.message", lastError.message);
@@ -105,6 +111,9 @@ function highlightDepth(tabId, row, depthSelector) {
       row: row,
       depthSelector: depthSelector
     }, function(response) {
+      chrome.windows.update(extensionWindowId, {
+        focused: true
+      });
       var lastError = chrome.runtime.lastError;
       if (lastError) {
         console.log("lastError.message", lastError.message);
@@ -129,6 +138,9 @@ function highlightPagination(tabId, level, paginationSelector) {
       level: level,
       paginationSelector: paginationSelector
     }, function(response) {
+      chrome.windows.update(extensionWindowId, {
+        focused: true
+      });
       var lastError = chrome.runtime.lastError;
       if (lastError) {
         console.log("lastError.message", lastError.message);

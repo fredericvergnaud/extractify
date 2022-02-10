@@ -77,6 +77,14 @@ function displayCol(col, row, level) {
   var colWrapper = document.createElement('div');
   colWrapper.setAttribute('class', "cols_table_row selection_table_row_level-" + level.id);
   colWrapper.setAttribute('id', "col_" + col.id);
+  colWrapper.addEventListener("mouseover", function(event) {
+    colRightWrapper.style.display = "block";
+    event.preventDefault();
+  });
+  colWrapper.addEventListener("mouseleave", function(event) {
+    colRightWrapper.style.display = "none";
+    event.preventDefault();
+  });
   colWrapper.appendChild(colLeftWrapper);
   colWrapper.appendChild(colRightWrapper);
 
@@ -101,6 +109,9 @@ function displayCol(col, row, level) {
     var cBody = document.getElementById("cols_table_row-" + row.id + "_body");
     cBody.appendChild(colWrapper);
   }
+
+  // par défaut on cache le right wrapper
+  colRightWrapper.style.display = "none";
 }
 
 function removeColDisplay(col) {

@@ -12,15 +12,15 @@ function addRow(rowSelector, rowColor, rowId, level) {
 }
 
 function removeRow(row, level) {
-    
+
     // On supprime l'élément row dans le tableau rows
     var rows = level.rows;
     var newRows = rows.filter(function (el) {
         return el.id !== row.id;
     });
-    level.rows = newRows; 
+    level.rows = newRows;
 //    console.log("tableau de rows après suppression passe à " + level.rows.length);
-    
+
     // si plus aucun row :
     if (level.rows.length === 0) {
         // on enlève pagination si elle existe
@@ -37,7 +37,7 @@ function removeRow(row, level) {
             removeLevelsAbove(level.id);
         }
     }
-    
+
     // on supprime les highlight
     // row
     removeHighlightedElement(level.tabId, row);
@@ -50,4 +50,3 @@ function removeRow(row, level) {
         removeHighlightedElement(level.tabId, row.depth);
     saveLevelsArray();
 }
-
