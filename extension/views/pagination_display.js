@@ -22,7 +22,7 @@ function displayPagination(level) {
   var selectorWrapper = document.createElement('div');
   selectorWrapper.setAttribute('class', "cols_table_cell cols_table_cell_middle");
   selectorWrapper.setAttribute('id', "pagination_constantString_and_step_wrapper_level-" + level.id);
-  if (level.pagination.constantString !== "") {
+  if (level.pagination.constantString !== undefined && level.pagination.constantString !== "") {
     let constantString = level.pagination.constantString;
     let constantStringURL = new URL(constantString);
     let pathnameConstantStringURL = constantStringURL.pathname;
