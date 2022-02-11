@@ -29,10 +29,6 @@ function displayLevel(level) {
   levelWrapper.setAttribute("id", "level_wrapper_level-" + level.id);
 
   // LEFT : Type, URL
-
-  var levelInfosWrapper = document.createElement("div");
-  levelInfosWrapper.setAttribute("class", "level_infos_wrapper");
-
   var levelInfosLeftWrapper = document.createElement("div");
   levelInfosLeftWrapper.setAttribute("class", "level_infos_left_wrapper");
   levelInfosLeftWrapper.setAttribute("id", "level_infos_left_wrapper");
@@ -53,42 +49,13 @@ function displayLevel(level) {
   levelInfosLeftWrapper.appendChild(levelTypeWrapper);
   levelInfosLeftWrapper.appendChild(levelUrlWrapper);
 
-  levelInfosWrapper.appendChild(levelInfosLeftWrapper);
+  levelWrapper.appendChild(levelInfosLeftWrapper);
 
-  // RIGHT : remove level button
+  // RIGHT : level buttons
 
   var levelInfosRightWrapper = document.createElement("div");
   levelInfosRightWrapper.setAttribute("class", "level_infos_right_wrapper");
   levelInfosRightWrapper.setAttribute("id", "level_infos_right_wrapper");
-
-  // remove level button wrapper
-  var removeLevelButtonWrapper = document.createElement("div");
-  removeLevelButtonWrapper.setAttribute("id", "remove_level_button_wrapper_level-" + level.id);
-  removeLevelButtonWrapper.setAttribute("class", "remove_level_button_wrapper");
-
-  // remove level button
-  var removeLevelButton = document.createElement("button");
-  removeLevelButton.setAttribute("class", "remove_level_button");
-  removeLevelButton.setAttribute("id", "remove_level-" + level.id);
-  removeLevelButton.setAttribute("title", "Remove level " + level.id);
-  // removeLevelButton.innerHTML = extensionLang.RemoveButton;
-  removeLevelButton.innerHTML = "";
-  removeLevelButton.addEventListener("click", function(event) {
-    removeLevel(level.id);
-    event.preventDefault();
-  });
-  removeLevelButtonWrapper.appendChild(removeLevelButton);
-
-  // Ajouts
-  levelInfosRightWrapper.appendChild(removeLevelButtonWrapper);
-  if (level.id > 0)
-    levelInfosWrapper.appendChild(levelInfosRightWrapper);
-  levelWrapper.appendChild(levelInfosWrapper);
-
-    // level buttons wrapper
-  var levelButtonsWrapper = document.createElement("div");
-  levelButtonsWrapper.setAttribute("class", "level_buttons_wrapper");
-  levelButtonsWrapper.setAttribute("id", "level_buttons_wrapper_level-" + level.id);
 
   // add level button
   var addLevelButtonWrapper = document.createElement("div");
@@ -97,7 +64,7 @@ function displayLevel(level) {
 
   // button
   var addLevelButton = document.createElement("button");
-  addLevelButton.setAttribute("class", "button_select button_img");
+  addLevelButton.setAttribute("class", "button_add_level");
   addLevelButton.setAttribute("id", "add_level_level-" + level.id);
   addLevelButton.addEventListener("click", function(event) {
     // on remplit le formulaire de sélection des liens
@@ -148,9 +115,14 @@ function displayLevel(level) {
     //        }
     event.preventDefault();
   });
-  addLevelButton.innerHTML = extensionLang.AddLevelButton;
+  // addLevelButton.innerHTML = extensionLang.AddLevelButton;
+  addLevelButton.innerHTML = "";
+
   // Ajout button au wrapper
   addLevelButtonWrapper.appendChild(addLevelButton);
+
+  // ajout du wrapper au right wrapper
+  levelInfosRightWrapper.appendChild(addLevelButtonWrapper);
 
   // add row button wrapper
   var addRowButtonWrapper = document.createElement("div");
@@ -159,10 +131,11 @@ function displayLevel(level) {
 
   // select row button
   var addRowButton = document.createElement("button");
-  addRowButton.setAttribute("class", "button_select button_img");
+  addRowButton.setAttribute("class", "button_add_row");
   addRowButton.setAttribute("id", "add_row_level-" + level.id);
   addRowButton.setAttribute("title", "Add a row for level " + level.id);
-  addRowButton.innerHTML = extensionLang.AddRowButton;
+  // addRowButton.innerHTML = extensionLang.AddRowButton;
+  addRowButton.innerHTML = "";
   addRowButton.addEventListener("click", function(event) {
 
     // on efface l'input de tag & class
@@ -203,6 +176,9 @@ function displayLevel(level) {
 
   addRowButtonWrapper.appendChild(addRowButton);
 
+  // ajout du wrapper au right wrapper
+  levelInfosRightWrapper.appendChild(addRowButtonWrapper);
+
   // add pagination button wrapper
   var addPaginationButtonWrapper = document.createElement("div");
   addPaginationButtonWrapper.setAttribute("id", "add_pagination_button_wrapper_level-" + level.id);
@@ -210,10 +186,11 @@ function displayLevel(level) {
 
   // select pagination button
   var addPaginationButton = document.createElement('button');
-  addPaginationButton.setAttribute('class', "button_select");
+  addPaginationButton.setAttribute('class', "button_add_pagination");
   addPaginationButton.setAttribute('id', "add_pagination_button_level-" + level.id);
   addPaginationButton.setAttribute('title', "Select pagination for level " + level.id);
-  addPaginationButton.innerHTML = extensionLang.AddPaginationButton;
+  // addPaginationButton.innerHTML = extensionLang.AddPaginationButton;
+  addPaginationButton.innerHTML = "";
   addPaginationButton.addEventListener("click", function(event) {
 
     // on efface l'input de selector
@@ -249,7 +226,11 @@ function displayLevel(level) {
       });
     event.preventDefault();
   });
+
   addPaginationButtonWrapper.appendChild(addPaginationButton);
+
+  // ajout du wrapper au right wrapper
+  levelInfosRightWrapper.appendChild(addPaginationButtonWrapper);
 
   // add custom pagination button wrapper
   var addCustomPaginationButtonWrapper = document.createElement("div");
@@ -258,10 +239,11 @@ function displayLevel(level) {
 
   // select custom pagination button
   var addCustomPaginationButton = document.createElement('button');
-  addCustomPaginationButton.setAttribute('class', "button_select");
+  addCustomPaginationButton.setAttribute('class', "button_add_custom_pagination");
   addCustomPaginationButton.setAttribute('id', "add_custom_pagination_button_level-" + level.id);
   addCustomPaginationButton.setAttribute('title', "Select custom pagination for level " + level.id);
-  addCustomPaginationButton.innerHTML = extensionLang.AddCustomPaginationButton;
+  // addCustomPaginationButton.innerHTML = extensionLang.AddCustomPaginationButton;
+  addCustomPaginationButton.innerHTML = "";
   addCustomPaginationButton.addEventListener("click", function(event) {
 
     // on efface les input
@@ -294,28 +276,49 @@ function displayLevel(level) {
     event.preventDefault();
     });
   });
+
   addCustomPaginationButtonWrapper.appendChild(addCustomPaginationButton);
 
-  // Ajouts des boutons au wrapper de boutons
-  levelButtonsWrapper.appendChild(addLevelButtonWrapper);
-  levelButtonsWrapper.appendChild(addRowButtonWrapper);
-  levelButtonsWrapper.appendChild(addPaginationButtonWrapper);
-  levelButtonsWrapper.appendChild(addCustomPaginationButtonWrapper);
+  // ajout du wrapper au right wrapper
+  levelInfosRightWrapper.appendChild(addCustomPaginationButtonWrapper);
+
+  // remove level button wrapper
+  var removeLevelButtonWrapper = document.createElement("div");
+  removeLevelButtonWrapper.setAttribute("id", "remove_level_button_wrapper_level-" + level.id);
+  removeLevelButtonWrapper.setAttribute("class", "level_button_wrapper");
+
+  // remove level button
+  var removeLevelButton = document.createElement("button");
+  removeLevelButton.setAttribute("class", "remove_level_button");
+  removeLevelButton.setAttribute("id", "remove_level-" + level.id);
+  removeLevelButton.setAttribute("title", "Remove level " + level.id);
+  // removeLevelButton.innerHTML = extensionLang.RemoveButton;
+  removeLevelButton.innerHTML = "";
+  removeLevelButton.addEventListener("click", function(event) {
+    removeLevel(level.id);
+    event.preventDefault();
+  });
+  removeLevelButtonWrapper.appendChild(removeLevelButton);
+
+  // Ajouts
+  if (level.id > 0)
+    levelInfosRightWrapper.appendChild(removeLevelButtonWrapper);
+
+  levelWrapper.appendChild(levelInfosRightWrapper);
+
 
   // Wrapper du tableau de sélection
   var selectionTableWrapper = document.createElement("div");
   selectionTableWrapper.setAttribute("id", "selection_table_wrapper_level-" + level.id);
   selectionTableWrapper.setAttribute("class", "selection_table_wrapper");
 
-  // tableau container
-  var selectionTable = document.createElement("div");
-  selectionTable.setAttribute("id", "selection_table_level-" + level.id);
-  selectionTable.setAttribute("class", "selection_table");
-
   // Header du tableau
-  var selectionHeaderTableWrapper = document.createElement("div");
-  selectionHeaderTableWrapper.setAttribute("id", "selection_table_header_wrapper");
-  selectionHeaderTableWrapper.setAttribute("class", "selection_table_header_wrapper");
+  var selectionTableHeaderWrapper = document.createElement("div");
+  selectionTableHeaderWrapper.setAttribute("id", "selection_table_header_wrapper");
+  selectionTableHeaderWrapper.setAttribute("class", "selection_table_header_wrapper");
+
+  var headerLeftWrapper = document.createElement('div');
+  headerLeftWrapper.setAttribute('class', "row_left_wrapper");
 
   // Header Type
   var headerDataTypeWrapper = document.createElement('div');
@@ -341,21 +344,35 @@ function displayLevel(level) {
   headerTitleWrapper.setAttribute('id', "header_title_wrapper");
   headerTitleWrapper.innerHTML = "Title";
 
+  headerLeftWrapper.appendChild(headerDataTypeWrapper);
+  headerLeftWrapper.appendChild(headerColorWrapper);
+  headerLeftWrapper.appendChild(headerSelectorWrapper);
+  headerLeftWrapper.appendChild(headerTitleWrapper);
+
+  var headerRightWrapper = document.createElement('div');
+  headerRightWrapper.setAttribute('class', "row_right_wrapper");
+
+  // Buttons
+
+
+  // Footer
+  let selectionTableFooter = document.createElement("div");
+  selectionTableFooter.setAttribute("id", "selection_table_footer_level-" + level.id);
+  selectionTableFooter.setAttribute("class", "selection_table_footer");
+
   // Wrapper total
-  var selectionHeaderTable = document.createElement("div");
-  selectionHeaderTable.setAttribute("id", "selection_table_header");
-  selectionHeaderTable.setAttribute("class", "selection_table_header");
+  var selectionTableHeader = document.createElement("div");
+  selectionTableHeader.setAttribute("id", "selection_table_header_level-" + level.id);
+  selectionTableHeader.setAttribute("class", "selection_table_header");
 
-  selectionHeaderTableWrapper.appendChild(headerDataTypeWrapper);
-  selectionHeaderTableWrapper.appendChild(headerColorWrapper);
-  selectionHeaderTableWrapper.appendChild(headerSelectorWrapper);
-  selectionHeaderTableWrapper.appendChild(headerTitleWrapper);
+  selectionTableHeader.appendChild(headerLeftWrapper);
+  selectionTableHeader.appendChild(headerRightWrapper);
 
-  selectionTable.appendChild(selectionHeaderTableWrapper);
+  selectionTableHeaderWrapper.appendChild(selectionTableHeader);
+  selectionTableWrapper.appendChild(selectionTableHeaderWrapper);
+  selectionTableWrapper.appendChild(selectionTableFooter);
 
   // Ajouts
-  levelWrapper.appendChild(levelButtonsWrapper);
-  selectionTableWrapper.appendChild(selectionTable);
   levelWrapper.appendChild(selectionTableWrapper);
 
   // Ajout du container au tab
@@ -371,11 +388,12 @@ function displayLevel(level) {
   var tabs = document.getElementById("tabs");
   tabs.style.display = "block";
 
-  // par défaut : on désactive le pagination et custom pagination button, le add level button et on cache le header
+  // par défaut : on désactive le pagination et custom pagination button, le add level button et on cache le header et le footer
   disableAddPaginationButton(level);
   disableAddCustomPaginationButton(level);
   disableAddLevelButton(level);
-  hideSelectionTableHeader();
+  hideSelectionTableHeader(level);
+  hideSelectionTableFooter(level);
 }
 
 function disableAddLevelButton(level) {
@@ -410,16 +428,24 @@ function disableAddCustomPaginationButton(level) {
   addCustomPaginationButton.disabled = true;
 }
 
-function showSelectionTableHeader() {
-  var selectionTableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
-  if (selectionTableHeaderWrapper !== null)
-    selectionTableHeaderWrapper.style.display = "table";
+function showSelectionTableHeader(level) {
+  var selectionTableHeader = document.getElementById("selection_table_header_level-" + level.id);
+  selectionTableHeader.style.display = "table";
 }
 
-function hideSelectionTableHeader() {
-  var selectionTableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
-  if (selectionTableHeaderWrapper !== null)
-    selectionTableHeaderWrapper.style.display = "none";
+function hideSelectionTableHeader(level) {
+  var selectionTableHeader = document.getElementById("selection_table_header_level-" + level.id);
+  selectionTableHeader.style.display = "none";
+}
+
+function showSelectionTableFooter(level) {
+  var selectionTableFooter = document.getElementById("selection_table_footer_level-" + level.id);
+  selectionTableFooter.style.display = "block";
+}
+
+function hideSelectionTableFooter(level) {
+  var selectionTableFooter = document.getElementById("selection_table_footer_level-" + level.id);
+  selectionTableFooter.style.display = "none";
 }
 
 // function d'update du level display
@@ -428,11 +454,13 @@ function hideSelectionTableHeader() {
 // => level details
 function updateLevelDisplay(level) {
   // Table selection header : si au moins 1 row
-  if (level.rows.length > 0)
-    showSelectionTableHeader();
-  else
-    hideSelectionTableHeader();
-
+  if (level.rows.length > 0) {
+    showSelectionTableHeader(level);
+    showSelectionTableFooter(level);
+  } else {
+    hideSelectionTableHeader(level);
+    hideSelectionTableFooter(level);
+  }
   // Add level : si au moins 1 depth et 1 col et pas de level supérieur
   const upperLevel = levels[level.id + 1];
   if (getDepthNbr(level) > 0 && getColsNbr(level) > 0 && upperLevel === undefined)

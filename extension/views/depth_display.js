@@ -1,5 +1,9 @@
 function displayDepth(depth, row, level) {
 
+    // left wrapper
+    var depthLeftWrapper = document.createElement('div');
+    depthLeftWrapper.setAttribute('class', "col_left_wrapper");
+
     // Data type
     var dataTypeWrapper = document.createElement('div');
     dataTypeWrapper.setAttribute('class', "cols_table_cell cols_table_cell_small");
@@ -23,6 +27,15 @@ function displayDepth(depth, row, level) {
     }
     selectorWrapper.innerHTML = selector;
 
+    // Ajout
+    depthLeftWrapper.appendChild(dataTypeWrapper);
+    depthLeftWrapper.appendChild(colorWrapper);
+    depthLeftWrapper.appendChild(selectorWrapper);
+
+    // right wrapper
+    var depthRightWrapper = document.createElement('div');
+    depthRightWrapper.setAttribute('class', "col_right_wrapper");
+
     // remove depth button wrapper
     var removeDepthButtonWrapper = document.createElement('div');
     removeDepthButtonWrapper.setAttribute('class', "cols_table_cell cols_table_cell_button");
@@ -44,28 +57,23 @@ function displayDepth(depth, row, level) {
     // Ajout button au wrapper
     removeDepthButtonWrapper.appendChild(removeDepthButton);
 
+    // Ajout
+    depthRightWrapper.appendChild(removeDepthButtonWrapper);
+
     // Wrapper total
     var depthWrapper = document.createElement('div');
     depthWrapper.setAttribute('class', "cols_table_row depth_row selection_table_row_level-" + level.id);
     depthWrapper.setAttribute('id', "row-" + row.id + "_depth");
     depthWrapper.addEventListener("mouseover", function(event) {
-      console.log("hello");
-      if (depthRightWrapper !== null && depthRightWrapper !== undefined)
-        depthRightWrapper.style.display = "inline-block";
+      depthRightWrapper.style.display = "block";
       event.preventDefault();
     });
     depthWrapper.addEventListener("mouseleave", function(event) {
-      if (depthRightWrapper !== null && depthRightWrapper !== undefined)
-        depthRightWrapper.style.display = "none";
+      depthRightWrapper.style.display = "none";
       event.preventDefault();
     });
-
-    depthWrapper.appendChild(dataTypeWrapper);
-    depthWrapper.appendChild(colorWrapper);
-    depthWrapper.appendChild(selectorWrapper);
-    depthWrapper.appendChild(removeDepthButtonWrapper);
-    // par défaut on cache les boutons
-    removeDepthButtonWrapper.style.display = "none";
+    depthWrapper.appendChild(depthLeftWrapper);
+    depthWrapper.appendChild(depthRightWrapper);
 
     if (document.getElementById("cols_table_row-" + row.id + "_body") === null) {
         // on crée le tableau
@@ -88,6 +96,8 @@ function displayDepth(depth, row, level) {
         var cBody = document.getElementById("cols_table_row-" + row.id + "_body");
         cBody.insertBefore(depthWrapper, cBody.firstChild);
     }
+    // par défaut on cache le right wrapper
+    depthRightWrapper.style.display = "none";
 }
 
 function removeDepthDisplay(depth) {

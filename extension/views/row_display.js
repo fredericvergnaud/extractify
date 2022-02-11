@@ -1,6 +1,10 @@
 function displayRow(row, level) {
     var text;
 
+    // left wrapper
+    var rowLeftWrapper = document.createElement('div');
+    rowLeftWrapper.setAttribute('class', "row_left_wrapper");
+
     // Type
     var dataTypeWrapper = document.createElement('div');
     dataTypeWrapper.setAttribute('class', "rows_table_cell rows_table_cell_small");
@@ -18,6 +22,15 @@ function displayRow(row, level) {
     selectorWrapper.setAttribute('class', "rows_table_cell rows_table_cell_big");
     selectorWrapper.setAttribute('id', "class_name_wrapper_row-" + row.id);
     selectorWrapper.innerHTML = row.selector;
+
+    // Ajout
+    rowLeftWrapper.appendChild(dataTypeWrapper);
+    rowLeftWrapper.appendChild(colorWrapper);
+    rowLeftWrapper.appendChild(selectorWrapper);
+
+    // right wrapper
+    var rowRightWrapper = document.createElement('div');
+    rowRightWrapper.setAttribute('class', "row_right_wrapper");
 
     // remove row button wrapper
     var removeRowButtonWrapper = document.createElement('div');
@@ -168,40 +181,39 @@ function displayRow(row, level) {
             });
         event.preventDefault();
     });
-    // Ajout bouton au wrapper
+    // Ajout bouton addCol au wrapper
     addColsButtonWrapper.appendChild(addColButton);
+
+    // Ajout des boutons au wrapper droite
+    rowRightWrapper.appendChild(addDepthButtonWrapper);
+    rowRightWrapper.appendChild(addColsButtonWrapper);
+    rowRightWrapper.appendChild(removeRowButtonWrapper);
 
     // Wrapper total
     var rowWrapper = document.createElement('div');
     rowWrapper.setAttribute('class', "rows_table_row selection_table_row_level-" + level.id);
     rowWrapper.setAttribute('id', "row_" + row.id);
     rowWrapper.addEventListener("mouseover", function(event) {
-      if (rowRightWrapper !== null && rowRightWrapper !== undefined)
-        rowRightWrapper.style.display = "inline-block";
+      rowRightWrapper.style.display = "block";
       event.preventDefault();
     });
     rowWrapper.addEventListener("mouseleave", function(event) {
-      if (rowRightWrapper !== null && rowRightWrapper !== undefined)
-        rowRightWrapper.style.display = "none";
+      rowRightWrapper.style.display = "none";
       event.preventDefault();
     });
-    rowWrapper.appendChild(dataTypeWrapper);
-    rowWrapper.appendChild(colorWrapper);
-    rowWrapper.appendChild(selectorWrapper);
-    rowWrapper.appendChild(addDepthButtonWrapper);
-    rowWrapper.appendChild(addColsButtonWrapper);
-    rowWrapper.appendChild(removeRowButtonWrapper);
-    // par défaut on cache les boutons
-    addDepthButtonWrapper.style.display = "none";
-    addColsButtonWrapper.style.display = "none";
-    removeRowButtonWrapper.style.display = "none";
+
+    rowWrapper.appendChild(rowLeftWrapper);
+    rowWrapper.appendChild(rowRightWrapper);
 
     var rTable = document.createElement('div');
     rTable.setAttribute('class', "rows_table");
     rTable.setAttribute('id', "rows_table_row-" + row.id);
     rTable.appendChild(rowWrapper);
-    var tWrapper = document.getElementById("selection_table_level-" + level.id);
-    tWrapper.appendChild(rTable);
+    var selectionTableFooter = document.getElementById("selection_table_footer_level-" + level.id);
+    selectionTableFooter.parentNode.insertBefore(rTable, selectionTableFooter);
+
+    // par défaut on cache le right wrapper
+    rowRightWrapper.style.display = "none";
 }
 
 function removeRowDisplay(row) {
