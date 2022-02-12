@@ -289,7 +289,7 @@ function displayLevel(level) {
 
   // remove level button
   var removeLevelButton = document.createElement("button");
-  removeLevelButton.setAttribute("class", "remove_level_button");
+  removeLevelButton.setAttribute("class", "button_remove_level");
   removeLevelButton.setAttribute("id", "remove_level-" + level.id);
   removeLevelButton.setAttribute("title", "Remove level " + level.id);
   // removeLevelButton.innerHTML = extensionLang.RemoveButton;
