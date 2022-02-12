@@ -21,8 +21,8 @@ function displayDepth(depth, row, level) {
     selectorWrapper.setAttribute('class', "cols_table_cell cols_table_cell_big");
     selectorWrapper.setAttribute('id', "depth_class_name_wrapper_row-" + row.id);
     let selector = depth.selector;
-    if (selector.length > 19) {
-      let trimmedSelector = selector.substr(0, 20);
+    if (selector.length > 29) {
+      let trimmedSelector = selector.substr(0, 30);
       selector = trimmedSelector + "...";
     }
     selectorWrapper.innerHTML = selector;

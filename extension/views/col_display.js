@@ -25,8 +25,8 @@ function displayCol(col, row, level) {
     selector = col.selector;
   else
     selector = col.idName;
-  if (selector.length > 19) {
-    let trimmedSelector = selector.substr(0, 20);
+  if (selector.length > 29) {
+    let trimmedSelector = selector.substr(0, 30);
     selector = trimmedSelector + "...";
   }
   selectorWrapper.innerHTML = selector;

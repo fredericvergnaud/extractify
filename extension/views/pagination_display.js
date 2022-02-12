@@ -26,15 +26,15 @@ function displayPagination(level) {
     let constantString = level.pagination.constantString;
     let constantStringURL = new URL(constantString);
     let pathnameConstantStringURL = constantStringURL.pathname;
-    let trimmedConstantString = pathnameConstantStringURL.substr(0, 20);
+    let trimmedConstantString = pathnameConstantStringURL.substr(0, 30);
     trimmedConstantString = trimmedConstantString + "...";
     selectorWrapper.innerHTML = '<span class="cell_result">' + trimmedConstantString + '<br/>' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.stop + '</span>';
   } else {
     let selector;
     if (level.pagination.selector !== "noSelector") {
       selector = level.pagination.selector;
-      if (selector.length > 19) {
-        let trimmedSelector = selector.substr(0, 20);
+      if (selector.length > 29) {
+        let trimmedSelector = selector.substr(0, 30);
         selector = trimmedSelector + "...";
       }
     } else

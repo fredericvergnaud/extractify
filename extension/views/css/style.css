@@ -291,7 +291,7 @@ p {
 .pagination_left_wrapper {
   float: left;
   height: 50px;
-  width: 63%;
+  width: 80%;
   margin-left: 20px;
 }
 
@@ -301,7 +301,7 @@ p {
   float: right;
   vertical-align: middle;
   height: auto;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 #rows_structure_wrapper_thead,
@@ -450,7 +450,7 @@ p {
 .header_table_cell_middle,
 .rows_table_cell_middle,
 .cols_table_cell_middle {
-  width: 158px;
+  width: 200px;
   text-align: left;
   word-wrap: break-word;
 }

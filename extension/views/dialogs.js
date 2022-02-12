@@ -305,136 +305,6 @@ $('#add_pagination_wrapper').keypress(function(e) {
   }
 });
 
-// function selectCustomPagination() {
-//   let defer = $.Deferred();
-//   $("#add_custom_pagination_wrapper").dialog({
-//     autoOpen: true,
-//     height: 250,
-//     width: 250,
-//     modal: true,
-//     buttons: {
-//       AddCustomPagination: {
-//         text: "Add custom pagination",
-//         id: "addCustomPaginationId",
-//         click: function() {
-//           let paginationConstantString = $("#pagination_constantString").val();
-//           let paginationStep = $("#pagination_step").val();
-//           if (paginationConstantString !== "" && paginationStep !== "") {
-//             if (!$.isNumeric(paginationConstantString) && $.isNumeric(paginationStep)) {
-//               let dataArray = [paginationConstantString, Number(paginationStep)]
-//               defer.resolve(dataArray);
-//               $(this).dialog("close");
-//               $(this).dialog("destroy");
-//               $(this).css("display", "none");
-//             } else {
-//               alert("ConstantString must be a characters string & Step must be numeric");
-//               return;
-//             }
-//           } else {
-//             alert("You must fill all the fields");
-//             return;
-//           }
-//         }
-//       },
-//       Cancel: {
-//         text: "Cancel",
-//         id: "addCustomPaginationCancelId",
-//         click: function() {
-//           $(this).dialog("close");
-//           $(this).dialog("destroy");
-//           $(this).css("display", "none");
-//         }
-//       }
-//     },
-//     dialogClass: "custom-dialog"
-//   });
-//   return defer.promise();
-// }
-
-// $('#add_custom_pagination_wrapper').keypress(function(e) {
-//   if (e.keyCode == $.ui.keyCode.ENTER) {
-//     $('#addCustomPaginationId').click();
-//     return false;
-//   } else if (e.keyCode == $.ui.keyCode.ESCAPE) {
-//     $('#addCustomPaginationCancelId').click();
-//     return false;
-//   }
-// });
-
-// function addPaginationLinksManually(pagination) {
-//   let defer = $.Deferred();
-//   $("#add_paginationlinks_manually_wrapper").dialog({
-//     autoOpen: true,
-//     height: 300,
-//     width: 360,
-//     modal: true,
-//     buttons: {
-//       AddCustomPagination: {
-//         text: "Add pagination links manually",
-//         id: "addPaginationLinksManuallyId",
-//         click: function() {
-//           let paginationConstantString = $("#add_paginationlinks_manually_constantString").val();
-//           let paginationStart = $("#add_paginationlinks_manually_start").val();
-//           let paginationStep = $("#add_paginationlinks_manually_step").val();
-//           let paginationUpto = $("#add_paginationlinks_manually_upto").val();
-//           if (paginationConstantString !== "" && paginationStep !== "" && paginationStart !== "" && paginationUpto !== "") {
-//             if (!$.isNumeric(paginationConstantString) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationUpto)) {
-//               if (Number(paginationUpto) !== 0 && !paginationConstantString.startsWith("http://") && !paginationConstantString.startsWith("https://")) {
-//                 alert("For a stop not equal to 0, please enter a constantString starting with http:// or https://");
-//                 return;
-//               } else if (Number(paginationUpto) === 0 && (paginationConstantString.startsWith("http://") || paginationConstantString.startsWith("https://"))) {
-//                 alert("For a stop equal to 0, please enter a variable name as constantString");
-//                 return;
-//               } else {
-//                 if (paginationConstantString.startsWith("/")) {
-//                   alert("ConstantString can't start with a / (slash)");
-//                   return;
-//                 } else if (paginationConstantString.endsWith("=")) {
-//                   alert("ConstantString can't end with an = (equal)");
-//                   return;
-//                 } else {
-//                   let dataArray = [paginationConstantString, Number(paginationStart), Number(paginationStep), Number(paginationUpto)];
-//                   defer.resolve(dataArray);
-//                   $(this).dialog("close");
-//                   $(this).dialog("destroy");
-//                   $(this).css("display", "none");
-//                 }
-//               }
-//             } else {
-//               alert("ConstantString must be a characters string & Start, Step and Upto must be numeric");
-//               return;
-//             }
-//           } else {
-//             alert("You must fill all the fields");
-//             return;
-//           }
-//         }
-//       },
-//       Cancel: {
-//         text: "Cancel",
-//         id: "addPaginationLinksManuallyCancelId",
-//         click: function() {
-//           $(this).dialog("close");
-//           $(this).dialog("destroy");
-//           $(this).css("display", "none");
-//         }
-//       }
-//     },
-//     dialogClass: "custom-dialog"
-//   });
-//   return defer.promise();
-// }
-//
-// $('#add_paginationlinks_manually_wrapper').keypress(function(e) {
-//   if (e.keyCode == $.ui.keyCode.ENTER) {
-//     $('#addPaginationLinksManuallyId').click();
-//     return false;
-//   } else if (e.keyCode == $.ui.keyCode.ESCAPE) {
-//     $('#addPaginationLinksManuallyCancelId').click();
-//     return false;
-//   }
-// });
-
 function selectCustomPagination(pagination) {
   let defer = $.Deferred();
   $("#add_custom_pagination_wrapper").dialog({
@@ -451,14 +321,14 @@ function selectCustomPagination(pagination) {
           let paginationStart = $("#add_custom_pagination_start").val();
           let paginationStep = $("#add_custom_pagination_step").val();
           let paginationStop = $("#add_custom_pagination_stop").val();
-          if (paginationConstantString !== "" && paginationStep !== "" && paginationStart !== "" && paginationUpto !== "") {
+          if (paginationConstantString !== "" && paginationStep !== "" && paginationStart !== "" && paginationStop !== "") {
             if (!$.isNumeric(paginationConstantString) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationStop)) {
               var countFourStars = (paginationConstantString.match(/\*\*\*\*/g) || []).length;
               console.log("countFourStars = ", countFourStars);
-              if (!paginationConstantString.startsWith("http://") || !paginationConstantString.startsWith("https://")) {
+              if (!paginationConstantString.startsWith("http://") && !paginationConstantString.startsWith("https://")) {
                 alert("Constant string must start with http:// or https://");
                 return;
-              } else if (countFourStars != 4) {
+              } else if (countFourStars != 1) {
                 alert("You must specify the variable number in constant string with '****' (4 stars)");
                 return;
               } else if (paginationStart < 1) {

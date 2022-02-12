@@ -19,9 +19,14 @@ function displayRow(row, level) {
 
     // Selector
     var selectorWrapper = document.createElement('div');
-    selectorWrapper.setAttribute('class', "rows_table_cell rows_table_cell_big");
+    selectorWrapper.setAttribute('class', "rows_table_cell rows_table_cell_middle");
     selectorWrapper.setAttribute('id', "class_name_wrapper_row-" + row.id);
-    selectorWrapper.innerHTML = row.selector;
+    let selector = row.selector;
+    if (selector.length > 29) {
+      let trimmedSelector = selector.substr(0, 30);
+      selector = trimmedSelector + "...";
+    }
+    selectorWrapper.innerHTML = selector;
 
     // Ajout
     rowLeftWrapper.appendChild(dataTypeWrapper);
