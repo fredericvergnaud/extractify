@@ -314,7 +314,7 @@ function displayLevel(level) {
 
   // Header du tableau
   var selectionTableHeaderWrapper = document.createElement("div");
-  selectionTableHeaderWrapper.setAttribute("id", "selection_table_header_wrapper");
+  selectionTableHeaderWrapper.setAttribute("id", "selection_table_header_wrapper_level-" + level.id);
   selectionTableHeaderWrapper.setAttribute("class", "selection_table_header_wrapper");
 
   var headerLeftWrapper = document.createElement('div');

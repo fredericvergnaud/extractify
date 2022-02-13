@@ -355,7 +355,7 @@ function selectCustomPagination(pagination) {
               }
 
             } else {
-              alert("ConstantString must be a characters string & Start, Step and Upto must be numeric");
+              alert("ConstantString must be a characters string & Start, Step and Stop must be numeric");
               return;
             }
           } else {

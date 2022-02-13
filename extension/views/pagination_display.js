@@ -88,7 +88,7 @@ function displayPagination(level) {
   paginationWrapper.appendChild(paginationLeftWrapper);
   paginationWrapper.appendChild(paginationRightWrapper);
 
-  var tableHeaderWrapper = document.getElementById("selection_table_header_wrapper");
+  var tableHeaderWrapper = document.getElementById("selection_table_header_wrapper_level-" + level.id);
   tableHeaderWrapper.parentNode.insertBefore(paginationWrapper, tableHeaderWrapper.nextSibling);
 
   // par défaut on cache le right wrapper
