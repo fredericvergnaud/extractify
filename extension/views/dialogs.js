@@ -326,10 +326,10 @@ function selectCustomPagination(pagination) {
               var countFourStars = (paginationConstantString.match(/\*\*\*\*/g) || []).length;
               console.log("countFourStars = ", countFourStars);
               if (!paginationConstantString.startsWith("http://") && !paginationConstantString.startsWith("https://")) {
-                alert("Constant string must start with http:// or https://");
+                alert("Constant url must start with http:// or https://");
                 return;
               } else if (countFourStars != 1) {
-                alert("You must specify the variable number in constant string with '****' (4 stars)");
+                alert("You must specify the variable number in constant url with '****' (4 stars)");
                 return;
               } else if (paginationStart < 1) {
                 alert("Start number must be stricly greater than 0");
@@ -355,7 +355,7 @@ function selectCustomPagination(pagination) {
               }
 
             } else {
-              alert("ConstantString must be a characters string & Start, Step and Stop must be numeric");
+              alert("Constant url must be a characters string & Start, Step and Stop must be numeric");
               return;
             }
           } else {
