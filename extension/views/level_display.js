@@ -247,8 +247,8 @@ function displayLevel(level) {
   addCustomPaginationButton.addEventListener("click", function(event) {
 
     // on efface les input
-    let paginationConstantStringInput = document.getElementById("add_custom_pagination_constantString");
-    paginationConstantStringInput.value = "";
+    let paginationConstantUrlInput = document.getElementById("add_custom_pagination_constantUrl");
+    paginationConstantUrlInput.value = "";
     let paginationStartInput = document.getElementById("add_custom_pagination_start");
     paginationStartInput.value = "";
     let paginationStepInput = document.getElementById("add_custom_pagination_step");
@@ -268,10 +268,13 @@ function displayLevel(level) {
           .then(function(selectedCustomPagination) {
             console.log("selectedCustomPagination : ", selectedCustomPagination);
             // on récupère les résultats de la sélection
-            addPagination(selectedCustomPagination.paginationSelector, dataArray[0], dataArray[1], dataArray[2], dataArray[3], level);
-            displayPagination(level);
-            updateLevelDisplay(level);
-            updateLevelsDisplay();
+            if (selectedCustomPagination !== "cancel") {
+              addPagination(selectedCustomPagination.paginationSelector, dataArray[0], dataArray[1], dataArray[2], dataArray[3], level);
+              displayPagination(level);
+              updateLevelDisplay(level);
+              updateLevelsDisplay();
+            } else
+              updateLevelsDisplay();            
           });
     event.preventDefault();
     });

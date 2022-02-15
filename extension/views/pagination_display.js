@@ -18,19 +18,26 @@ function displayPagination(level) {
     colorclass = '<div class="pagination-color highlight_pagination">&nbsp;</div>';
   colorWrapper.innerHTML = colorclass;
 
-  // Selector : class name or ConstantString & step
+  // Selector : class name or ConstantUrl & step
   var selectorWrapper = document.createElement('div');
   selectorWrapper.setAttribute('class', "cols_table_cell cols_table_cell_middle");
-  selectorWrapper.setAttribute('id', "pagination_constantString_and_step_wrapper_level-" + level.id);
-  if (level.pagination.constantString !== undefined && level.pagination.constantString !== "") {
-    let constantString = level.pagination.constantString;
-    let constantStringURL = new URL(constantString);
-    let pathnameConstantStringURL = constantStringURL.pathname;
-    let trimmedConstantString = pathnameConstantStringURL.substr(0, 30);
-    trimmedConstantString = trimmedConstantString + "...";
-    selectorWrapper.innerHTML = '<span class="cell_result">' + trimmedConstantString + '<br/>' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.stop + '</span>';
+  selectorWrapper.setAttribute('id', "pagination_constantUrl_and_step_wrapper_level-" + level.id);
+  let selector;
+  if (level.pagination.constantUrl !== undefined && level.pagination.constantUrl !== "") {
+    let constantUrl = level.pagination.constantUrl;
+    let constantUrlURL = new URL(constantUrl);
+    let pathnameConstantUrlURL = constantUrlURL.pathname;
+    console.log("pathnameConstantUrlURL : ", pathnameConstantUrlURL);
+    let constantUrlSubstr = constantUrl.substr(constantUrl.indexOf(pathnameConstantUrlURL));
+    console.log("constantUrlSubstr : ", constantUrlSubstr);
+    let trimmedConstantUrl;
+    if (constantUrlSubstr.length > 29) {
+      trimmedConstantUrl = pathnameConstantUrlURL.substr(0, 30);
+      trimmedConstantUrl = trimmedConstantUrl + "...";
+    } else
+      trimmedConstantUrl = constantUrlSubstr;
+    selector = '<span class="cell_result">' + trimmedConstantUrl + '<br/>' + level.pagination.start + ' &#126; ' + level.pagination.step + ' &#126; ' + level.pagination.stop + '</span>';
   } else {
-    let selector;
     if (level.pagination.selector !== "noSelector") {
       selector = level.pagination.selector;
       if (selector.length > 29) {
@@ -39,8 +46,8 @@ function displayPagination(level) {
       }
     } else
       selector = 'None';
-    selectorWrapper.innerHTML = selector;
   }
+  selectorWrapper.innerHTML = selector;
 
   // Ajout
   paginationLeftWrapper.appendChild(dataTypeWrapper);

@@ -1,7 +1,7 @@
-function addPagination(paginationSelector, paginationConstantString, paginationStart, paginationStep, paginationStop, level) {
+function addPagination(paginationSelector, paginationConstantUrl, paginationStart, paginationStep, paginationStop, level) {
     var pagination = new Pagination();
     pagination.selector = paginationSelector;
-    pagination.constantString = paginationConstantString;
+    pagination.constantUrl = paginationConstantUrl;
     pagination.start = Number(paginationStart);
     pagination.step = Number(paginationStep);
     pagination.stop = Number(paginationStop);

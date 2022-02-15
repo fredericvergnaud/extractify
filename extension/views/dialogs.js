@@ -317,19 +317,19 @@ function selectCustomPagination(pagination) {
         text: "Add custom pagination",
         id: "addCustomPaginationId",
         click: function() {
-          let paginationConstantString = $("#add_custom_pagination_constantString").val();
+          let paginationConstantUrl = $("#add_custom_pagination_constantUrl").val();
           let paginationStart = $("#add_custom_pagination_start").val();
           let paginationStep = $("#add_custom_pagination_step").val();
           let paginationStop = $("#add_custom_pagination_stop").val();
-          if (paginationConstantString !== "" && paginationStep !== "" && paginationStart !== "" && paginationStop !== "") {
-            if (!$.isNumeric(paginationConstantString) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationStop)) {
-              var countFourStars = (paginationConstantString.match(/\*\*\*\*/g) || []).length;
+          if (paginationConstantUrl !== "" && paginationStep !== "" && paginationStart !== "" && paginationStop !== "") {
+            if (!$.isNumeric(paginationConstantUrl) && $.isNumeric(paginationStart) && $.isNumeric(paginationStep) && $.isNumeric(paginationStop)) {
+              var countFourStars = (paginationConstantUrl.match(/\*/g) || []).length;
               console.log("countFourStars = ", countFourStars);
-              if (!paginationConstantString.startsWith("http://") && !paginationConstantString.startsWith("https://")) {
+              if (!paginationConstantUrl.startsWith("http://") && !paginationConstantUrl.startsWith("https://")) {
                 alert("Constant url must start with http:// or https://");
                 return;
-              } else if (countFourStars != 1) {
-                alert("You must specify the variable number in constant url with '****' (4 stars)");
+              } else if (countFourStars != 4) {
+                alert("You must specify the variable number in constant url with **** (4 stars)");
                 return;
               } else if (paginationStart < 1) {
                 alert("Start number must be stricly greater than 0");
@@ -347,7 +347,7 @@ function selectCustomPagination(pagination) {
                 alert("Stop number must be stricly greater than Start number + Step number");
                 return;
               } else {
-                let dataArray = [paginationConstantString, Number(paginationStart), Number(paginationStep), Number(paginationStop)];
+                let dataArray = [paginationConstantUrl, Number(paginationStart), Number(paginationStep), Number(paginationStop)];
                 defer.resolve(dataArray);
                 $(this).dialog("close");
                 $(this).dialog("destroy");

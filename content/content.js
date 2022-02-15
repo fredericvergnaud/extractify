@@ -166,28 +166,6 @@ chrome.runtime.onMessage.addListener(
             });
           });
         break;
-        // case "checkManualPagination":
-        //   var level = message.level;
-        //   var paginationData = message.data;
-        //   checkManualPagination(level, paginationData)
-        //     .then(function(response) {
-        //       sendResponse({
-        //         response: "checkedManualPagination",
-        //         responseData: response
-        //       });
-        //     });
-        //   break;
-        // case "matchPaginationConstantStringAndStep":
-        //   var constantString = message.constantString;
-        //   var step = message.step;
-        //   matchPaginationConstantStringAndStep(constantString, step)
-        //     .then(function(response) {
-        //       sendResponse({
-        //         response: "foundInvariant",
-        //         responseData: response
-        //       });
-        //     });
-        //   break;
       case "scrapPage":
         var levelStructureMap = new Map(message.data);
         console.log("levelStructureMap : ", levelStructureMap);
