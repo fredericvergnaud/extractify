@@ -169,7 +169,6 @@ function displayRow(row, level) {
                     };
                     sendMessageToTab(level, "selectCols", colsData)
                         .then(function (selectedCols) {
-                            //                        console.log("selectedCols : " + selectedCols.colSelector);
                             // add key / title to level type col titles
                             let colTitleKey = colArray[0];
                             let colTitle = colArray[1];
@@ -233,7 +232,6 @@ function removeRowDisplay(row) {
 // => bouton add depth
 // => bouton add col
 function updateRowDisplay(row, level) {
-    //    console.log("updateRowDisplay : row.depth = " + row.depth);
     // button add depth
     if (row.depth != null)
         disableAddDepthButton(row);

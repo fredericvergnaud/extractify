@@ -6,7 +6,6 @@ function addPagination(paginationSelector, paginationConstantUrl, paginationStar
     pagination.step = Number(paginationStep);
     pagination.stop = Number(paginationStop);
     level.pagination = pagination;
-//    console.log("Nouvelle pagination : " + pagination.dataType + ", " + pagination.selector);
     saveLevelsArray();
     return pagination;
 }

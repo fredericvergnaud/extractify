@@ -86,8 +86,7 @@ function readJsonFile() {
             dejsonizedLevels = 0;
             dejsonizedRows = 0;
             dejsonizedCols = 0;
-            //    console.log("newLevels length = " + newLevels.length);
-            //    console.log("levels length = " + levels.length);
+
             // on efface levels en cours
             if (levels.length > 0) {
               var levelsToRemove = [];
@@ -126,7 +125,6 @@ function readJsonFile() {
               // dejsonize
               dejsonize(levels);
               // affichage fichier
-              //                            console.log("selectedFile : ", selectedFile);
               displayJsonFile(selectedFile);
             }
           }
@@ -228,7 +226,6 @@ function initScraping() {
   stopScraping = 0;
   initScrapingResultsDialog();
   scrapingErrorsNbr = 0;
-  paginationScraped = 0;
   visitedPaginationLinks = new Set();
 }
 
@@ -262,7 +259,6 @@ function getLevelStructureMap(level) {
       }
     }
   }
-  //    console.log("levelStructureMap : ", levelStructureMap);
   return levelStructureMap;
 }
 
@@ -343,37 +339,9 @@ async function getScrapedPage(tabId, url, levelId, scrapedObjects, requestLatenc
       })
       .then(async function() {
         let level = getLevel(levelId);
-        if (level.pagination !== null
-          // && paginationScraped === 0
-        ) {
+        if (level.pagination !== null) {
           console.log("Pagination not null ");
           await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
-            // .then(function (paginationLinks) {
-            //   for (const paginationLink of paginationLinks)
-            //     if (!visitedPaginationLinks.has(paginationLink)) {
-            //       getScrapedPageFromPaginationLink(tabId, paginationLink, [...getLevelStructureMap(levels[levelId])], requestLatency, scrapingPageInOwnTab);
-            //     }
-            // });
-
-
-
-          // if (level.pagination.links.length === 0) {
-          // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab)
-          // } else {
-          //   for (const paginationLink of level.pagination.links)
-          //     if (!visitedPaginationLinks.has(paginationLink)) {
-          //       await getScrapedPage(tabId, paginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-          //       visitedPaginationLinks.add(paginationLink);
-          //     }
-          // }
-          paginationScraped = 1;
-          // await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-          // if (level.pagination.links.length > 0)
-          //   for (const scrapedPaginationLink of level.pagination.links)
-          //     await getScrapedPageFromPaginationLink(tabId, scrapedPaginationLink, level.id, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-          // else {
-          //   await getPaginationLinks(tabId, url, level, scrapedObjects, requestLatency, scrapingPageInOwnTab);
-          // }
         } else
           console.log("pagination null ");
       });
@@ -465,10 +433,8 @@ function containsScrapedObject(scrapedObject, scrapedObjects) {
 function endScrap(tabId, scrapingPageInOwnTab) {
   console.log("endScrap : tabId = " + tabId + " | stopscraping = " + stopScraping + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
   jsonizeScraping();
-  // if (scrapingPageInOwnTab === "false" && tabId !== null)
-  //   chrome.tabs.remove(tabId);
-  // if (stopScraping === 0)
-    switchScrapingResultsDialogButton();
-    //closeScrapingResultsDialog();
-
+  // closing scraping tab
+  if (scrapingPageInOwnTab === "false" && tabId !== null)
+    chrome.tabs.remove(tabId);
+  switchScrapingResultsDialogButton();
 }

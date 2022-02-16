@@ -329,7 +329,7 @@ function selectCustomPagination(pagination) {
                 alert("Constant url must start with http:// or https://");
                 return;
               } else if (countFourStars != 4) {
-                alert("You must specify the variable number in constant url with **** (4 stars)");
+                alert("You must specify the variable number in \nconstant url with **** (4 stars)");
                 return;
               } else if (paginationStart < 1) {
                 alert("Start number must be stricly greater than 0");
