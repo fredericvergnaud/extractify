@@ -2,7 +2,7 @@
 
 **Presentation**
 
-Extractify is a free extension for Chrome, developed in JavaScript under Bracket, whose purpose is to scrap structured data on the web. It is particularly designed for collecting online comments or online conversations such as forums.
+Extractify is a free extension for Chromium, developed in JavaScript under Bracket, whose purpose is to scrap structured data on the web. It is particularly designed for collecting online comments or online conversations such as forums.
 
 It allows you to: 
 1) Select structured information on a web page (like tables with rows and columns), by direct selection on the web page, or manual selection by entering HTML tags and related CSS code
