@@ -396,6 +396,7 @@ function processPageScraping(result, levelId, scrapedObjects) {
       if (url !== null) {
         let scrapedObject = new Object();
         scrapedObject.type = levels[levelId].type;
+        scrapedObject.typeKey = levels[levelId].typeKey;
         for (let child in children) {
           for (let key in colTitles)
             if (child === key)
@@ -407,11 +408,11 @@ function processPageScraping(result, levelId, scrapedObjects) {
         if (containsScrapedObject(scrapedObject, scrapedObjects) === false) {
           scrapedObjects.push(scrapedObject);
           // update results
-          if (scrapedObjectsCount.has(scrapedObject.type))
-            scrapedObjectsCount.set(scrapedObject.type, scrapedObjectsCount.get(scrapedObject.type)+1);
+          if (scrapedObjectsCount.has(scrapedObject.typeKey))
+            scrapedObjectsCount.set(scrapedObject.typeKey, scrapedObjectsCount.get(scrapedObject.typeKey)+1);
           else
-            scrapedObjectsCount.set(scrapedObject.type, 1);
-          updateScrapingResultsDialog(scrapedObject.type);
+            scrapedObjectsCount.set(scrapedObject.typeKey, 1);
+          updateScrapingResultsDialog(scrapedObject.typeKey, scrapedObject.type);
         } else
           console.log("scrapedObject already existing : ", scrapedObject);
       }
@@ -433,8 +434,17 @@ function containsScrapedObject(scrapedObject, scrapedObjects) {
 function endScrap(tabId, scrapingPageInOwnTab) {
   console.log("endScrap : tabId = " + tabId + " | stopscraping = " + stopScraping + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
   jsonizeScraping();
+<<<<<<< HEAD
   // closing scraping tab
   if (scrapingPageInOwnTab === "false" && tabId !== null)
     chrome.tabs.remove(tabId);
   switchScrapingResultsDialogButton();
+=======
+  // if (scrapingPageInOwnTab === "false" && tabId !== null)
+  //   chrome.tabs.remove(tabId);
+  // if (stopScraping === 0)
+    switchScrapingResultsDialogButton(tabId);
+    //closeScrapingResultsDialog();
+
+>>>>>>> 1.5
 }

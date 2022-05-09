@@ -355,7 +355,11 @@ function selectCustomPagination(pagination) {
               }
 
             } else {
+<<<<<<< HEAD
               alert("Constant url must be a characters string & Start, Step and Stop must be numeric");
+=======
+              alert("ConstantString must be a characters string & Start, Step and Stop must be numeric");
+>>>>>>> 1.5
               return;
             }
           } else {
@@ -445,9 +449,6 @@ function openScrapingResultsDialog(tabId) {
       "Cancel": function() {
         console.log("Scraping cancel button clicked")
         stopScraping = 1;
-        // $(this).dialog("close");
-        // $(this).dialog("destroy");
-        // $(this).css("display", "none");
       }
     },
     dialogClass: "custom-dialog"
