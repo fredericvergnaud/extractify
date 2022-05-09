@@ -434,17 +434,10 @@ function containsScrapedObject(scrapedObject, scrapedObjects) {
 function endScrap(tabId, scrapingPageInOwnTab) {
   console.log("endScrap : tabId = " + tabId + " | stopscraping = " + stopScraping + " | scrapingPageInOwnTab = " + scrapingPageInOwnTab);
   jsonizeScraping();
-<<<<<<< HEAD
-  // closing scraping tab
-  if (scrapingPageInOwnTab === "false" && tabId !== null)
-    chrome.tabs.remove(tabId);
-  switchScrapingResultsDialogButton();
-=======
   // if (scrapingPageInOwnTab === "false" && tabId !== null)
   //   chrome.tabs.remove(tabId);
   // if (stopScraping === 0)
     switchScrapingResultsDialogButton(tabId);
     //closeScrapingResultsDialog();
 
->>>>>>> 1.5
 }
