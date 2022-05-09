@@ -249,13 +249,13 @@ function disableOptionsButton() {
     optionsButton.disabled = true;
 }
 
-function updateScrapingResultsDialog(objectType) {
+function updateScrapingResultsDialog(objectTypeKey, objectType) {
     let $nbr_of_scraped_objects = $("#nbr_of_scraped_objects");
-    let child = $(nbr_of_scraped_objects).find("#nbr_of_" + objectType);
+    let child = $(nbr_of_scraped_objects).find("#nbr_of_" + objectTypeKey);
     if (child.length === 0)
-        $nbr_of_scraped_objects.append("<p id='nbr_of_" + objectType + "'>" + scrapedObjectsCount.get(objectType) + " " + objectType + "(s)</p>");
+        $nbr_of_scraped_objects.append("<p id='nbr_of_" + objectTypeKey + "'>" + scrapedObjectsCount.get(objectTypeKey) + " " + objectType + "(s)</p>");
     else
-        child.text(scrapedObjectsCount.get(objectType) + " " + objectType + "(s)");
+        child.text(scrapedObjectsCount.get(objectTypeKey) + " " + objectType + "(s)");
 }
 
 function initScrapingResultsDialog() {
@@ -274,13 +274,14 @@ function closeScrapingResultsDialog() {
     }
 }
 
-function switchScrapingResultsDialogButton() {
+function switchScrapingResultsDialogButton(tabId) {
   $scrapingResultsWrapper = $("#scraping_results_wrapper");
   $scrapingResultsWrapper.dialog( "option", "buttons", {
    "Ok": function() {
      $(this).dialog("close");
      $(this).dialog("destroy");
      $(this).css("display", "none");
+     chrome.tabs.remove(tabId);
    }
   });
 }
