@@ -331,19 +331,19 @@ function selectCustomPagination(pagination) {
               } else if (countFourStars != 4) {
                 alert("You must specify the variable number in \nconstant url with **** (4 stars)");
                 return;
-              } else if (paginationStart < 1) {
+              } else if (Number(paginationStart) < 1) {
                 alert("Start number must be stricly greater than 0");
                 return;
-              } else if (paginationStart >= paginationStop) {
+              } else if (Number(paginationStart) >= Number(paginationStop)) {
                 alert("Start number must be stricly less than Stop number");
                 return;
-              } else if (paginationStep < 1) {
+              } else if (Number(paginationStep) < 1) {
                 alert("Step number must be stricly greater than 0");
                 return;
-              } else if (paginationStop < 1) {
+              } else if (Number(paginationStop) < 1) {
                 alert("Stop number must be stricly greater than 0");
                 return;
-              } else if (paginationStop <= paginationStart + paginationStep) {
+              } else if (Number(paginationStop) <= Number(paginationStart) + Number(paginationStep)) {
                 alert("Stop number must be stricly greater than Start number + Step number");
                 return;
               } else {
