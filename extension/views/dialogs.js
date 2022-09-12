@@ -445,9 +445,6 @@ function openScrapingResultsDialog(tabId) {
       "Cancel": function() {
         console.log("Scraping cancel button clicked")
         stopScraping = 1;
-        // $(this).dialog("close");
-        // $(this).dialog("destroy");
-        // $(this).css("display", "none");
       }
     },
     dialogClass: "custom-dialog"
