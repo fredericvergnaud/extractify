@@ -208,7 +208,7 @@ function selectDepth() {
     modal: true,
     buttons: {
       AddDepth: {
-        text: "Add deeper level",
+        text: "Add deeper links",
         id: "addDepthId",
         click: function() {
           let depthSelector = $("#depth_tag_class").val();
