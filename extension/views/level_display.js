@@ -61,6 +61,7 @@ function displayLevel(level) {
   var addLevelButtonWrapper = document.createElement("div");
   addLevelButtonWrapper.setAttribute("id", "add_level_button_wrapper_level-" + level.id);
   addLevelButtonWrapper.setAttribute("class", "level_button_wrapper");
+  addLevelButtonWrapper.setAttribute("title", "Add a deeper level");
 
   // button
   var addLevelButton = document.createElement("button");
